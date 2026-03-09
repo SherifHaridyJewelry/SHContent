@@ -1,0 +1,16 @@
+{
+  "prompt": "A young woman in her early 20s posing in a professional photography studio against a seamless matte charcoal gray backdrop. She wears an elegant black velvet off-shoulder top that contrasts sharply with her gold jewelry. Around her neck, a bold statement gold collar necklace with intricate geometric links, sitting flat against her chest just below the collarbone, catching focused studio light and producing crisp specular highlights on each link. On her right wrist, a wide gold cuff bracelet with a brushed matte finish and beveled edges, held up near her jawline with her fingers lightly touching her chin in a classic jewelry showcase pose. Her skin is naturally textured — visible pores on the nose and cheeks, subtle under-eye texture, a small beauty mark near her left eyebrow. Complexion is medium warm-toned. Hair is jet black and slicked back into a low bun, keeping the neck and ears fully visible. Expression is confident and composed, lips slightly parted. Shot with a 105mm macro lens, f/4.0, ISO 100. Two-light studio setup: a large octabox at 45 degrees camera-left providing the key light, and a strip softbox camera-right for rim separation. The lighting is controlled and directional, producing defined shadows under the jawline and crisp reflections on the gold surfaces. Do not smooth skin. Do not add makeup effects. Preserve all natural skin texture and micro-imperfections.",
+  "negative_prompt": "skin smoothing, plastic skin, airbrushed texture, beautification filters, anatomy normalization, body proportion averaging, dataset-average anatomy, stylized realism, over-retouched, fashion magazine post-processing, HDR tonemapping, digital art, illustration, cartoon, anime, 3D render, more realistic reinterpretation, wide-angle distortion, depth flattening, neon lighting, outdoor setting, casual clothing",
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "professional studio portrait, jewelry product showcase",
+    "lighting": "two-light studio setup, octabox key with strip softbox rim",
+    "camera_angle": "eye-level, straight-on with slight head tilt",
+    "depth_of_field": "moderate, f/4.0, background uniformly out of focus",
+    "quality": "ultra_high"
+  }
+}

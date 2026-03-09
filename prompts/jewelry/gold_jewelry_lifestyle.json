@@ -1,0 +1,16 @@
+{
+  "prompt": "A young woman in her mid-20s, photographed during golden hour outdoors on a sun-drenched terrace with warm sandstone walls. She wears a fitted off-white linen blouse with the top two buttons undone, showcasing a delicate layered gold chain necklace — one thin 16-inch choker and one longer 20-inch pendant chain with a small hammered gold disc — both catching the warm low-angle sunlight and casting tiny golden light flickers on her collarbone. On her left wrist, a chunky gold link bracelet with a polished finish, angled toward camera as she rests her hand lightly on her opposite forearm in a relaxed pose. Skin is naturally textured with visible pores, light peach fuzz on cheeks, faint sun freckles across the bridge of her nose. Hair is dark brown, slightly windswept, tucked behind one ear. Eyes are warm brown, catching a small catchlight from the sun. Background is a softly blurred Mediterranean-style garden with terracotta pots and green trailing vines. Shot with a 85mm lens, f/2.0, ISO 200, shallow depth of field isolating subject from background. Natural golden hour lighting creating warm highlights on the gold jewelry and soft shadows on the neck and wrist. Do not beautify or alter facial features. No makeup styling. No retouching. No airbrushed skin.",
+  "negative_prompt": "skin smoothing, plastic skin, airbrushed texture, beautification filters, anatomy normalization, body proportion averaging, dataset-average anatomy, stylized realism, editorial fashion proportions, studio lighting, ring flash, beauty dish, high-end camera look, over-saturated colors, HDR tonemapping, digital art, illustration, cartoon, anime, 3D render, more realistic reinterpretation, lens compression not in reference, mirror selfies, reflections",
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "documentary realism, lifestyle photography",
+    "lighting": "natural golden hour, low-angle warm sunlight",
+    "camera_angle": "eye-level, slight three-quarter view",
+    "depth_of_field": "shallow, f/2.0, background softly blurred",
+    "quality": "ultra_high"
+  }
+}

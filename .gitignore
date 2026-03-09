@@ -1,0 +1,21 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Generated images (large binaries)
+images/*
+!images/.gitkeep
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Prompts — uncomment next two lines to ignore prompts too
+# prompts/*
+# !prompts/.gitkeep
+
+# Cursor IDE
+.cursor/plans/

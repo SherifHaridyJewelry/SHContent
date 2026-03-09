@@ -1,0 +1,16 @@
+{
+  "prompt": "A young woman around 23 years old, captured candidly on a city sidewalk in front of a weathered exposed-brick wall with faded graffiti tags. She wears a cropped olive-green bomber jacket over a white ribbed tank top, paired with high-waisted dark denim. Around her neck, a thick gold rope chain necklace — approximately 5mm width, 18 inches — resting over the tank top and catching ambient daylight with a warm metallic gleam. On her left wrist, a stack of three slim gold bangles of slightly different widths that shift and overlap naturally. She is mid-stride, half-turned toward camera with a relaxed candid expression, one hand adjusting her jacket collar, the wrist bangles visible and slightly motion-blurred at the edges. Her skin shows natural texture — visible pores, light under-eye circles, a few subtle blemish marks on her forehead. Light olive complexion. Hair is honey-brown with natural waves, shoulder-length, slightly messy from wind. Shot with a 50mm lens, f/2.8, ISO 400, simulating a high-quality smartphone aesthetic. Overcast daylight providing even, diffused illumination with no harsh shadows — the gold jewelry has a soft warm glow rather than sharp specular highlights. Slight depth compression from the 50mm creating a natural street-photography feel. Background shows blurred pedestrians and a parked bicycle. Do not beautify or alter facial features. No skin retouching. No glamour lighting. Preserve candid imperfections.",
+  "negative_prompt": "skin smoothing, plastic skin, airbrushed texture, beautification filters, anatomy normalization, body proportion averaging, dataset-average anatomy, stylized realism, studio lighting, ring flash, beauty dish, high-end fashion look, editorial fashion proportions, HDR tonemapping, over-saturated, digital art, illustration, cartoon, anime, 3D render, more realistic reinterpretation, mirror selfies, reflections, posed model stance, glamour photography",
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "candid street photography, urban editorial",
+    "lighting": "overcast natural daylight, diffused and even",
+    "camera_angle": "eye-level, slight candid angle as if caught mid-stride",
+    "depth_of_field": "moderate-shallow, f/2.8, soft background separation",
+    "quality": "ultra_high"
+  }
+}
