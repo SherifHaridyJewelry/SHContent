@@ -1,0 +1,97 @@
+{
+  "name": "btc_coins_seedream",
+  "description": "BTC silver coins catalog via seedream/4.5-edit",
+  "model": "seedream/4.5-edit",
+  "generator": "generate_kie_market.py",
+  "approved_style": {
+    "background": "deep midnight navy blue matte seamless studio backdrop",
+    "lighting": "even balanced studio lighting, large softboxes left and right, catalog clarity"
+  },
+  "aspect_ratio": "1:1",
+  "r2_prefix": "products/btc-silver",
+  "prompts_dir": "prompts/bullion/catalog-seedream",
+  "images_dir": "images/bullion/catalog-seedream",
+  "api_parameters": {
+    "aspect_ratio": "1:1",
+    "nsfw_checker": false,
+    "quality": "high"
+  },
+  "catalogs": {
+    "coins": "scraped/bullion-trading-center/silver-coins/products.json"
+  },
+  "variations": [
+    {
+      "id": "collection_coins_religious",
+      "label": "Coins \u2014 religious/phrases (4 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXAKBRXX10",
+        "ES999PXHADLXX10",
+        "ES999PXLEEAXX10",
+        "ES999PXSBHNXX10"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_religious_seedream.jpg"
+    },
+    {
+      "id": "collection_coins_character_1",
+      "label": "Coins \u2014 character/licensed part 1 (6 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXDASDXX10",
+        "ES999PXDDPLXX10",
+        "ES999PXDONDXX10",
+        "ES999PXHULKXX10",
+        "ES999PXIRMNXX10",
+        "ES999PXMICMXX10"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_character_1_seedream.jpg"
+    },
+    {
+      "id": "collection_coins_character_2",
+      "label": "Coins \u2014 character/licensed part 2 (6 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXMINMXX10",
+        "ES999PXMRSCXX10",
+        "ES999PXSPMNXX10",
+        "ES999PXTHORXX10",
+        "ES999PXWOLVXX10",
+        "ES999PXXHDLXX10"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_character_2_seedream.jpg"
+    },
+    {
+      "id": "collection_coins_character_3",
+      "label": "Coins \u2014 character/licensed part 3 (6 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXDDPLXXX8",
+        "ES999PXDONDXX50",
+        "ES999PXDasDXX50",
+        "ES999PXIRMNXX50",
+        "ES999PXKULKXX50",
+        "ES999PXMICMXX50"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_character_3_seedream.jpg"
+    },
+    {
+      "id": "collection_coins_character_4",
+      "label": "Coins \u2014 character/licensed part 4 (6 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXMINMXX50",
+        "ES999PXMRSCXX50",
+        "ES999PXSPMNXX50",
+        "ES999PXTHORXX50",
+        "ES999PXWOLVXXX8",
+        "ES999PXXHDLXX50"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_character_4_seedream.jpg"
+    }
+  ]
+}

@@ -1,0 +1,643 @@
+{
+  "scraped_from": "https://shop.bulliontradingcenter.com/products/silver/ingots",
+  "graphql_endpoint": "https://magento-1205032-5154147.cloudwaysapps.com/graphql",
+  "category": {
+    "uid": "NTI=",
+    "name": "Ingots",
+    "url_path": "silver/ingots",
+    "source_url": "https://shop.bulliontradingcenter.com/products/silver/ingots",
+    "total_count": 42
+  },
+  "products": [
+    {
+      "sku": "EWXWBBOXX10X",
+      "name": "BTC Wooden Box for 10 Cards",
+      "url_key": "btc-wooden-box-for-10-cards",
+      "product_url": "https://shop.bulliontradingcenter.com/product/btc-wooden-box-for-10-cards",
+      "price": {
+        "value": 600,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/s/m/small_box.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/s/m/small_box.png",
+      "local_image": "images/EWXWBBOXX10X.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/s/m/small_box.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/s/m/small_box.png"
+    },
+    {
+      "sku": "EWXWBOXX25X",
+      "name": "BTC  Wooden Box for 25 Cards",
+      "url_key": "btc-wooden-box-for-25-cards",
+      "product_url": "https://shop.bulliontradingcenter.com/product/btc-wooden-box-for-25-cards",
+      "price": {
+        "value": 1000,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/a/large_box..png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/l/a/large_box..png",
+      "local_image": "images/EWXWBOXX25X.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/a/large_box..png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/a/large_box..png"
+    },
+    {
+      "sku": "ES999IXMOALX100",
+      "name": "100g Ingot 999 -  Mother in all Languages  ",
+      "url_key": "100g-ingot-999-mother-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/100g-ingot-999-mother-in-all-languages",
+      "price": {
+        "value": 14405,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_5.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/o/m/ommy_1500x1500_5.png",
+      "local_image": "images/ES999IXMOALX100.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_5.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_5.png"
+    },
+    {
+      "sku": "ES999IXEGALX100",
+      "name": " 100g Ingot 999 -  Egypt in all Languages ",
+      "url_key": "100g-ingot-999-egypt-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/100g-ingot-999-egypt-in-all-languages",
+      "price": {
+        "value": 14405,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_5.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt_1500x1500_5.png",
+      "local_image": "images/ES999IXEGALX100.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_5.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_5.png"
+    },
+    {
+      "sku": "ES999IXFTHAX100",
+      "name": "  100g Ingot 999 - Al-Fatiha  ",
+      "url_key": "100g-ingot-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/100g-ingot-999-al-fatiha",
+      "price": {
+        "value": 14405,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_5.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_al-fatiha_5.png",
+      "local_image": "images/ES999IXFTHAX100.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_5.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_5.png"
+    },
+    {
+      "sku": "ES999IXRBTCX100",
+      "name": "  100g Ingot - BTC 999  ",
+      "url_key": "100g-ingot-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/100g-ingot-btc-999",
+      "price": {
+        "value": 14405,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_4.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_-_btc_999_4.png",
+      "local_image": "images/ES999IXRBTCX100.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_4.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_4.png"
+    },
+    {
+      "sku": "ES999IXMOALXX50",
+      "name": "50g Ingot 999 -  Mother in all Languages ",
+      "url_key": "50g-ingot-999-mother-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-ingot-999-mother-in-all-languages",
+      "price": {
+        "value": 7252.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_4.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/o/m/ommy_1500x1500_4.png",
+      "local_image": "images/ES999IXMOALXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_4.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_4.png"
+    },
+    {
+      "sku": "ES999IXEGALXX50",
+      "name": "  50g Ingot 999 -  Egypt in all Languages  ",
+      "url_key": "50g-ingot-999-egypt-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-ingot-999-egypt-in-all-languages",
+      "price": {
+        "value": 7252.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_4.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt_1500x1500_4.png",
+      "local_image": "images/ES999IXEGALXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_4.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_4.png"
+    },
+    {
+      "sku": "ES999IXTJNFXX50",
+      "name": " 50g Ingot 999 - Kemet's Treasures  ",
+      "url_key": "50g-ingot-999-kemet-s-treasures",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-ingot-999-kemet-s-treasures",
+      "price": {
+        "value": 7252.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_kemet_s_treasures_1.png",
+      "local_image": "images/ES999IXTJNFXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_1.png"
+    },
+    {
+      "sku": "ES999IXRBTCXX50",
+      "name": " 50g Ingot - BTC 999 ",
+      "url_key": "50g-ingot-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-ingot-btc-999",
+      "price": {
+        "value": 7252.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_-_btc_999_1.png",
+      "local_image": "images/ES999IXRBTCXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_1.png"
+    },
+    {
+      "sku": "ES999IXFTHAXX50",
+      "name": " 50g Ingot 999 - Al-Fatiha",
+      "url_key": "50g-ingot-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-ingot-999-al-fatiha",
+      "price": {
+        "value": 7252.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_2.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_al-fatiha_2.png",
+      "local_image": "images/ES999IXFTHAXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_2.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_2.png"
+    },
+    {
+      "sku": "ES999IXEGAL31X1",
+      "name": " 31.1g Ingot 999 -  Egypt in all Languages  ",
+      "url_key": "31-1g-ingot-999-egypt-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-ingot-999-egypt-in-all-languages",
+      "price": {
+        "value": 4542.16,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_3.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt_1500x1500_3.png",
+      "local_image": "images/ES999IXEGAL31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_3.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_3.png"
+    },
+    {
+      "sku": "ES999IXMOAL31X1",
+      "name": "31.1g Ingot 999 -  Mother in all Languages",
+      "url_key": "31-1g-ingot-999-mother-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-ingot-999-mother-in-all-languages",
+      "price": {
+        "value": 4542.16,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_3.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/o/m/ommy_1500x1500_3.png",
+      "local_image": "images/ES999IXMOAL31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_3.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_3.png"
+    },
+    {
+      "sku": "ES999IXTJNF31X1",
+      "name": "31.1g Ingot 999 - Kemet's Treasures ",
+      "url_key": "31-1g-ingot-999-kemet-s-treasures",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-ingot-999-kemet-s-treasures",
+      "price": {
+        "value": 4542.16,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_4.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_kemet_s_treasures_4.png",
+      "local_image": "images/ES999IXTJNF31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_4.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_4.png"
+    },
+    {
+      "sku": "ES999IXFTHA31X1",
+      "name": " 31.1g Ingot 999 - Al-Fatiha ",
+      "url_key": "31-1g-ingot-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-ingot-999-al-fatiha",
+      "price": {
+        "value": 4542.16,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_4.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_al-fatiha_4.png",
+      "local_image": "images/ES999IXFTHA31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_4.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_4.png"
+    },
+    {
+      "sku": "ES999IXMOALXX20",
+      "name": " 20g Ingot 999 -  Mother in all Languages",
+      "url_key": "20g-ingot-999-mother-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/20g-ingot-999-mother-in-all-languages",
+      "price": {
+        "value": 2941,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_2.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/o/m/ommy_1500x1500_2.png",
+      "local_image": "images/ES999IXMOALXX20.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_2.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_2.png"
+    },
+    {
+      "sku": "ES999IXEGALXX20",
+      "name": " 20g Ingot 999 -  Egypt in all Languages ",
+      "url_key": "20g-ingot-999-egypt-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/20g-ingot-999-egypt-in-all-languages",
+      "price": {
+        "value": 2941,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_2.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt_1500x1500_2.png",
+      "local_image": "images/ES999IXEGALXX20.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_2.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_2.png"
+    },
+    {
+      "sku": "ES999IXRBTCXX20",
+      "name": "20g Ingot - BTC 999",
+      "url_key": "20g-ingot-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/20g-ingot-btc-999",
+      "price": {
+        "value": 2941,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_2.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_-_btc_999_2.png",
+      "local_image": "images/ES999IXRBTCXX20.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_2.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_2.png"
+    },
+    {
+      "sku": "ES999IXTJNFXX20",
+      "name": "20g Ingot 999 - Kemet's Treasures",
+      "url_key": "20g-ingot-999-kemet-s-treasures",
+      "product_url": "https://shop.bulliontradingcenter.com/product/20g-ingot-999-kemet-s-treasures",
+      "price": {
+        "value": 2941,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_2.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_kemet_s_treasures_2.png",
+      "local_image": "images/ES999IXTJNFXX20.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_2.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_2.png"
+    },
+    {
+      "sku": "ES999IXFTHAXX20",
+      "name": "20g Ingot 999 - Al-Fatiha",
+      "url_key": "20g-ingot-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/20g-ingot-999-al-fatiha",
+      "price": {
+        "value": 2941,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_al-fatiha_1.png",
+      "local_image": "images/ES999IXFTHAXX20.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_1.png"
+    },
+    {
+      "sku": "ES999IXEGALXX10",
+      "name": "10g Ingot 999 - Egypt in all Languages",
+      "url_key": "10g-ingot-999-egypt-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-ingot-999-egypt-in-all-languages",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt_1500x1500_1.png",
+      "local_image": "images/ES999IXEGALXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500_1.png"
+    },
+    {
+      "sku": "ES999IXEGALXXX5",
+      "name": "5g Ingot 999 -  Egypt in all Languages",
+      "url_key": "5g-ingot-999-egypt-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5g-ingot-999-egypt-in-all-languages",
+      "price": {
+        "value": 757.75,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt_1500x1500.png",
+      "local_image": "images/ES999IXEGALXXX5.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt_1500x1500.png"
+    },
+    {
+      "sku": "ES999IXMOALXXX5",
+      "name": "5g Ingot 999 -  Mother in all Languages",
+      "url_key": "5g-ingot-999-mother-in-all-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5g-ingot-999-mother-in-all-languages",
+      "price": {
+        "value": 757.75,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/o/m/ommy_1500x1500.png",
+      "local_image": "images/ES999IXMOALXXX5.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500.png"
+    },
+    {
+      "sku": "ES999IXMOALXX10",
+      "name": "10g Ingot 999 -  Mother in all Languages",
+      "url_key": "10g-ingot-999-mother-in-languages",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-ingot-999-mother-in-languages",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/o/m/ommy_1500x1500_1.png",
+      "local_image": "images/ES999IXMOALXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/o/m/ommy_1500x1500_1.png"
+    },
+    {
+      "sku": "ES999IXTJNFXX10",
+      "name": "10g Ingot 999 - Kemet's Treasures ",
+      "url_key": "10g-ingot-999-kemet-s-treasures",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-ingot-999-kemet-s-treasures",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_3.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_kemet_s_treasures_3.png",
+      "local_image": "images/ES999IXTJNFXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_3.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures_3.png"
+    },
+    {
+      "sku": "ES999IXFTHAXX10",
+      "name": "10g Ingot 999 - Al-Fatiha",
+      "url_key": "10g-ingot-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-ingot-999-al-fatiha",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_3.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_al-fatiha_3.png",
+      "local_image": "images/ES999IXFTHAXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_3.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha_3.png"
+    },
+    {
+      "sku": "ES999IXTJNFXXX5",
+      "name": "5g Ingot 999 - Kemet's Treasures ",
+      "url_key": "5g-ingot-999-kemet-s-treasures",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5g-ingot-999-kemet-s-treasures",
+      "price": {
+        "value": 757.75,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_kemet_s_treasures.png",
+      "local_image": "images/ES999IXTJNFXXX5.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_kemet_s_treasures.png"
+    },
+    {
+      "sku": "ES999IXRBTCXXX5",
+      "name": "5g Ingot - BTC 999",
+      "url_key": "5g-ingot-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5g-ingot-btc-999",
+      "price": {
+        "value": 757.75,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_-_btc_999.png",
+      "local_image": "images/ES999IXRBTCXXX5.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999.png"
+    },
+    {
+      "sku": "ES999IXFTHAXXX5",
+      "name": "5g Ingot 999 - Al-Fatiha",
+      "url_key": "5g-ingot-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5g-ingot-999-al-fatiha",
+      "price": {
+        "value": 757.75,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_999_-_al-fatiha.png",
+      "local_image": "images/ES999IXFTHAXXX5.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_999_-_al-fatiha.png"
+    },
+    {
+      "sku": "ES999IXANGLXX10",
+      "name": " 10g Silver Ingot - Angel",
+      "url_key": "10g-silver-ingot-angel",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-silver-ingot-angel",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/a/n/angel_gcc_web_silver_front_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/a/n/angel_gcc_web_silver_front_1.png",
+      "local_image": "images/ES999IXANGLXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/a/n/angel_gcc_web_silver_front_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/a/n/angel_gcc_web_silver_front_1.png"
+    },
+    {
+      "sku": "ES999IXLILOXX10",
+      "name": "10g Silver Ingot - Lilo",
+      "url_key": "10g-silver-ingot-lilo",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-silver-ingot-lilo",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/i/lilo_gcc_web_silver_front_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/l/i/lilo_gcc_web_silver_front_1.png",
+      "local_image": "images/ES999IXLILOXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/i/lilo_gcc_web_silver_front_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/i/lilo_gcc_web_silver_front_1.png"
+    },
+    {
+      "sku": "ES999IXSTCHXX10",
+      "name": "10g Silver Ingot - Stitch",
+      "url_key": "10g-silver-ingot-stitch",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-silver-ingot-stitch",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/s/t/stitch_gcc_web_silver_front_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/s/t/stitch_gcc_web_silver_front_1.png",
+      "local_image": "images/ES999IXSTCHXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/s/t/stitch_gcc_web_silver_front_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/s/t/stitch_gcc_web_silver_front_1.png"
+    },
+    {
+      "sku": "ES999IXPLUMX100",
+      "name": "100g Ingot 999 - Paradise for Mothers",
+      "url_key": "100g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "product_url": "https://shop.bulliontradingcenter.com/product/100g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "price": {
+        "value": 14405,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_5.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/8/_/8_5.png",
+      "local_image": "images/ES999IXPLUMX100.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_5.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_5.png"
+    },
+    {
+      "sku": "ES999IXPLUMXX50",
+      "name": "50g Ingot 999 - Paradise for Mothers",
+      "url_key": "50g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "price": {
+        "value": 7252.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_4.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/8/_/8_4.png",
+      "local_image": "images/ES999IXPLUMXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_4.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_4.png"
+    },
+    {
+      "sku": "ES999IXPLUM31X1",
+      "name": "31.1g Ingot 999 -  Paradise for Mothers",
+      "url_key": "31-1g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "price": {
+        "value": 4542.16,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_1.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/8/_/8_1.png",
+      "local_image": "images/ES999IXPLUM31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_1.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_1.png"
+    },
+    {
+      "sku": "ES999IXPLUMXX20",
+      "name": "20g Ingot 999 - Paradise for Mothers",
+      "url_key": "20g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "product_url": "https://shop.bulliontradingcenter.com/product/20g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "price": {
+        "value": 2941,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_3.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/8/_/8_3.png",
+      "local_image": "images/ES999IXPLUMXX20.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_3.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_3.png"
+    },
+    {
+      "sku": "ES999IXPLUMXX10",
+      "name": "10g Ingot 999 - Paradise for Mothers",
+      "url_key": "10g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_2.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/8/_/8_2.png",
+      "local_image": "images/ES999IXPLUMXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_2.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8_2.png"
+    },
+    {
+      "sku": "ES999IXPLUMXXX5",
+      "name": "5g Ingot 999 - Paradise for Mothers",
+      "url_key": "5g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5g-ingot-paradise-lies-under-the-feet-of-mothers",
+      "price": {
+        "value": 757.75,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/8/_/8.png",
+      "local_image": "images/ES999IXPLUMXXX5.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/8/_/8.png"
+    },
+    {
+      "sku": "ES999IXMKSAXX50",
+      "name": "50g Map - Saudi Arabia 999",
+      "url_key": "50g-map-saudi-arabia-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/50g-map-saudi-arabia-999",
+      "price": {
+        "value": 7277.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/k/s/ksa.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/k/s/ksa.png",
+      "local_image": "images/ES999IXMKSAXX50.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/k/s/ksa.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/k/s/ksa.png"
+    },
+    {
+      "sku": "ES999IXMEGP31X1",
+      "name": "31.1g Map - Egypt 999",
+      "url_key": "31-1g-map-egypt-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-map-egypt-999",
+      "price": {
+        "value": 4557.7,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/e/g/egypt.png",
+      "local_image": "images/ES999IXMEGP31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/e/g/egypt.png"
+    },
+    {
+      "sku": "ES999IXRBTC31X1",
+      "name": "31.1g Ingot - BTC 999",
+      "url_key": "31-1g-ingot-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-ingot-btc-999",
+      "price": {
+        "value": 4542.16,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_5.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_-_btc_999_5.png",
+      "local_image": "images/ES999IXRBTC31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_5.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_5.png"
+    },
+    {
+      "sku": "ES999IXRBTCXX10",
+      "name": "10g Ingot - BTC 999 ",
+      "url_key": "10g-ingot-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/10g-ingot-btc-999",
+      "price": {
+        "value": 1480.5,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_3.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/g/5g_ingot_-_btc_999_3.png",
+      "local_image": "images/ES999IXRBTCXX10.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_3.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/g/5g_ingot_-_btc_999_3.png"
+    }
+  ]
+}

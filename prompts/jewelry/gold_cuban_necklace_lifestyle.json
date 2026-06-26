@@ -1,0 +1,20 @@
+{
+  "prompt": "Use the first reference image for the scene, composition, lighting, model, and setting. Replace the jewelry worn by the model with the necklace shown in the second reference image. Preserve every detail from both images — do not add, alter, or reinterpret anything.",
+  "negative_prompt": "product tags, safety pins, display busts, calculators, cables, purple backgrounds, retail setting, harsh studio flash, skin smoothing, plastic skin, airbrushed texture, beautification filters, anatomy normalization, stylized realism, HDR tonemapping, digital art, illustration, cartoon, anime, 3D render, over-saturated colors, text overlays, watermarks",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773700029_gold_jewelry_lifestyle.jpg",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1773700072_img_20260308_220245.jpg"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "lifestyle jewelry, golden hour, natural outdoor",
+    "lighting": "warm natural golden hour, soft directional",
+    "camera_angle": "chest-up close-up, slight three-quarter",
+    "depth_of_field": "shallow, f/2.0, creamy bokeh",
+    "quality": "ultra_high"
+  }
+}

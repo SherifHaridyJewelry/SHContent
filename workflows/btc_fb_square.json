@@ -1,0 +1,18 @@
+{
+  "name": "btc_fb_square_gpt_image2",
+  "description": "Facebook 1:1 silver ingot ad creatives via GPT Image 2 image-to-image",
+  "model": "gpt-image-2-image-to-image",
+  "model_docs": "https://docs.kie.ai/market/gpt/gpt-image-2-image-to-image",
+  "category": "bullion",
+  "aspect_ratio": "1:1",
+  "resolution": "2K",
+  "output_image": "images/bullion/btc_silver_investment_fb_square_gpt.jpg",
+  "prompt_file": "prompts/bullion/btc_silver_investment_fb_square_gpt_i2i.json",
+  "products_catalog": "scraped/bullion-trading-center/silver-ingots/products.json",
+  "product_skus": [
+    "ES999IXEGALX100",
+    "ES999IXMOALX100",
+    "ES999IXRBTCX100"
+  ],
+  "r2_prefix": "products/btc-silver"
+}

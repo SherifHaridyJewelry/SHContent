@@ -1,0 +1,19 @@
+{
+  "prompt": "Use the first reference image ONLY for the printed invitation artwork: border style, gold filigree, pale pink florals, Arabic typography hierarchy, and internal layout. Output must show the invitation card ALONE with no scene dressing. Absolutely NO fabric, NO satin drape, NO rose petals, NO fresh roses, NO wax seal, NO ribbons, NO props, NO hands — only the rectangular card design as if ready to send to a print shop. Full card visible with a thin natural paper edge or very subtle deckled edge optional. Background: seamless clean pure white (#FFFFFF) or soft warm off-white studio sweep with no texture, no gradient clutter; minimal soft contact shadow directly under the card edges only (very light) so the card reads as a physical sheet, not a floating graphic. Card face: same cream/off-white cardstock, thick ornate metallic gold damask-filigree border around the entire card, pale blush-pink floral corner illustrations inside the border with delicate gold outlining and small side floral accents. Typography: large ornate centered gold calligraphy title exactly \"دعوة زفاف\"; names \"أحمد الغريب\" and \"جنة بدران\" in bold gold stylized Arabic calligraphy separated by a small refined gold heart, gold flourishes above and below. Body in formal black Arabic Naskh: \"بقلوب تملؤها الفرحة والسرور، نتشرف بدعوتكم لحضور حفل زفافنا الميمون\". Two-column detail row: \"يوم الخميس | الموافق 27 مارس\" and \"بقاعة هلنان | الساعة التاسعة مساءً\" with elegant vertical dividers. Bottom gold-outlined frame: \"عائلة: ................\" \"عدد الأفراد: ................\" \"رقم المائدة: ................\". Camera: copy-stand perpendicular 90° to card plane, 50mm macro-flat perspective, f/8, ISO 100, even dual softbox lighting, fully sharp front-to-back across the card, print-ready sharpness on all text. Preserve palette: cream, gold, pale pink only on the card. Do not add watermarks, QR codes, or English.",
+  "negative_prompt": "fabric, satin, silk, tablecloth, drapery folds, rose petals, flowers beside card, wax seal, stamp, ribbon bow, props, lifestyle scene, wooden table, marble surface, tiles, hands, pen, envelope, wrong Arabic spelling, mirrored RTL text, Latin letters, watermark, QR code, heavy vignette, blurry tiny Arabic, cropped card corners, bent card, perspective tilt, busy shadow patterns",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1774022499_wedding_invitation_inspiration.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "isolated print-ready Arabic wedding invitation, die-cut card only",
+    "lighting": "even copy-stand softboxes, no directional mood lighting",
+    "camera_angle": "dead-center perpendicular to card face",
+    "depth_of_field": "full sharpness across entire card for litho reproduction",
+    "quality": "ultra_high print reproduction"
+  }
+}

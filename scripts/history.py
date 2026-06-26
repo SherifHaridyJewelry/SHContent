@@ -95,12 +95,17 @@ def cmd_retry(args):
         print(f"ERROR: Prompt file no longer exists: {prompt_file}")
         sys.exit(1)
 
-    cmd = [
-        sys.executable,
-        str(PROJECT_ROOT / "scripts" / "generate_kie.py"),
-        prompt_file,
-        output_file,
-    ]
+    generator = entry.get("generator", "generate_kie.py")
+    if "gpt_image" in generator:
+        script = PROJECT_ROOT / "scripts" / "generate_kie_gpt_image.py"
+    else:
+        script = PROJECT_ROOT / "scripts" / "generate_kie.py"
+
+    cmd = [sys.executable, str(script), prompt_file, output_file]
+
+    model = entry.get("model")
+    if model and "gpt_image" in str(script):
+        cmd.extend(["--model", model])
 
     ar = entry.get("aspect_ratio")
     if ar and ar != "auto":

@@ -1,0 +1,146 @@
+---
+description: Product photography pipeline - template generation, vision analysis, prompt building, R2 integration, and batch processing
+globs:
+  - "templates/**/*.json"
+  - "scripts/product_pipeline.py"
+  - "scripts/template_manager.py"
+  - "scripts/vision_analyze.py"
+  - "scripts/prompt_builder.py"
+  - "scripts/r2_upload.py"
+---
+
+# Product Photography Pipeline
+
+## Overview
+
+The product pipeline takes raw product images and produces styled photography using brand templates. Templates are auto-generated from inspiration images via Gemini 3 Flash.
+
+```
+Raw Product Image(s) -> Upload to R2 -> (Optional) Vision Analysis -> Build Prompt -> Generate via Nano Banana 2
+```
+
+## Brand Template Schema
+
+Templates live in `templates/` as JSON files. They define everything about the scene and style, but nothing about the specific product.
+
+```json
+{
+  "template_name": "string - descriptive name",
+  "category": "string - e.g., jewelry, accessories",
+  "product_type": "string - ring, necklace, earrings, bracelet, brooch, watch, pendant, general_jewelry",
+  "scene": {
+    "surface": "string - what the product sits on",
+    "background": "string - what is behind/around",
+    "props": "string - additional objects or 'none'",
+    "arrangement": "string - how the product is positioned"
+  },
+  "camera": {
+    "focal_length": "string - e.g., '100mm macro'",
+    "aperture": "string - e.g., 'f/4.0'",
+    "iso": "string - e.g., '100'",
+    "lens_behavior": "string - focus and bokeh characteristics",
+    "shooting_angle": "string - camera angle relative to subject"
+  },
+  "lighting": {
+    "setup": "string - detailed light positions, modifiers, ratios",
+    "quality": "string - overall light quality and mood"
+  },
+  "style": "string - overall photographic style",
+  "style_references": ["array of R2 URLs - inspiration images included in every generation"],
+  "quality_directives": "string - photorealism requirements",
+  "negative_prompt": "string - comma-separated things to avoid",
+  "api_parameters": {
+    "aspect_ratio": "string - 4:5, 1:1, 16:9, etc.",
+    "resolution": "string - 1K, 2K, or 4K",
+    "output_format": "string - jpg or png"
+  }
+}
+```
+
+No human model or body in templates. That feature is deferred to a future update using NanoBanana's character image payload.
+
+## Template Generation Workflow
+
+Templates are created from inspiration images, not written by hand.
+
+1. Save an inspiration image to `raw/inspiration/`.
+2. Generate: `python scripts/template_manager.py generate raw/inspiration/image.jpg --name "My Style"`
+3. The script uploads the image to R2 (under `references/` prefix), sends it to Gemini 3 Flash for style analysis, and saves the resulting template with the R2 URL in `style_references`.
+4. Review and edit the template if needed.
+5. Multiple inspiration images can be provided: `generate img1.jpg img2.jpg --name "My Style"`
+6. Override product type detection: `--product-type ring`
+
+## image_input Composition
+
+Every Nano Banana 2 generation includes `image_input` composed as:
+
+1. `style_references` from the template (inspiration images) -- these come first
+2. Raw product image URLs -- these come after
+
+Combined total must not exceed 14 (the API limit). Recommended budget: 2-3 style references, leaving 11-12 slots for product angles.
+
+Product images in `image_input` are mandatory. The model needs them to reproduce the exact product.
+
+## Vision Analysis (Optional)
+
+Disabled by default. Enable with `--analyze` flag.
+
+- **Without analysis (default):** prompt uses "the jewelry piece shown in the reference images" as the subject. Nano Banana relies on `image_input` to see the product.
+- **With `--analyze`:** Gemini 3 Flash describes the product (material, dimensions, features) and the description is woven into the prompt text.
+
+API: `POST https://api.kie.ai/gemini-3-flash/v1/chat/completions` with `response_format` for structured output. Uses the same `KIE_API_KEY`.
+
+## Cloudflare R2
+
+R2 is S3-compatible. Credentials in `.env`:
+- `CF_ACCOUNT_ID`, `CF_R2_ACCESS_KEY`, `CF_R2_SECRET_KEY`, `CF_R2_BUCKET`, `CF_R2_PUBLIC_URL`
+
+Key prefixes:
+- `products/` -- raw product photos
+- `references/` -- inspiration/style reference images
+
+Upload: `python scripts/r2_upload.py upload <files> [--prefix products]`
+
+## Product Pipeline CLI
+
+Single product:
+```bash
+python scripts/product_pipeline.py --image raw/ring.jpg -t template_name -n output_name
+```
+
+Multiple angles of one product:
+```bash
+python scripts/product_pipeline.py --image raw/ring_front.jpg raw/ring_side.jpg -t template_name -n output_name
+```
+
+Batch (each file = separate product, same template):
+```bash
+python scripts/product_pipeline.py --batch raw/ring.jpg raw/necklace.jpg -t template_name --output-prefix collection
+```
+
+Batch-dir (each subfolder = product with multiple angles):
+```bash
+python scripts/product_pipeline.py --batch-dir raw/collection/ -t template_name --output-prefix collection
+```
+
+Flags:
+- `--analyze` -- enable Gemini vision analysis
+- `--hint "context"` -- provide a hint for vision analysis
+- `--category jewelry` -- output subfolder (default: jewelry)
+
+## Output Locations
+
+- Prompts: `prompts/<category>/<name>.json`
+- Images: `images/<category>/<name>.jpg`
+- History: auto-logged to `logs/history.json`
+
+## Template Management
+
+```bash
+python scripts/template_manager.py generate <images> --name "Name"   # Create from inspiration
+python scripts/template_manager.py list [--product-type ring]         # List templates
+python scripts/template_manager.py show <template>                    # View contents
+python scripts/template_manager.py validate <template>                # Check schema
+python scripts/template_manager.py clone <template> "New Name"        # Duplicate
+python scripts/template_manager.py add-reference <template> <image>   # Add style ref
+```

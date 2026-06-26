@@ -1,0 +1,21 @@
+{
+  "prompt": "Product photography in the style of Minimalist editorial catalog, high-end lifestyle studio photography. Hero subject: The jewelry piece shown in the reference images, placed as the hero subject, with all original details, textures, and proportions faithfully preserved. The product is placed on Cream-colored linen-textured jewelry bust, with Centrally positioned on the bust, following the natural curve of the neck, layered with appropriate spacing. Background: Flat, muted sage green matte background with soft gradient. Shot with a 85mm or 100mm macro lens lens, f/2.8 to f/4.0, ISO 100. Shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture. Camera angle: Eye-level, varying between straight-on and a slight three-quarter perspective. Lighting: Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion. Soft, wrap-around light with gentle shadow transitions; clean, bright highlights to define metallic edges and surface sheen. Extreme detail on fabric weave and metal grain, no visible digital noise, professional color grading, realistic micro-reflections on metal surfaces, clean minimalist composition Reproduce the product from the reference images with exact fidelity -- preserve every detail of shape, texture, material finish, and construction. Do not alter, simplify, or reinterpret the product design.",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, specular highlights, cluttered background, lens flare, dust on lens",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp01.jpg",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp02.jpg",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1773699197_img_20260308_220245.jpg"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "Minimalist editorial catalog, high-end lifestyle studio photography",
+    "lighting": "Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion",
+    "camera_angle": "Eye-level, varying between straight-on and a slight three-quarter perspective",
+    "depth_of_field": "Shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture",
+    "quality": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional color grading, realistic micro-reflections on metal surfaces, clean minimalist composition"
+  }
+}

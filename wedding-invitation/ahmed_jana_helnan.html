@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>دعوة فرح — أحمد وجنة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=El+Messiri:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #2c2416;
+      --gold: #b8860b;
+      --gold-light: #d4af37;
+      --cream: #faf6ef;
+      --rose: #c9a9a6;
+      --border: rgba(184, 134, 11, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(212, 175, 55, 0.12), transparent 55%),
+        linear-gradient(165deg, #f5efe4 0%, var(--cream) 45%, #ede4d6 100%);
+      font-family: "El Messiri", "Amiri", serif;
+      color: var(--ink);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: #fffef9;
+      border: 1px solid var(--border);
+      box-shadow:
+        0 4px 24px rgba(44, 36, 22, 0.08),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid var(--border);
+      pointer-events: none;
+    }
+
+    .ornament {
+      text-align: center;
+      font-size: 1.25rem;
+      color: var(--gold);
+      letter-spacing: 0.35em;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+
+    h1 {
+      font-family: "Amiri", serif;
+      font-weight: 700;
+      font-size: clamp(1.85rem, 5vw, 2.35rem);
+      text-align: center;
+      margin: 0 0 0.25rem;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #5c5346;
+      margin-bottom: 1.75rem;
+    }
+
+    .names {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .names .line {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 0.35rem 0;
+      color: var(--ink);
+    }
+
+    .names .and {
+      font-size: 1rem;
+      color: var(--gold);
+      margin: 0.5rem 0;
+      font-weight: 600;
+    }
+
+    .details {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 0;
+      margin: 0 0 1.5rem;
+    }
+
+    .detail-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.75rem;
+      justify-content: center;
+      align-items: baseline;
+      font-size: 1.05rem;
+      margin: 0.5rem 0;
+      text-align: center;
+    }
+
+    .detail-row strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .invite-text {
+      text-align: center;
+      font-size: 1rem;
+      line-height: 1.85;
+      color: #4a4338;
+      margin-bottom: 1.5rem;
+    }
+
+    .fields {
+      display: grid;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .field {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 1rem;
+    }
+
+    .field label {
+      white-space: nowrap;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .field .line-input {
+      flex: 1;
+      min-width: 140px;
+      border: none;
+      border-bottom: 1px dashed var(--gold);
+      background: transparent;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.15rem 0.25rem;
+      color: var(--ink);
+    }
+
+    .field .line-input:focus {
+      outline: none;
+      border-bottom-style: solid;
+    }
+
+    .footer-ornament {
+      text-align: center;
+      margin-top: 1.75rem;
+      font-size: 0.9rem;
+      color: var(--rose);
+      letter-spacing: 0.2em;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .card {
+        box-shadow: none;
+        max-width: none;
+        border: none;
+      }
+
+      .card::before {
+        inset: 8px;
+      }
+
+      .no-print {
+        display: none;
+      }
+    }
+
+    .print-hint {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #8a8070;
+    }
+  </style>
+</head>
+<body>
+  <article class="card" aria-label="دعوة زفاف">
+    <div class="ornament">✦ ✦ ✦</div>
+    <h1>بسم الله الرحمن الرحيم</h1>
+    <p class="subtitle">يتشرفان بدعوتكم لحضور حفل زفافهما</p>
+
+    <div class="names">
+      <p class="line">العريس: <span>أحمد الغريب</span></p>
+      <p class="and">و</p>
+      <p class="line">العروس: <span>جنة بدران</span></p>
+    </div>
+
+    <div class="details">
+      <div class="detail-row">
+        <strong>اليوم:</strong>
+        <span>الخميس</span>
+      </div>
+      <div class="detail-row">
+        <strong>الموافق:</strong>
+        <span>٢٧ مارس (٢٧ / ٣)</span>
+      </div>
+      <div class="detail-row">
+        <strong>المكان:</strong>
+        <span>قاعة هلنان</span>
+      </div>
+      <div class="detail-row">
+        <strong>الموعد:</strong>
+        <span>الساعة التاسعة مساءً</span>
+      </div>
+    </div>
+
+    <p class="invite-text">
+      نسعد بمشاركتكم فرحتنا، ونتمنى أن تزيدونا شرفًا بحضوركم الكريم.
+    </p>
+
+    <div class="fields">
+      <div class="field">
+        <label for="family">اسم العائلة</label>
+        <input id="family" class="line-input" type="text" name="family" autocomplete="off" placeholder="…………………………" />
+      </div>
+      <div class="field">
+        <label for="count">عدد الأفراد</label>
+        <input id="count" class="line-input" type="text" name="count" inputmode="numeric" autocomplete="off" placeholder="…………………………" />
+      </div>
+      <div class="field">
+        <label for="table">رقم المائدة</label>
+        <input id="table" class="line-input" type="text" name="table" autocomplete="off" placeholder="…………………………" />
+      </div>
+    </div>
+
+    <div class="footer-ornament">— والحضور يشرّفنا —</div>
+    <p class="print-hint no-print">للطباعة: استخدم Ctrl+P (أو Cmd+P) واختر حجم ورق A5 أو A4.</p>
+  </article>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "prompt": "Vertical 9:16 Facebook Stories / Reels ad frame for silver bullion. Two ingot bars from reference images stacked with elegant spacing on black marble with thin white veining — 100g Egypt in all languages bar upper-center, 50g Egypt in all languages bar lower-center, both preserving exact engravings and dual-texture silver finish from references. Dramatic cinematic lighting: narrow strip softbox from above-left, deep shadows falling toward bottom third. Bottom third of vertical frame is dark empty space for swipe-up CTA text to be added in Ads Manager — no baked-in text or stickers. Shot 70mm f/4 ISO 200, vertical portrait orientation. Premium Bullion Trading Center silver collection ad, hyper-real metal speculars and micro-scratches visible on matte borders. Do not add people, jewelry boxes, or unrelated props.",
+  "negative_prompt": "text overlays, stickers, emoji, watermarks, UI buttons, wrong bar designs, resized illegible engravings, plastic look, 3D render, horizontal crop, cluttered background, gold only, coins pile, hands holding bars, beauty filters, oversaturated teal orange grading",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407351_es999ixegalx100.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407358_es999ixegalxx50.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "9:16",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "cinematic vertical story ad, bullion",
+    "lighting": "dramatic strip softbox, moody",
+    "camera_angle": "straight-on vertical hero",
+    "depth_of_field": "moderate, both bars sharp",
+    "quality": "ultra_high"
+  }
+}

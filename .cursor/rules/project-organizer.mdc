@@ -1,8 +1,9 @@
 ---
-description: Project organization rules for the Nano Banana 2 image generation workflow - file structure, naming, and process enforcement
+description: Project organization rules for the SHContent image generation and product photography pipeline - file structure, naming, and process enforcement
 globs:
   - "images/**"
   - "prompts/**"
+  - "templates/**"
   - "logs/**"
   - "gemini.md"
 alwaysApply: true
@@ -10,25 +11,43 @@ alwaysApply: true
 
 # Project Organizer
 
+## Do not delete existing files
+
+- **Never delete** an existing file in this project (any path: root, `images/`, `raw/`, `prompts/`, etc.) unless the user **explicitly** asks you to remove it.
+- If a file conflicts with another guideline (for example an image sitting in the project root instead of `images/<category>/`), **do not delete it**: leave it as-is, or ask the user how they want it handled (e.g. duplicate vs move).
+- Prefer adding or updating files over removing them.
+
 ## Mandatory File Organization
 
 Every image generation must follow this structure. No exceptions.
 
 ### Images
 
-- All generated images go in `images/<category>/` (e.g., `images/infographics/`, `images/portraits/`, `images/products/`).
+- All generated images go in `images/<category>/` (e.g., `images/jewelry/`, `images/infographics/`, `images/products/`).
 - If no clear category applies, use `images/miscellaneous/`.
 - Never save images to the project root or any other location.
 
 ### Prompts
 
 - Every generated image must have a corresponding prompt JSON saved in `prompts/`.
-- The subfolder in `prompts/` must mirror the subfolder used in `images/` (e.g., if the image is at `images/infographics/chart.jpg`, the prompt goes to `prompts/infographics/chart.json`).
+- The subfolder in `prompts/` must mirror the subfolder used in `images/` (e.g., if the image is at `images/jewelry/ring.jpg`, the prompt goes to `prompts/jewelry/ring.json`).
 - Prompts use the Dense Narrative JSON format (see `.cursor/rules/nano-banana.mdc` for schema).
+
+### Templates
+
+- Brand templates live in `templates/` as JSON files.
+- Templates are auto-generated from inspiration images via `scripts/template_manager.py generate`.
+- See `.cursor/rules/product-pipeline.mdc` for the template schema and pipeline workflow.
+
+### Raw Images
+
+- Raw product photos and inspiration images go in `raw/` (gitignored).
+- Inspiration images: `raw/inspiration/`
+- Product photos: `raw/` or organized in subfolders for batch processing.
 
 ### Logs
 
-- `logs/history.json` is auto-populated by `scripts/generate_kie.py`. Do not manually edit it.
+- `logs/history.json` is auto-populated by `scripts/generate_kie.py` and `scripts/product_pipeline.py`. Do not manually edit it.
 - Use `python scripts/history.py list` to review past generations.
 
 ## Environment
@@ -39,18 +58,47 @@ Before running any Python script, activate the virtual environment:
 source ~/.venvs/shcontent/bin/activate
 ```
 
-The `.env` file in the project root must contain `KIE_API_KEY`. Never commit `.env` to version control.
+The `.env` file in the project root must contain:
+- `KIE_API_KEY` -- KIE API key (used for Nano Banana 2 and Gemini 3 Flash)
+- `CF_ACCOUNT_ID`, `CF_R2_ACCESS_KEY`, `CF_R2_SECRET_KEY`, `CF_R2_BUCKET`, `CF_R2_PUBLIC_URL` -- Cloudflare R2 credentials
 
-## Image Generation Workflow
+Never commit `.env` to version control.
 
-When the user requests an image:
+## Workflows
 
-1. Construct a Dense Narrative JSON prompt based on the user's requirements (follow `.cursor/rules/nano-banana.mdc`).
-2. Save the prompt to `prompts/<category>/<descriptive_name>.json`.
-3. Validate it: `python scripts/prompt_manager.py validate prompts/<file>.json`
+### Direct Prompt Workflow (manual)
+
+When the user provides a text description and wants a custom prompt:
+
+1. Construct a Dense Narrative JSON prompt (follow `.cursor/rules/nano-banana.mdc`).
+2. Save to `prompts/<category>/<name>.json`.
+3. Validate: `python scripts/prompt_manager.py validate prompts/<file>.json`
 4. Generate: `python scripts/generate_kie.py prompts/<file>.json images/<category>/<output>.jpg --aspect-ratio "4:5"`
-5. Confirm the image was saved to the correct categorized subfolder in `images/`.
-6. History is auto-logged. Verify with `python scripts/history.py list` if needed.
+5. History is auto-logged.
+
+### BTC Facebook Square Workflow (GPT Image 2)
+
+For Bullion Trading Center silver ingot Facebook **1:1** ads using scraped product photos:
+
+1. Config: `workflows/btc_fb_square.json`
+2. Run: `python scripts/btc_fb_square_workflow.py`
+3. Output: `images/bullion/btc_silver_investment_fb_square_gpt.jpg`
+4. Prompt: `prompts/bullion/btc_silver_investment_fb_square_gpt_i2i.json`
+
+Uses `gpt-image-2-image-to-image` with `input_urls` from R2. Manual retry: `python scripts/generate_kie_gpt_image.py prompts/bullion/btc_silver_investment_fb_square_gpt_i2i.json images/bullion/btc_silver_investment_fb_square_gpt.jpg -m i2i -ar 1:1 -r 2K`
+
+**9 variation set** (ingot / coin / bar / mixed): config `workflows/btc_fb_square_variations.json`, run `python scripts/btc_fb_variations_workflow.py` → `images/bullion/variations/`
+
+**Coins catalog (Disney/Marvel):** Do **not** use Seedream or Wan (lower quality vs GPT Image 2 / Nano Banana). Use `generate_kie.py` (Nano Banana 2) with `image_input` — it tolerates licensed character refs better than GPT Image 2. Output to `images/bullion/catalog/` (GPT) or `images/bullion/catalog-nano/` (Nano Banana). Scripts `generate_kie_market.py` and `btc_coins_*` Seedream/Wan workflows are deprecated for this project.
+
+### Product Pipeline Workflow (template-based)
+
+When the user has raw product images and wants styled photography:
+
+1. Create a template from inspiration images: `python scripts/template_manager.py generate raw/inspiration/image.jpg --name "My Style"`
+2. Run the pipeline: `python scripts/product_pipeline.py --image raw/product.jpg -t my_style -n product_name`
+3. For batches: `python scripts/product_pipeline.py --batch-dir raw/collection/ -t my_style --output-prefix collection`
+4. See `.cursor/rules/product-pipeline.mdc` for full pipeline details.
 
 ## Parallel Processing
 
@@ -64,7 +112,14 @@ When processing multiple images at the same time, you MUST run their generation 
 | `scripts/get_kie_image.py` | Fetch/download image for an existing task ID (supports polling) | Active |
 | `scripts/prompt_manager.py` | List, create, validate, and show prompt JSON files | Active |
 | `scripts/history.py` | View task history, show details, retry failed tasks | Active |
+| `scripts/product_pipeline.py` | End-to-end product pipeline: upload -> analyze -> build prompt -> generate | Active |
+| `scripts/template_manager.py` | Generate/manage brand templates from inspiration images via Gemini | Active |
+| `scripts/vision_analyze.py` | Analyze product images via Gemini 3 Flash (optional step) | Active |
+| `scripts/prompt_builder.py` | Build Dense Narrative prompts from template + product info | Active |
+| `scripts/r2_upload.py` | Upload/manage files on Cloudflare R2 | Active |
+| `scripts/generate_kie_gpt_image.py` | Generate images via GPT Image 2 (text-to-image / image-to-image) | Active |
+| `scripts/btc_fb_square_workflow.py` | BTC Facebook 1:1 silver ad workflow (GPT Image 2 i2i) | Active |
 
 ## Current Phase
 
-Schema Validation -- generating complex test images to validate the JSON schema's effectiveness. All output must be properly filed per the rules above.
+Product Pipeline -- building and testing the template-based product photography pipeline with Cloudflare R2 and Gemini 3 Flash integration.

@@ -1,0 +1,103 @@
+{
+  "scraped_from": "https://shop.bulliontradingcenter.com/products/silver/wearables",
+  "graphql_endpoint": "https://magento-1205032-5154147.cloudwaysapps.com/graphql",
+  "category": {
+    "uid": "NTU=",
+    "name": "Wearables",
+    "url_path": "silver/wearables",
+    "source_url": "https://shop.bulliontradingcenter.com/products/silver/wearables",
+    "total_count": 6
+  },
+  "products": [
+    {
+      "sku": "EWXWBOXX25X",
+      "name": "BTC  Wooden Box for 25 Cards",
+      "url_key": "btc-wooden-box-for-25-cards",
+      "product_url": "https://shop.bulliontradingcenter.com/product/btc-wooden-box-for-25-cards",
+      "price": {
+        "value": 1000,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/a/large_box..png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/l/a/large_box..png",
+      "local_image": "images/EWXWBOXX25X.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/a/large_box..png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/l/a/large_box..png"
+    },
+    {
+      "sku": "ES999BWENAS31X1",
+      "name": " 31.10g Bangle 999 -  Al Nas",
+      "url_key": "31-10g-bangle-999-al-nas",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-10g-bangle-999-al-nas",
+      "price": {
+        "value": 4837.6,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_al_nas.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/3/1/31.10g_bangle_999-_al_nas.png",
+      "local_image": "images/ES999BWENAS31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_al_nas.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_al_nas.png"
+    },
+    {
+      "sku": "ES999BWNEFG31X1",
+      "name": "31.10g Bangle 999 - Needy for Grace",
+      "url_key": "31-10g-bangle-999-needy-for-grace",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-10g-bangle-999-needy-for-grace",
+      "price": {
+        "value": 4837.6,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_needy_for_grace.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/3/1/31.10g_bangle_999-_needy_for_grace.png",
+      "local_image": "images/ES999BWNEFG31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_needy_for_grace.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_needy_for_grace.png"
+    },
+    {
+      "sku": "ES999BWREIB31X1",
+      "name": "31.10g Bangle 999 -  Rejoice in Blessings",
+      "url_key": "31-10g-bangle-999-rejoice-in-blessings",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-10g-bangle-999-rejoice-in-blessings",
+      "price": {
+        "value": 4837.6,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_rejoice_in_blessings.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/3/1/31.10g_bangle_999-_rejoice_in_blessings.png",
+      "local_image": "images/ES999BWREIB31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_rejoice_in_blessings.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_rejoice_in_blessings.png"
+    },
+    {
+      "sku": "ES999BWFATH31X1",
+      "name": "31.10g Bangle 999 - Al-Fatiha",
+      "url_key": "31-10g-bangle-999-al-fatiha",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-10g-bangle-999-al-fatiha",
+      "price": {
+        "value": 4837.6,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_al_fatiha.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/3/1/31.10g_bangle_999-_al_fatiha.png",
+      "local_image": "images/ES999BWFATH31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_al_fatiha.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/3/1/31.10g_bangle_999-_al_fatiha.png"
+    },
+    {
+      "sku": "ES999IWBARB31X1",
+      "name": "31.1g Bangle 999 - Arabesque",
+      "url_key": "31-1g-bangle-arabesque",
+      "product_url": "https://shop.bulliontradingcenter.com/product/31-1g-bangle-arabesque",
+      "price": {
+        "value": 4837.6,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/a/r/arabisqq.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/a/r/arabisqq.png",
+      "local_image": "images/ES999IWBARB31X1.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/a/r/arabisqq.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/a/r/arabisqq.png"
+    }
+  ]
+}

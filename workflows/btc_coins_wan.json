@@ -1,0 +1,90 @@
+{
+  "name": "btc_coins_wan",
+  "description": "BTC silver coins catalog via wan/2-7-image-pro",
+  "model": "wan/2-7-image-pro",
+  "generator": "generate_kie_market.py",
+  "approved_style": {
+    "background": "deep midnight navy blue matte seamless studio backdrop",
+    "lighting": "even balanced studio lighting, large softboxes left and right, catalog clarity"
+  },
+  "aspect_ratio": "1:1",
+  "r2_prefix": "products/btc-silver",
+  "prompts_dir": "prompts/bullion/catalog-wan",
+  "images_dir": "images/bullion/catalog-wan",
+  "api_parameters": {
+    "aspect_ratio": "1:1",
+    "nsfw_checker": false,
+    "resolution": "2K",
+    "n": 1,
+    "watermark": false
+  },
+  "catalogs": {
+    "coins": "scraped/bullion-trading-center/silver-coins/products.json"
+  },
+  "variations": [
+    {
+      "id": "collection_coins_1",
+      "label": "Coins catalog part 1 (9 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXAKBRXX10",
+        "ES999PXDASDXX10",
+        "ES999PXDDPLXX10",
+        "ES999PXDONDXX10",
+        "ES999PXHADLXX10",
+        "ES999PXHULKXX10",
+        "ES999PXIRMNXX10",
+        "ES999PXLEEAXX10",
+        "ES999PXMICMXX10"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_1_wan.jpg"
+    },
+    {
+      "id": "collection_coins_2",
+      "label": "Coins catalog part 2 (9 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXMINMXX10",
+        "ES999PXMRSCXX10",
+        "ES999PXSBHNXX10",
+        "ES999PXSPMNXX10",
+        "ES999PXTHORXX10",
+        "ES999PXWOLVXX10",
+        "ES999PXXHDLXX10",
+        "ES999PXDDPLXXX8",
+        "ES999PXDONDXX50"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_2_wan.jpg"
+    },
+    {
+      "id": "collection_coins_3",
+      "label": "Coins catalog part 3 (9 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXDasDXX50",
+        "ES999PXIRMNXX50",
+        "ES999PXKULKXX50",
+        "ES999PXMICMXX50",
+        "ES999PXMINMXX50",
+        "ES999PXMRSCXX50",
+        "ES999PXSPMNXX50",
+        "ES999PXTHORXX50",
+        "ES999PXWOLVXXX8"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_3_wan.jpg"
+    },
+    {
+      "id": "collection_coins_4",
+      "label": "Coins catalog part 4 (1 coins)",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXXHDLXX50"
+      ],
+      "composition": "Catalog grid on navy: arrange every silver coin from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), each design legible, no overlapping products",
+      "output": "fb_square_collection_coins_4_wan.jpg"
+    }
+  ]
+}

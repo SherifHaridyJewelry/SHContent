@@ -1,0 +1,113 @@
+{
+  "name": "btc_fb_square_variations",
+  "description": "9 Facebook 1:1 silver ad creatives — navy backdrop, even studio light",
+  "approved_style": {
+    "background": "deep midnight navy blue matte seamless studio backdrop",
+    "lighting": "even balanced studio lighting, large softboxes left and right, catalog clarity",
+    "contrast_note": "navy must contrast clearly with cool silver products so metal pops in feed"
+  },
+  "model": "gpt-image-2-image-to-image",
+  "aspect_ratio": "1:1",
+  "resolution": "2K",
+  "r2_prefix": "products/btc-silver",
+  "prompts_dir": "prompts/bullion/variations",
+  "images_dir": "images/bullion/variations",
+  "catalogs": {
+    "ingots": "scraped/bullion-trading-center/silver-ingots/products.json",
+    "coins": "scraped/bullion-trading-center/silver-coins/products.json",
+    "bars": "scraped/bullion-trading-center/silver-bars/products.json"
+  },
+  "variations": [
+    {
+      "id": "ingot_solo",
+      "label": "Ingot standalone — Egypt 100g hero",
+      "catalog": "ingots",
+      "skus": ["ES999IXEGALX100"],
+      "composition": "Single rectangular silver ingot centered upright on navy, generous negative space top for ad copy. Product fills lower two-thirds.",
+      "output": "fb_square_ingot_solo_gpt.jpg"
+    },
+    {
+      "id": "ingot_trio",
+      "label": "Ingot trio — Egypt, Mother, BTC",
+      "catalog": "ingots",
+      "skus": ["ES999IXEGALX100", "ES999IXMOALX100", "ES999IXRBTCX100"],
+      "composition": "Three ingot bars in confident triangular flat-lay, Egypt front center, Mother back left, BTC back right.",
+      "output": "fb_square_ingot_trio_gpt.jpg"
+    },
+    {
+      "id": "coin_solo_religious",
+      "label": "Coin standalone — Sobhan Allah 10g",
+      "catalog": "coins",
+      "skus": ["ES999PXSBHNXX10"],
+      "composition": "Single round silver coin centered, slight angle showing relief depth, hero product on navy.",
+      "output": "fb_square_coin_solo_religious_gpt.jpg"
+    },
+    {
+      "id": "coin_trio_mixed",
+      "label": "Coin trio — three religious 10g coins",
+      "catalog": "coins",
+      "skus": ["ES999PXSBHNXX10", "ES999PXAKBRXX10", "ES999PXHADLXX10"],
+      "composition": "Three round 10g religious phrase silver coins arranged in triangle on navy, equal hero treatment, crisp relief detail.",
+      "output": "fb_square_coin_trio_mixed_gpt.jpg",
+      "note": "Disney character coin refs blocked by KIE safety; trio uses religious line only"
+    },
+    {
+      "id": "bar_solo",
+      "label": "Bar standalone — 1kg cast bar",
+      "catalog": "bars",
+      "skus": ["ES999BXSRAR1000"],
+      "composition": "Single large cast silver bar angled 15 degrees, dominant weight in frame, investment-grade hero on navy.",
+      "output": "fb_square_bar_solo_gpt.jpg"
+    },
+    {
+      "id": "mixed_all",
+      "label": "Mixed — coin + ingot + bar",
+      "catalog": "ingots",
+      "skus": ["ES999PXSBHNXX10", "ES999IXEGALX100", "ES999BXSRARX500"],
+      "composition": "One round coin left, one rectangular ingot center, one cast bar right — balanced trio showing full BTC silver range, scale proportional to references.",
+      "output": "fb_square_mixed_all_gpt.jpg",
+      "sku_catalogs": {
+        "ES999PXSBHNXX10": "coins",
+        "ES999IXEGALX100": "ingots",
+        "ES999BXSRARX500": "bars"
+      }
+    },
+    {
+      "id": "mixed_ingot_bar",
+      "label": "Mixed — ingot + bar",
+      "catalog": "ingots",
+      "skus": ["ES999IXEGALX100", "ES999BXSRARX500"],
+      "composition": "Egypt ingot and 500g cast bar side by side, ingot slightly forward, bar receding — two-format investment story.",
+      "output": "fb_square_mixed_ingot_bar_gpt.jpg",
+      "sku_catalogs": {
+        "ES999IXEGALX100": "ingots",
+        "ES999BXSRARX500": "bars"
+      }
+    },
+    {
+      "id": "mixed_coin_bar",
+      "label": "Mixed — Allah Akbar coin + 500g bar",
+      "catalog": "coins",
+      "skus": ["ES999PXAKBRXX10", "ES999BXSRARX500"],
+      "composition": "10g round religious phrase silver coin foreground left, 500g cast bar background right, heritage gift meets investment on navy.",
+      "output": "fb_square_mixed_coin_bar_gpt.jpg",
+      "sku_catalogs": {
+        "ES999PXAKBRXX10": "coins",
+        "ES999BXSRARX500": "bars"
+      },
+      "note": "Licensed character coin refs blocked by KIE safety; use religious coin here"
+    },
+    {
+      "id": "mixed_coin_ingot",
+      "label": "Mixed — religious coin + ingot",
+      "catalog": "coins",
+      "skus": ["ES999PXSBHNXX10", "ES999IXEGALX100"],
+      "composition": "Sobhan Allah coin lower left, Egypt ingot upper right, diagonal balance, gift and heritage pairing.",
+      "output": "fb_square_mixed_coin_ingot_gpt.jpg",
+      "sku_catalogs": {
+        "ES999PXSBHNXX10": "coins",
+        "ES999IXEGALX100": "ingots"
+      }
+    }
+  ]
+}

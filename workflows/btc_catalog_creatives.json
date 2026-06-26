@@ -1,0 +1,224 @@
+{
+  "name": "btc_catalog_creatives",
+  "description": "BTC catalog creatives \u2014 bars scaled trio, wearables, per-category collections",
+  "approved_style": {
+    "background": "deep midnight navy blue matte seamless studio backdrop",
+    "lighting": "even balanced studio lighting, large softboxes left and right, catalog clarity"
+  },
+  "model": "gpt-image-2-image-to-image",
+  "aspect_ratio": "1:1",
+  "resolution": "2K",
+  "r2_prefix": "products/btc-silver",
+  "prompts_dir": "prompts/bullion/catalog",
+  "images_dir": "images/bullion/catalog",
+  "catalogs": {
+    "ingots": "scraped/bullion-trading-center/silver-ingots/products.json",
+    "coins": "scraped/bullion-trading-center/silver-coins/products.json",
+    "bars": "scraped/bullion-trading-center/silver-bars/products.json",
+    "wearables": "scraped/bullion-trading-center/silver-wearables/products.json"
+  },
+  "variations": [
+    {
+      "id": "bar_trio_1kg_500g_250g",
+      "label": "Cast bars 1kg / 500g / 250g \u2014 weight-accurate scale",
+      "catalog": "bars",
+      "skus": [
+        "ES999BXSRAR1000",
+        "ES999BXSRARX500",
+        "ES999BXSRARX250"
+      ],
+      "composition": "Three cast BTC silver bars in one row on navy, STRICT weight-accurate scaling from references: 1kg bar length exactly 2.0\u00d7 the 500g bar, 500g bar length exactly 2.0\u00d7 the 250g bar, same height and thickness proportions, aligned on shared baseline, crisp cast surface detail",
+      "output": "fb_square_bar_trio_scaled_gpt.jpg"
+    },
+    {
+      "id": "collection_bars_all",
+      "label": "Bars category \u2014 full range",
+      "catalog": "bars",
+      "skus": [
+        "ES999BXXBAR5000",
+        "ES999BXSRAR1000",
+        "ES999BXSRARX500",
+        "ES999BXSRARX250"
+      ],
+      "composition": "Full silver bars catalog on navy: every cast bar from references in one frame, weight-accurate relative sizing (5kg mega largest, then 1kg, 500g, 250g), organized left-to-right descending weight, shared baseline",
+      "output": "fb_square_collection_bars_all_gpt.jpg"
+    },
+    {
+      "id": "wearables_all",
+      "label": "Wearables \u2014 all bangles",
+      "catalog": "wearables",
+      "skus": [
+        "ES999BWENAS31X1",
+        "ES999BWREIB31X1",
+        "ES999BWFATH31X1",
+        "ES999BWNEFG31X1",
+        "ES999IWBARB31X1"
+      ],
+      "composition": "All five silver bangle wearables from references in gentle arc on navy, each bracelet design distinct and legible, equal studio treatment",
+      "output": "fb_square_wearables_all_gpt.jpg"
+    },
+    {
+      "id": "wearable_solo_enas31x1",
+      "label": "Wearable solo \u2014 31.10g Bangle 999 -  Al Nas",
+      "catalog": "wearables",
+      "skus": [
+        "ES999BWENAS31X1"
+      ],
+      "composition": "Single silver bangle wearable (31.10g Bangle 999 -  Al Nas) from reference, centered hero on navy, slight angle showing bracelet depth",
+      "output": "fb_square_wearable_es999bwenas31x1_gpt.jpg"
+    },
+    {
+      "id": "wearable_solo_reib31x1",
+      "label": "Wearable solo \u2014 31.10g Bangle 999 -  Rejoice in Blessings",
+      "catalog": "wearables",
+      "skus": [
+        "ES999BWREIB31X1"
+      ],
+      "composition": "Single silver bangle wearable (31.10g Bangle 999 -  Rejoice in Blessings) from reference, centered hero on navy, slight angle showing bracelet depth",
+      "output": "fb_square_wearable_es999bwreib31x1_gpt.jpg"
+    },
+    {
+      "id": "wearable_solo_fath31x1",
+      "label": "Wearable solo \u2014 31.10g Bangle 999 - Al-Fatiha",
+      "catalog": "wearables",
+      "skus": [
+        "ES999BWFATH31X1"
+      ],
+      "composition": "Single silver bangle wearable (31.10g Bangle 999 - Al-Fatiha) from reference, centered hero on navy, slight angle showing bracelet depth",
+      "output": "fb_square_wearable_es999bwfath31x1_gpt.jpg"
+    },
+    {
+      "id": "wearable_solo_nefg31x1",
+      "label": "Wearable solo \u2014 31.10g Bangle 999 - Needy for Grace",
+      "catalog": "wearables",
+      "skus": [
+        "ES999BWNEFG31X1"
+      ],
+      "composition": "Single silver bangle wearable (31.10g Bangle 999 - Needy for Grace) from reference, centered hero on navy, slight angle showing bracelet depth",
+      "output": "fb_square_wearable_es999bwnefg31x1_gpt.jpg"
+    },
+    {
+      "id": "wearable_solo_barb31x1",
+      "label": "Wearable solo \u2014 31.1g Bangle 999 - Arabesque",
+      "catalog": "wearables",
+      "skus": [
+        "ES999IWBARB31X1"
+      ],
+      "composition": "Single silver bangle wearable (31.1g Bangle 999 - Arabesque) from reference, centered hero on navy, slight angle showing bracelet depth",
+      "output": "fb_square_wearable_es999iwbarb31x1_gpt.jpg"
+    },
+    {
+      "id": "collection_ingots_1",
+      "label": "Ingots catalog grid part 1/3",
+      "catalog": "ingots",
+      "skus": [
+        "ES999IXEGALXXX5",
+        "ES999IXMOALXXX5",
+        "ES999IXTJNFXXX5",
+        "ES999IXRBTCXXX5",
+        "ES999IXFTHAXXX5",
+        "ES999IXPLUMXXX5",
+        "ES999IXEGALXX10",
+        "ES999IXMOALXX10",
+        "ES999IXTJNFXX10",
+        "ES999IXFTHAXX10",
+        "ES999IXANGLXX10",
+        "ES999IXLILOXX10",
+        "ES999IXSTCHXX10",
+        "ES999IXPLUMXX10",
+        "ES999IXRBTCXX10",
+        "ES999IXMOALXX20"
+      ],
+      "composition": "Catalog grid on navy: 16 rectangular silver ingots from references in neat rows, each engraving legible, scale each ingot by gram weight relative to others in frame (smallest 5g, largest 100g), no overlapping products",
+      "output": "fb_square_collection_ingots_1_gpt.jpg"
+    },
+    {
+      "id": "collection_ingots_2",
+      "label": "Ingots catalog grid part 2/3",
+      "catalog": "ingots",
+      "skus": [
+        "ES999IXEGALXX20",
+        "ES999IXRBTCXX20",
+        "ES999IXTJNFXX20",
+        "ES999IXFTHAXX20",
+        "ES999IXPLUMXX20",
+        "ES999IXEGAL31X1",
+        "ES999IXMOAL31X1",
+        "ES999IXTJNF31X1",
+        "ES999IXFTHA31X1",
+        "ES999IXPLUM31X1",
+        "ES999IXMEGP31X1",
+        "ES999IXRBTC31X1",
+        "ES999IXMOALXX50",
+        "ES999IXEGALXX50",
+        "ES999IXTJNFXX50",
+        "ES999IXRBTCXX50"
+      ],
+      "composition": "Catalog grid on navy: 16 rectangular silver ingots from references in neat rows, each engraving legible, scale each ingot by gram weight relative to others in frame (smallest 5g, largest 100g), no overlapping products",
+      "output": "fb_square_collection_ingots_2_gpt.jpg"
+    },
+    {
+      "id": "collection_ingots_3",
+      "label": "Ingots catalog grid part 3/3",
+      "catalog": "ingots",
+      "skus": [
+        "ES999IXFTHAXX50",
+        "ES999IXPLUMXX50",
+        "ES999IXMKSAXX50",
+        "ES999IXMOALX100",
+        "ES999IXEGALX100",
+        "ES999IXFTHAX100",
+        "ES999IXRBTCX100",
+        "ES999IXPLUMX100"
+      ],
+      "composition": "Catalog grid on navy: 8 rectangular silver ingots from references in neat rows, each engraving legible, scale each ingot by gram weight relative to others in frame (smallest 5g, largest 100g), no overlapping products",
+      "output": "fb_square_collection_ingots_3_gpt.jpg"
+    },
+    {
+      "id": "collection_coins_1",
+      "label": "Coins catalog grid part 1/2",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXSBHNXX10",
+        "ES999PXAKBRXX10",
+        "ES999PXLEEAXX10",
+        "ES999PXHADLXX10",
+        "ES999PXDDPLXX10",
+        "ES999PXWOLVXX10",
+        "ES999PXTHORXX10",
+        "ES999PXHULKXX10",
+        "ES999PXSPMNXX10",
+        "ES999PXIRMNXX10",
+        "ES999PXDONDXX10",
+        "ES999PXXHDLXX10",
+        "ES999PXMRSCXX10",
+        "ES999PXDASDXX10",
+        "ES999PXMINMXX10",
+        "ES999PXMICMXX10"
+      ],
+      "composition": "Catalog grid on navy: 16 round silver coins from references in neat rows, scale diameter by weight (10g smallest, 50g largest), preserve each relief design exactly",
+      "output": "fb_square_collection_coins_1_gpt.jpg"
+    },
+    {
+      "id": "collection_coins_2",
+      "label": "Coins catalog grid part 2/2",
+      "catalog": "coins",
+      "skus": [
+        "ES999PXXHDLXX50",
+        "ES999PXMRSCXX50",
+        "ES999PXDasDXX50",
+        "ES999PXDONDXX50",
+        "ES999PXMINMXX50",
+        "ES999PXMICMXX50",
+        "ES999PXTHORXX50",
+        "ES999PXKULKXX50",
+        "ES999PXDDPLXXX8",
+        "ES999PXWOLVXXX8",
+        "ES999PXSPMNXX50",
+        "ES999PXIRMNXX50"
+      ],
+      "composition": "Catalog grid on navy: 12 round silver coins from references in neat rows, scale diameter by weight (10g smallest, 50g largest), preserve each relief design exactly",
+      "output": "fb_square_collection_coins_2_gpt.jpg"
+    }
+  ]
+}

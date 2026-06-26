@@ -1,0 +1,16 @@
+{
+  "prompt": "Professional product photography of a thick gold Cuban link chain necklace displayed on a matte black velvet jewelry bust. The necklace features interlocking flattened oval links in polished 14K gold with a prominent rectangular box clasp at the front center — the clasp is embellished with numerous small brilliant-cut stones (diamonds or crystals) set across its top surface, creating sharp specular highlights. The chain drapes naturally over the display bust with no tags, pins, or distracting elements. Shot with a 100mm macro lens, f/5.6, ISO 100. Two-light studio setup: a large softbox at 45 degrees camera-left providing even key light, and a subtle rim light camera-right to define the gold edges. The black velvet absorbs light with no reflections. Crisp specular highlights on each gold link and the stone-encrusted clasp. Clean, minimalist composition — the necklace is the sole focus against an uninterrupted dark background. No product tags, no safety pins, no calculators or cables. Professional e-commerce jewelry product shot. Do not add any text overlays or watermarks.",
+  "negative_prompt": "product tags, safety pins, calculators, cables, cluttered background, retail store reflections, purple display bust, maroon background, text overlays, watermarks, skin smoothing, plastic skin, airbrushed texture, beautification filters, anatomy normalization, stylized realism, HDR tonemapping, digital art, illustration, cartoon, anime, 3D render, over-saturated colors, harsh shadows, uneven lighting",
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "professional product photography, luxury minimalist",
+    "lighting": "two-light studio, softbox key with rim separation",
+    "camera_angle": "eye-level, straight-on product shot",
+    "depth_of_field": "moderate, f/5.6, tack-sharp on necklace",
+    "quality": "ultra_high"
+  }
+}

@@ -4,6 +4,7 @@
 # Python
 __pycache__/
 *.pyc
+.venv/
 
 # Generated images (large binaries)
 images/*
@@ -17,5 +18,11 @@ logs/*
 # prompts/*
 # !prompts/.gitkeep
 
+# Raw product photos and inspiration images
+raw/*
+!raw/.gitkeep
+
 # Cursor IDE
 .cursor/plans/
+
+cloudflare api.txt

@@ -1,0 +1,73 @@
+{
+  "scraped_from": "https://shop.bulliontradingcenter.com/products/silver/bars",
+  "graphql_endpoint": "https://magento-1205032-5154147.cloudwaysapps.com/graphql",
+  "category": {
+    "uid": "NTM=",
+    "name": "Bars",
+    "url_path": "silver/bars",
+    "source_url": "https://shop.bulliontradingcenter.com/products/silver/bars",
+    "total_count": 4
+  },
+  "products": [
+    {
+      "sku": "ES999BXXBAR5000",
+      "name": " 5k Mega Bar- BTC 999",
+      "url_key": "5000",
+      "product_url": "https://shop.bulliontradingcenter.com/product/5000",
+      "price": {
+        "value": 679750,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/9/9/999.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/9/9/999.png",
+      "local_image": "images/ES999BXXBAR5000.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/9/9/999.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/9/9/999.png"
+    },
+    {
+      "sku": "ES999BXSRAR1000",
+      "name": "1Kg Cast Bar - BTC 999",
+      "url_key": "1kg-cast-bar-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/1kg-cast-bar-btc-999",
+      "price": {
+        "value": 136050,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/1/_/1_kg_bar.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/1/_/1_kg_bar.png",
+      "local_image": "images/ES999BXSRAR1000.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/1/_/1_kg_bar.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/1/_/1_kg_bar.png"
+    },
+    {
+      "sku": "ES999BXSRARX500",
+      "name": "500g Cast Bar - BTC 999",
+      "url_key": "500g-cast-bar-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/500g-cast-bar-btc-999",
+      "price": {
+        "value": 68300,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/0/500_gm_bar.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/5/0/500_gm_bar.png",
+      "local_image": "images/ES999BXSRARX500.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/0/500_gm_bar.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/5/0/500_gm_bar.png"
+    },
+    {
+      "sku": "ES999BXSRARX250",
+      "name": "250g Cast Bar - BTC 999",
+      "url_key": "250g-cast-bar-btc-999",
+      "product_url": "https://shop.bulliontradingcenter.com/product/250g-cast-bar-btc-999",
+      "price": {
+        "value": 34225,
+        "currency": "EGP"
+      },
+      "image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/2/5/250_gm.png",
+      "image_url_uncached": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/2/5/250_gm.png",
+      "local_image": "images/ES999BXSRARX250.png",
+      "small_image_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/2/5/250_gm.png",
+      "thumbnail_url": "https://magento-1205032-5154147.cloudwaysapps.com/media/catalog/product/cache/c63e1ce394818a5ea82008e71cd4417f/2/5/250_gm.png"
+    }
+  ]
+}

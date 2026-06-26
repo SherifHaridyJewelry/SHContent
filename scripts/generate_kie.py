@@ -40,8 +40,10 @@ def log_task(entry: dict):
 
 
 def create_task(api_key: str, prompt_json: dict, args) -> str:
-    image_input = prompt_json.pop("image_input", None)
+    image_input = prompt_json.pop("image_input", None) or prompt_json.pop("input_urls", None)
     api_parameters = prompt_json.pop("api_parameters", {})
+    for key in ("input_urls", "image_urls", "model", "settings"):
+        prompt_json.pop(key, None)
 
     prompt_string = json.dumps(prompt_json)
 
