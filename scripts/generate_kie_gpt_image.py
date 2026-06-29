@@ -35,8 +35,14 @@ MODEL_ALIASES = {
 }
 VALID_MODELS = {"gpt-image-2-text-to-image", "gpt-image-2-image-to-image"}
 
-GPT_ASPECT_RATIOS = {"auto", "1:1", "9:16", "16:9", "4:3", "3:4"}
+GPT_ASPECT_RATIOS = {
+    "auto", "1:1", "3:2", "2:3", "4:3", "3:4", "5:4", "4:5",
+    "16:9", "9:16", "2:1", "1:2", "3:1", "1:3", "21:9", "9:21",
+}
 GPT_RESOLUTIONS = {"1K", "2K", "4K"}
+
+# Per KIE OpenAPI: 4:5 and 5:4 only support 1K on GPT i2i.
+GPT_1K_ONLY_ASPECT_RATIOS = {"4:5", "5:4"}
 
 
 def resolve_model(name: str | None, prompt_data: dict) -> str:
@@ -70,6 +76,17 @@ def build_payload(prompt_data: dict, args) -> dict:
     if resolution not in GPT_RESOLUTIONS:
         print(f"ERROR: Invalid resolution '{resolution}'. Use: {', '.join(sorted(GPT_RESOLUTIONS))}")
         sys.exit(1)
+
+    if (
+        model == "gpt-image-2-image-to-image"
+        and aspect_ratio in GPT_1K_ONLY_ASPECT_RATIOS
+        and resolution != "1K"
+    ):
+        print(
+            f"WARNING: GPT i2i aspect ratio {aspect_ratio} only supports 1K; "
+            f"downgrading resolution from {resolution} to 1K."
+        )
+        resolution = "1K"
 
     input_payload = {
         "prompt": build_prompt_text(prompt_data),

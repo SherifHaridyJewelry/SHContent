@@ -31,6 +31,90 @@ SCALE_GUARD = (
     "do not shrink the product to match a small or distant display in the reference."
 )
 
+GENERIC_SUBJECT = (
+    "The jewelry piece shown in the reference images, placed as the hero subject, "
+    "with all original details, textures, and proportions faithfully preserved."
+)
+
+FIDELITY_SUBJECT = (
+    "Use the bracelet from the reference image as the exact product identity. "
+    "You may restage it into a premium catalog setup with better composition, lighting, and angle."
+)
+
+FIDELITY_CHAIN_RULES = (
+    "Preserve exact link sequence, clasp, chain thickness, material finish, and total link count. "
+    "Do not invent, remove, merge, or simplify links. Do not redesign the chain pattern."
+)
+
+
+def build_material_only_description(analysis: dict) -> str:
+    """Hero text from material/clasp/dimensions only — no free-form chain prose."""
+    parts: list[str] = []
+    if analysis.get("material"):
+        parts.append(f"Material and finish: {analysis['material']}.")
+    clasp = analysis.get("clasp_type")
+    if clasp:
+        parts.append(f"Clasp: {clasp}.")
+    if analysis.get("dimensions"):
+        parts.append(analysis["dimensions"].rstrip(".") + ".")
+    features = analysis.get("distinctive_features") or []
+    if features:
+        parts.append("Features: " + "; ".join(features[:3]) + ".")
+    return " ".join(parts) if parts else GENERIC_SUBJECT
+
+
+def build_chain_structured_description(analysis: dict) -> str:
+    """Hero text from structured chain analysis fields."""
+    parts: list[str] = []
+    if analysis.get("material"):
+        parts.append(f"This bracelet is {analysis['material'].rstrip('.')}.")
+    count = analysis.get("total_link_count")
+    if count is not None:
+        parts.append(f"The chain has {count} links total.")
+    unit = analysis.get("chain_pattern_unit") or []
+    if unit:
+        unit_str = ", ".join(unit)
+        parts.append(f"The pattern repeats exactly as: {unit_str}.")
+    if analysis.get("link_separations"):
+        parts.append(f"Link connections: {analysis['link_separations'].rstrip('.')}.")
+    if analysis.get("clasp_type"):
+        parts.append(f"Clasp type: {analysis['clasp_type'].rstrip('.')}.")
+    if analysis.get("visibility_note"):
+        parts.append(analysis["visibility_note"].rstrip(".") + ".")
+    parts.append(
+        "Preserve this cadence across the full bracelet. "
+        "Do not invent, remove, merge, or simplify links. Match the clasp from the reference."
+    )
+    return " ".join(parts)
+
+
+def resolve_product_description(
+    product_analysis: dict | None,
+    *,
+    prompt_mode: str = "baseline",
+    analyze_mode: str = "standard",
+) -> str | None:
+    """Map vision analysis + modes to hero subject text."""
+    if not product_analysis:
+        if prompt_mode == "fidelity":
+            return f"{FIDELITY_SUBJECT} {FIDELITY_CHAIN_RULES}"
+        return None
+
+    if analyze_mode == "chain_structured":
+        return build_chain_structured_description(product_analysis)
+
+    if analyze_mode == "material_only":
+        desc = build_material_only_description(product_analysis)
+        if prompt_mode == "fidelity":
+            return f"{desc} {FIDELITY_CHAIN_RULES}"
+        return desc
+
+    # standard baseline analyze
+    desc = product_analysis.get("product_description")
+    if prompt_mode == "fidelity" and desc:
+        return f"{FIDELITY_SUBJECT} {FIDELITY_CHAIN_RULES}"
+    return desc
+
 
 def load_json(path: Path) -> dict:
     with open(path, "r", encoding="utf-8") as f:
@@ -127,6 +211,7 @@ def build_prompt_text(
     product_description: str | None = None,
     *,
     has_reference: bool = False,
+    prompt_mode: str = "baseline",
 ) -> str:
     """Weave template fields + product description into a Dense Narrative prompt string."""
     scene = template.get("scene", {})
@@ -138,10 +223,9 @@ def build_prompt_text(
     if product_description:
         subject_block = product_description
     else:
-        subject_block = (
-            "The jewelry piece shown in the reference images, placed as the hero subject, "
-            "with all original details, textures, and proportions faithfully preserved."
-        )
+        subject_block = GENERIC_SUBJECT
+        if prompt_mode == "fidelity":
+            subject_block = f"{FIDELITY_SUBJECT} {FIDELITY_CHAIN_RULES}"
 
     surface = scene.get("surface", "a neutral display surface")
     background = scene.get("background", "a clean, out-of-focus background")
@@ -200,24 +284,34 @@ def build_prompt_json(
     *,
     job_ref_url: str | None = None,
     product_ref_url: str | None = None,
+    prompt_mode: str = "baseline",
+    analyze_mode: str = "standard",
+    extra_reference_urls: list[str] | None = None,
 ) -> dict:
     """Build a complete Dense Narrative JSON prompt from template + product info."""
     del product_type  # used for UI grouping only, not auto-selection
 
-    product_description = None
-    if product_analysis:
-        product_description = product_analysis.get("product_description")
+    product_description = resolve_product_description(
+        product_analysis,
+        prompt_mode=prompt_mode,
+        analyze_mode=analyze_mode,
+    )
 
-    ref_urls = resolve_generation_references(
+    ref_urls = list(extra_reference_urls or [])
+    selected = resolve_generation_references(
         job_ref_url=job_ref_url,
         product_ref_url=product_ref_url,
     )
+    for url in selected:
+        if url not in ref_urls:
+            ref_urls.append(url)
     resolved_ref_url = ref_urls[0] if ref_urls else None
 
     prompt_text = build_prompt_text(
         template,
         product_description,
         has_reference=bool(ref_urls),
+        prompt_mode=prompt_mode,
     )
 
     gen_urls = generation_urls if generation_urls is not None else product_urls
@@ -237,6 +331,8 @@ def build_prompt_json(
         "quality": template.get("quality_directives", ""),
         "selected_ref_url": resolved_ref_url,
         "selected_ref_source": resolve_ref_source(template, resolved_ref_url),
+        "prompt_mode": prompt_mode,
+        "analyze_mode": analyze_mode,
     }
 
     return {

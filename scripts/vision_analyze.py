@@ -49,6 +49,59 @@ Follow these rules strictly:
 
 Do NOT describe how the product should be photographed. Do NOT describe a scene or setting. Only describe the product itself."""
 
+CHAIN_SYSTEM_PROMPT = """You are an expert jewelry appraiser analyzing a full-layout bracelet or chain photograph.
+
+The image shows the complete bracelet with all links and clasp visible. Your task is precise structural documentation.
+
+Rules:
+1. Count every individual link visible in the full layout. Report as total_link_count (integer).
+2. Describe one repeating pattern unit as chain_pattern_unit (ordered list of link shapes, e.g. round, elongated_oval).
+3. Describe link_separations (how links connect).
+4. Identify clasp_type.
+5. Note visibility_note only if any links overlap or are partially occluded.
+6. Material and finish in material field.
+7. product_description: 2-4 sentences on material, finish, and construction only. Do NOT describe drape, wrist fit, or how it sits when worn.
+8. Do NOT invent links you cannot see. If uncertain on count, state best estimate and explain in visibility_note."""
+
+CHAIN_RESPONSE_FORMAT = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "chain_analysis",
+        "strict": True,
+        "schema": {
+            "type": "object",
+            "title": "Chain Bracelet Analysis",
+            "properties": {
+                "product_type": {"type": "string"},
+                "material": {"type": "string"},
+                "dimensions": {"type": "string"},
+                "clasp_type": {"type": "string"},
+                "chain_pattern_unit": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "One repeat cycle of link shapes in order",
+                },
+                "total_link_count": {
+                    "type": "integer",
+                    "description": "Total links visible in the full bracelet layout",
+                },
+                "link_separations": {"type": "string"},
+                "visibility_note": {"type": "string"},
+                "distinctive_features": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "product_description": {"type": "string"},
+            },
+            "required": [
+                "product_type", "material", "dimensions", "clasp_type",
+                "chain_pattern_unit", "total_link_count", "link_separations",
+                "visibility_note", "distinctive_features", "product_description",
+            ],
+        },
+    },
+}
+
 RESPONSE_FORMAT = {
     "type": "json_schema",
     "json_schema": {
@@ -97,15 +150,38 @@ def get_api_key():
     return key
 
 
-def analyze_product(api_key: str, image_urls: list[str], hint: str | None = None) -> dict:
-    """Send product image(s) to Gemini 3 Flash and return structured description."""
+def analyze_product(
+    api_key: str,
+    image_urls: list[str],
+    hint: str | None = None,
+    *,
+    analyze_mode: str = "standard",
+) -> dict:
+    """Send product image(s) to Gemini 3 Flash and return structured description.
+
+    analyze_mode: standard | chain_structured (bracelet/chain structural fields)
+    """
     content = []
 
-    prompt_text = "Analyze the product shown in the provided image(s) and describe it in detail."
+    if analyze_mode == "chain_structured":
+        prompt_text = (
+            "Analyze this full-layout bracelet/chain photograph. "
+            "Count all visible links and document the repeating pattern unit."
+        )
+        system_prompt = CHAIN_SYSTEM_PROMPT
+        response_format = CHAIN_RESPONSE_FORMAT
+    else:
+        prompt_text = "Analyze the product shown in the provided image(s) and describe it in detail."
+        system_prompt = SYSTEM_PROMPT
+        response_format = RESPONSE_FORMAT
+
     if hint:
         prompt_text += f" Additional context: {hint}"
     if len(image_urls) > 1:
-        prompt_text += f" You are seeing {len(image_urls)} images of the SAME product from different angles. Cross-reference all angles for the most accurate description."
+        prompt_text += (
+            f" You are seeing {len(image_urls)} images of the SAME product from different angles. "
+            "Cross-reference all angles for the most accurate description."
+        )
 
     content.append({"type": "text", "text": prompt_text})
 
@@ -117,13 +193,13 @@ def analyze_product(api_key: str, image_urls: list[str], hint: str | None = None
 
     payload = {
         "messages": [
-            {"role": "system", "content": [{"type": "text", "text": SYSTEM_PROMPT}]},
+            {"role": "system", "content": [{"type": "text", "text": system_prompt}]},
             {"role": "user", "content": content},
         ],
         "stream": False,
         "include_thoughts": False,
         "reasoning_effort": "high",
-        "response_format": RESPONSE_FORMAT,
+        "response_format": response_format,
     }
 
     headers = {
@@ -152,8 +228,18 @@ def analyze_product(api_key: str, image_urls: list[str], hint: str | None = None
 
     content_str = choices[0].get("message", {}).get("content", "")
 
+    # Gemini occasionally wraps JSON in markdown fences.
+    stripped = content_str.strip()
+    if stripped.startswith("```"):
+        lines = stripped.splitlines()
+        if lines and lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        stripped = "\n".join(lines).strip()
+
     try:
-        analysis = json.loads(content_str)
+        analysis = json.loads(stripped)
     except json.JSONDecodeError as e:
         raise RuntimeError(f"Gemini returned invalid JSON: {content_str[:500]}") from e
 
@@ -164,7 +250,13 @@ def analyze_product(api_key: str, image_urls: list[str], hint: str | None = None
     return analysis
 
 
-def analyze_from_local(api_key: str, image_paths: list[Path], hint: str | None = None) -> dict:
+def analyze_from_local(
+    api_key: str,
+    image_paths: list[Path],
+    hint: str | None = None,
+    *,
+    analyze_mode: str = "standard",
+) -> tuple[dict, list[str]]:
     """Upload local images to R2 first, then analyze."""
     scripts_dir = Path(__file__).resolve().parent
     if str(scripts_dir) not in sys.path:
@@ -184,7 +276,7 @@ def analyze_from_local(api_key: str, image_paths: list[Path], hint: str | None =
         print(f"OK -> {url}")
         image_urls.append(url)
 
-    return analyze_product(api_key, image_urls, hint), image_urls
+    return analyze_product(api_key, image_urls, hint, analyze_mode=analyze_mode), image_urls
 
 
 def main():
@@ -201,13 +293,16 @@ def main():
                         help="Save analysis JSON to file")
     parser.add_argument("--quiet", "-q", action="store_true",
                         help="Only output the JSON result")
+    parser.add_argument("--chain-structured", action="store_true",
+                        help="Use chain/bracelet structural analysis schema (link count, pattern unit)")
     args = parser.parse_args()
 
     api_key = get_api_key()
+    mode = "chain_structured" if args.chain_structured else "standard"
 
     if args.urls:
         image_urls = args.images
-        analysis = analyze_product(api_key, image_urls, args.hint)
+        analysis = analyze_product(api_key, image_urls, args.hint, analyze_mode=mode)
         uploaded_urls = image_urls
     else:
         image_paths = [Path(p) for p in args.images]
@@ -215,7 +310,9 @@ def main():
             if not p.exists():
                 print(f"ERROR: File not found: {p}")
                 sys.exit(1)
-        analysis, uploaded_urls = analyze_from_local(api_key, image_paths, args.hint)
+        analysis, uploaded_urls = analyze_from_local(
+            api_key, image_paths, args.hint, analyze_mode=mode,
+        )
 
     analysis["_source_urls"] = uploaded_urls
 
