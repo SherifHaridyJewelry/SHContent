@@ -39,7 +39,7 @@ def log_task(entry: dict):
         f.write(json.dumps(entry) + "\n")
 
 
-def create_task(api_key: str, prompt_json: dict, args) -> str:
+def create_task(api_key: str, prompt_json: dict, args, *, exit_on_error: bool = True) -> str:
     image_input = prompt_json.pop("image_input", None) or prompt_json.pop("input_urls", None)
     api_parameters = prompt_json.pop("api_parameters", {})
     for key in ("input_urls", "image_urls", "model", "settings"):
@@ -77,18 +77,45 @@ def create_task(api_key: str, prompt_json: dict, args) -> str:
         print(f"ERROR creating task: {e}")
         if "resp" in locals():
             print(resp.text)
-        sys.exit(1)
+        if exit_on_error:
+            sys.exit(1)
+        raise RuntimeError(f"KIE createTask failed: {e}") from e
 
     task_id = result.get("data", {}).get("taskId")
     if not task_id:
-        print("ERROR: No taskId returned")
-        print(json.dumps(result, indent=2))
-        sys.exit(1)
+        msg = f"No taskId returned: {json.dumps(result, indent=2)}"
+        print(f"ERROR: {msg}")
+        if exit_on_error:
+            sys.exit(1)
+        raise RuntimeError(msg)
 
     return task_id
 
 
-def poll_task(api_key: str, task_id: str, max_attempts: int = 60, interval: int = 4) -> dict:
+def fetch_task(api_key: str, task_id: str) -> dict:
+    """Fetch current KIE task state (single check, no polling)."""
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+    }
+    resp = requests.get(
+        f"{API_BASE}/recordInfo",
+        headers=headers,
+        params={"taskId": task_id},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    return resp.json().get("data", {})
+
+
+def poll_task(
+    api_key: str,
+    task_id: str,
+    max_attempts: int = 60,
+    interval: int = 4,
+    *,
+    exit_on_error: bool = True,
+) -> dict:
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}",
@@ -121,13 +148,18 @@ def poll_task(api_key: str, task_id: str, max_attempts: int = 60, interval: int 
         if state in ("failed", "fail", "error"):
             print("ERROR: Task failed on server side.")
             print(json.dumps(data, indent=2))
-            sys.exit(1)
+            if exit_on_error:
+                sys.exit(1)
+            raise RuntimeError(f"KIE task failed: {data}")
 
-    print("ERROR: Timed out waiting for job completion.")
-    sys.exit(1)
+    msg = "Timed out waiting for job completion."
+    print(f"ERROR: {msg}")
+    if exit_on_error:
+        sys.exit(1)
+    raise RuntimeError(msg)
 
 
-def download_image(data: dict, output_path: Path):
+def download_image(data: dict, output_path: Path, *, exit_on_error: bool = True) -> str:
     result_json_str = data.get("resultJson", "{}")
     try:
         result_json = json.loads(result_json_str)
@@ -136,9 +168,12 @@ def download_image(data: dict, output_path: Path):
 
     urls = result_json.get("resultUrls", [])
     if not urls:
-        print("ERROR: No image URL in resultJson.")
-        print(json.dumps(data, indent=2))
-        sys.exit(1)
+        msg = "No image URL in resultJson."
+        if exit_on_error:
+            print(f"ERROR: {msg}")
+            print(json.dumps(data, indent=2))
+            sys.exit(1)
+        raise ValueError(msg)
 
     image_url = urls[0]
     print(f"Downloading image from {image_url}")

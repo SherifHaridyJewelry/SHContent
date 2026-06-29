@@ -13,6 +13,7 @@ import argparse
 import json
 import sys
 import time
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,7 +24,8 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from r2_upload import get_r2_config, get_s3_client, upload_file, validate_image, ALLOWED_EXTENSIONS
+from r2_upload import get_r2_config, get_s3_client, upload_file, upload_file_with_key, validate_image, ALLOWED_EXTENSIONS
+from naming import build_output_name
 from prompt_builder import build_prompt_json, resolve_template, load_json
 from vision_analyze import analyze_product, get_api_key
 from generate_kie import create_task, poll_task, download_image, log_task
@@ -57,6 +59,16 @@ def collect_images_from_path(path: Path) -> list[Path]:
     return []
 
 
+def _urls_for_paths(path_to_url: dict[Path, str], paths: list[Path]) -> list[str]:
+    """Map local paths to R2 URLs preserving order; skip missing uploads."""
+    urls = []
+    for p in paths:
+        url = path_to_url.get(p.resolve())
+        if url:
+            urls.append(url)
+    return urls
+
+
 def process_single_product(
     api_key: str,
     s3_client,
@@ -67,6 +79,15 @@ def process_single_product(
     category: str,
     analyze: bool = False,
     hint: str | None = None,
+    generation_paths: list[Path] | None = None,
+    analysis_paths: list[Path] | None = None,
+    on_step: Callable[[str], None] | None = None,
+    on_task_created: Callable[[str], None] | None = None,
+    job_id: str | None = None,
+    template_key: str | None = None,
+    product_type: str | None = None,
+    job_ref_url: str | None = None,
+    product_ref_url: str | None = None,
 ) -> dict:
     """Process one product through the full pipeline. Returns a result dict."""
     result = {
@@ -81,9 +102,31 @@ def process_single_product(
     print(f"  Analyze: {'yes' if analyze else 'no'}")
     print(f"{'='*60}")
 
-    # Step 1: Upload to R2
+    def _step(name: str) -> None:
+        if on_step:
+            on_step(name)
+
+    # Step 1: Upload to R2 (dedupe paths when generation/analysis subsets overlap)
+    _step("uploading")
     print("\n[1/4] Uploading to R2...")
-    product_urls = upload_product_images(s3_client, r2_config, image_paths)
+    upload_paths: list[Path] = []
+    seen: set[Path] = set()
+    for p in image_paths:
+        resolved = p.resolve()
+        if resolved not in seen:
+            seen.add(resolved)
+            upload_paths.append(p)
+
+    path_to_url: dict[Path, str] = {}
+    for p in upload_paths:
+        url = upload_file(s3_client, r2_config, p, prefix="products")
+        if url:
+            path_to_url[p.resolve()] = url
+            print(f"  Uploaded: {p.name} -> {url}")
+        else:
+            print(f"  FAILED: {p.name}")
+
+    product_urls = _urls_for_paths(path_to_url, image_paths)
     if not product_urls:
         result["status"] = "failed"
         result["error"] = "No images uploaded successfully"
@@ -91,24 +134,47 @@ def process_single_product(
         return result
     result["product_urls"] = product_urls
 
+    gen_paths = generation_paths if generation_paths is not None else image_paths
+    analysis_only_paths = analysis_paths if analysis_paths is not None else image_paths
+    generation_urls = _urls_for_paths(path_to_url, gen_paths)
+    analysis_urls = _urls_for_paths(path_to_url, analysis_only_paths)
+    if not generation_urls:
+        generation_urls = product_urls
+    result["generation_urls"] = generation_urls
+
     # Step 2: Vision analysis (optional)
     product_analysis = None
     if analyze:
+        _step("analyzing")
         print("\n[2/4] Analyzing product via Gemini 3 Flash...")
         try:
-            product_analysis = analyze_product(api_key, product_urls, hint)
+            product_analysis = analyze_product(api_key, analysis_urls, hint)
             print(f"  Product type: {product_analysis.get('product_type', '?')}")
             print(f"  Material: {product_analysis.get('material', '?')}")
             result["analysis"] = product_analysis
-        except Exception as e:
-            print(f"  WARNING: Vision analysis failed: {e}")
-            print("  Continuing without analysis...")
+        except (Exception, SystemExit) as e:
+            if isinstance(e, SystemExit):
+                print("  WARNING: Vision analysis aborted (server exit). Continuing without analysis...")
+            else:
+                print(f"  WARNING: Vision analysis failed: {e}")
+                print("  Continuing without analysis...")
     else:
         print("\n[2/4] Skipping vision analysis (use --analyze to enable)")
 
     # Step 3: Build prompt
     print("\n[3/4] Building prompt...")
-    prompt_json = build_prompt_json(template, product_urls, product_analysis)
+    prompt_json = build_prompt_json(
+        template,
+        product_urls,
+        product_analysis,
+        generation_urls=generation_urls,
+        product_type=product_type,
+        job_ref_url=job_ref_url,
+        product_ref_url=product_ref_url,
+    )
+    resolved_ref_url = prompt_json.get("settings", {}).get("selected_ref_url")
+    if resolved_ref_url:
+        result["resolved_ref_url"] = resolved_ref_url
 
     prompt_path = PROJECT_ROOT / "prompts" / category / f"{output_name}.json"
     prompt_path.parent.mkdir(parents=True, exist_ok=True)
@@ -118,6 +184,7 @@ def process_single_product(
     result["prompt_file"] = str(prompt_path)
 
     # Step 4: Generate image
+    _step("generating")
     print("\n[4/4] Generating image via Nano Banana 2...")
     fmt = prompt_json.get("api_parameters", {}).get("output_format", "jpg")
     image_path = PROJECT_ROOT / "images" / category / f"{output_name}.{fmt}"
@@ -132,12 +199,23 @@ def process_single_product(
         google_search = False
 
     try:
-        task_id = create_task(api_key, prompt_for_api, MockArgs())
+        task_id = create_task(api_key, prompt_for_api, MockArgs(), exit_on_error=False)
         print(f"  Task ID: {task_id}")
         result["task_id"] = task_id
+        if on_task_created:
+            on_task_created(task_id)
 
-        data = poll_task(api_key, task_id)
-        image_url = download_image(data, image_path)
+        data = poll_task(api_key, task_id, exit_on_error=False)
+        image_url = download_image(data, image_path, exit_on_error=False)
+
+        output_r2_url = None
+        try:
+            object_key = f"outputs/{category}/{image_path.name}"
+            output_r2_url = upload_file_with_key(s3_client, r2_config, image_path, object_key)
+            if output_r2_url:
+                print(f"  R2 output: {output_r2_url}")
+        except Exception as e:
+            print(f"  WARNING: R2 output upload failed: {e}")
 
         log_entry = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -151,20 +229,24 @@ def process_single_product(
             "image_url": image_url,
             "completed_at": datetime.now(timezone.utc).isoformat(),
             "pipeline": True,
-            "template": template.get("template_name", "unknown"),
+            "template": template_key or template.get("template_name", "unknown"),
             "product_urls": product_urls,
+            "output_r2_url": output_r2_url,
         }
+        if job_id:
+            log_entry["job_id"] = job_id
         log_task(log_entry)
 
         result["status"] = "success"
         result["output_image"] = str(image_path)
         result["image_url"] = image_url
+        result["output_r2_url"] = output_r2_url
         print(f"  Image saved: {image_path}")
 
     except SystemExit:
         result["status"] = "failed"
-        result["error"] = "Image generation failed"
-        print("  ERROR: Image generation failed.")
+        result["error"] = "Image generation aborted"
+        print("  ERROR: Image generation aborted.")
     except Exception as e:
         result["status"] = "failed"
         result["error"] = str(e)
@@ -184,24 +266,36 @@ def run_batch_parallel(
     hint: str | None,
     max_workers: int,
 ) -> list[dict]:
-    """Run multiple products through the pipeline. Generation is sequential
-    to avoid overwhelming the KIE API, but uploads happen per-product."""
-    results = []
-    for product in products:
-        result = process_single_product(
-            api_key=api_key,
-            s3_client=s3_client,
-            r2_config=r2_config,
-            template=json.loads(json.dumps(template)),
-            image_paths=product["images"],
-            output_name=product["name"],
-            category=category,
-            analyze=analyze,
-            hint=hint,
-        )
-        results.append(result)
+    """Run multiple products through the pipeline in parallel."""
+    results: list[dict] = []
+    with ThreadPoolExecutor(max_workers=max(1, max_workers)) as executor:
+        futures = {
+            executor.submit(
+                process_single_product,
+                api_key,
+                s3_client,
+                r2_config,
+                json.loads(json.dumps(template)),
+                product["images"],
+                product["name"],
+                category,
+                analyze,
+                hint,
+                product.get("generation_paths"),
+                product.get("analysis_paths"),
+                None,
+                None,
+                None,
+                None,
+                product.get("product_type"),
+            ): product["name"]
+            for product in products
+        }
+        for future in as_completed(futures):
+            results.append(future.result())
 
-    return results
+    by_name = {r["product"]: r for r in results}
+    return [by_name[p["name"]] for p in products if p["name"] in by_name]
 
 
 def main():
@@ -243,10 +337,20 @@ Examples:
                         help="Output name prefix for batch modes")
     parser.add_argument("--category", "-c", default="jewelry",
                         help="Output category subfolder (default: jewelry)")
+    parser.add_argument("--run-id", default=None,
+                        help="Run id for app-style naming (requires --template-key and --product-id)")
+    parser.add_argument("--template-key", default=None,
+                        help="Template key for app-style naming (e.g. jewelry_beige_4x5)")
+    parser.add_argument("--product-id", default=None,
+                        help="Product id for app-style naming with --run-id")
     parser.add_argument("--analyze", action="store_true",
                         help="Enable vision analysis via Gemini 3 Flash")
     parser.add_argument("--hint", default=None,
                         help="Context hint for vision analysis (e.g., 'gold ring with diamond')")
+    parser.add_argument("--ref-url", default=None,
+                        help="Explicit style/scene reference URL for image_input")
+    parser.add_argument("--list-template-refs", action="store_true",
+                        help="Print selectable template references and exit")
     parser.add_argument("--max-workers", type=int, default=3,
                         help="Max parallel workers for batch mode (default: 3)")
     args = parser.parse_args()
@@ -254,6 +358,11 @@ Examples:
     template_path = resolve_template(args.template)
     template = load_json(template_path)
     print(f"Template: {template.get('template_name', template_path.name)}")
+
+    if args.list_template_refs:
+        from prompt_builder import print_template_refs
+        print_template_refs(template)
+        return
 
     api_key = get_api_key()
     r2_config = get_r2_config()
@@ -271,6 +380,9 @@ Examples:
             sys.exit(1)
 
         output_name = args.output_name or image_paths[0].stem
+        if args.run_id and args.template_key and args.product_id:
+            prefix = args.output_prefix or "catalog"
+            output_name = build_output_name(prefix, args.product_id, args.template_key, args.run_id)
         result = process_single_product(
             api_key=api_key,
             s3_client=s3_client,
@@ -281,6 +393,8 @@ Examples:
             category=args.category,
             analyze=args.analyze,
             hint=args.hint,
+            template_key=args.template_key or template_path.stem,
+            job_ref_url=args.ref_url,
         )
         print_summary([result])
 

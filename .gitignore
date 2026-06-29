@@ -10,6 +10,9 @@ __pycache__/
 images/*
 !images/.gitkeep
 
+# Generated export ZIPs
+exports/
+
 # Logs
 logs/*
 !logs/.gitkeep
@@ -24,5 +27,10 @@ raw/*
 
 # Cursor IDE
 .cursor/plans/
+
+# Web frontend
+web/node_modules/
+web/dist/
+web/tsconfig.tsbuildinfo
 
 cloudflare api.txt

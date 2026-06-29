@@ -1,0 +1,182 @@
+[
+  {
+    "id": "distill-8344582d",
+    "template": "jewelry_eggplant_4x5",
+    "status": "success",
+    "plates": [
+      {
+        "id": "distill_bracelet_catalog_bracelet05_eggplant_4x5_ced902d0",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782681105226_py81n3.jpg"
+      }
+    ],
+    "created_at": "2026-06-28T21:11:11.842904+00:00",
+    "updated_at": "2026-06-28T21:11:53.120419+00:00",
+    "error": null
+  },
+  {
+    "id": "034c8a95",
+    "template": "jewelry_beige_4x5",
+    "status": "success",
+    "plates": [
+      {
+        "id": "beige_cylinder",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_cylinder.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_cylinder.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782572845183_t79ey3.jpg"
+      },
+      {
+        "id": "beige_bracelet_chain",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_bracelet_chain.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_bracelet_chain.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782572873856_hteu39.jpg"
+      },
+      {
+        "id": "beige_half_set",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_half_set.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_half_set.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782572900836_vga2zh.jpg"
+      },
+      {
+        "id": "beige_ring",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_ring.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782572931959_a2sku1.jpg"
+      },
+      {
+        "id": "beige_ring_cone",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_ring_cone.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring_cone.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782572957147_cky38f.jpg"
+      },
+      {
+        "id": "beige_ring_pillow",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_ring_pillow.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring_pillow.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782572984574_wsplkl.jpg"
+      },
+      {
+        "id": "beige_bust",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_bust.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_bust.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782573012921_cr2shd.jpg"
+      },
+      {
+        "id": "beige_earrings",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_earrings.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_earrings.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782573055459_058jyd.jpg"
+      },
+      {
+        "id": "beige_earrings_tbar",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_earrings_tbar.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_earrings_tbar.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782573100795_4n1d2h.jpg"
+      }
+    ],
+    "created_at": "2026-06-27T15:06:59.755437+00:00",
+    "updated_at": "2026-06-27T15:11:47.967762+00:00",
+    "error": null
+  },
+  {
+    "id": "faa9d89b",
+    "template": "jewelry_eggplant_4x5",
+    "status": "success",
+    "plates": [
+      {
+        "id": "eggplant_pillow",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_eggplant_pillow.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_eggplant_4x5/scene_plate_eggplant_pillow.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567832884_jn8fvj.jpg"
+      },
+      {
+        "id": "eggplant_cylinder",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_eggplant_cylinder.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_eggplant_4x5/scene_plate_eggplant_cylinder.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567863161_vzy42v.jpg"
+      },
+      {
+        "id": "eggplant_ring",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_eggplant_ring.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_eggplant_4x5/scene_plate_eggplant_ring.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567914679_rziqvp.jpg"
+      },
+      {
+        "id": "eggplant_bust",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_eggplant_bust.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_eggplant_4x5/scene_plate_eggplant_bust.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567945348_52yzbm.jpg"
+      },
+      {
+        "id": "eggplant_earrings",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_eggplant_earrings.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_eggplant_4x5/scene_plate_eggplant_earrings.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567974429_tq26y6.jpg"
+      }
+    ],
+    "created_at": "2026-06-27T13:43:34.257513+00:00",
+    "updated_at": "2026-06-27T13:46:25.029498+00:00",
+    "error": null
+  },
+  {
+    "id": "4102911e",
+    "template": "jewelry_beige_4x5",
+    "status": "success",
+    "plates": [
+      {
+        "id": "beige_pillow",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_pillow.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_pillow.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567497956_rxgf19.jpg"
+      },
+      {
+        "id": "beige_cylinder",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_cylinder.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_cylinder.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567545952_xbqzcr.jpg"
+      },
+      {
+        "id": "beige_ring",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_ring.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567572159_zxd3wy.jpg"
+      },
+      {
+        "id": "beige_bust",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_bust.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_bust.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567602900_z5fflp.jpg"
+      },
+      {
+        "id": "beige_earrings",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/scene_plate_beige_earrings.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_earrings.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782567649316_ytqtbv.jpg"
+      }
+    ],
+    "created_at": "2026-06-27T13:37:46.879823+00:00",
+    "updated_at": "2026-06-27T13:40:57.923038+00:00",
+    "error": null
+  }
+]

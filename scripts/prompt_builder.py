@@ -5,21 +5,31 @@ Merges a brand template (scene, lighting, camera, style) with either:
   - A vision analysis result (detailed product description from Gemini)
   - A generic product reference (when --no-analyze is used)
 
-Also composes the image_input array from style_references (template)
-and raw product image URLs, respecting the 14-image API limit.
+Composes image_input from explicitly selected style/scene references and
+raw product image URLs, respecting the 14-image API limit.
 
 Output is a prompt JSON file ready for scripts/generate_kie.py.
 """
+
+from __future__ import annotations
 
 import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
+from urllib.parse import unquote, urlparse
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = PROJECT_ROOT / "templates"
 
 MAX_IMAGE_INPUT = 14
+
+SCALE_GUARD = (
+    "Place the product as a large hero subject in tight catalog framing. "
+    "Match the scene reference for background, surface, and lighting only — "
+    "do not shrink the product to match a small or distant display in the reference."
+)
 
 
 def load_json(path: Path) -> dict:
@@ -27,24 +37,97 @@ def load_json(path: Path) -> dict:
         return json.load(f)
 
 
-def compose_image_input(style_references: list[str], product_urls: list[str]) -> list[str]:
-    """Combine style references and product URLs, respecting the 14-image limit."""
-    combined = list(style_references) + list(product_urls)
+def url_basename(url: str) -> str:
+    path = unquote(urlparse(url).path)
+    return Path(path).stem
+
+
+def _valid_url(url: str) -> bool:
+    return isinstance(url, str) and url.startswith(("http://", "https://"))
+
+
+def collect_selectable_references(template: dict) -> list[dict[str, Any]]:
+    """Flatten style_references and scene_references into a selectable list."""
+    options: list[dict[str, Any]] = []
+    seen: set[str] = set()
+
+    for i, url in enumerate(template.get("style_references") or []):
+        if not _valid_url(url) or url in seen:
+            continue
+        seen.add(url)
+        options.append({
+            "url": url,
+            "source": "style",
+            "scene_key": None,
+            "label": f"Style reference {i + 1}",
+        })
+
+    scene_refs = template.get("scene_references") or {}
+    if isinstance(scene_refs, dict):
+        for key, urls in scene_refs.items():
+            for url in urls or []:
+                if not _valid_url(url) or url in seen:
+                    continue
+                seen.add(url)
+                options.append({
+                    "url": url,
+                    "source": "scene",
+                    "scene_key": key,
+                    "label": f"Scene ref: {key}",
+                })
+
+    return options
+
+
+def collect_selectable_url_set(template: dict) -> set[str]:
+    return {opt["url"] for opt in collect_selectable_references(template)}
+
+
+def resolve_generation_references(
+    *,
+    job_ref_url: str | None = None,
+    product_ref_url: str | None = None,
+) -> list[str]:
+    """Return at most one explicitly selected reference URL."""
+    if _valid_url(product_ref_url or ""):
+        return [product_ref_url]  # type: ignore[list-item]
+    if _valid_url(job_ref_url or ""):
+        return [job_ref_url]  # type: ignore[list-item]
+    return []
+
+
+def resolve_ref_source(template: dict, ref_url: str | None) -> str | None:
+    if not ref_url:
+        return None
+    for opt in collect_selectable_references(template):
+        if opt["url"] == ref_url:
+            return opt["source"]
+    return None
+
+
+def compose_image_input(reference_urls: list[str], product_urls: list[str]) -> list[str]:
+    """Combine product URLs and reference URLs, respecting the 14-image limit."""
+    combined = list(product_urls) + list(reference_urls)
     if len(combined) > MAX_IMAGE_INPUT:
-        available = MAX_IMAGE_INPUT - len(style_references)
+        available = MAX_IMAGE_INPUT - len(reference_urls)
         if available <= 0:
-            print(f"WARNING: {len(style_references)} style references already exceed the {MAX_IMAGE_INPUT}-image limit.")
-            print("Truncating style references to fit at least 1 product image.")
-            style_refs_truncated = style_references[:MAX_IMAGE_INPUT - 1]
-            combined = style_refs_truncated + product_urls[:1]
+            print(f"WARNING: {len(reference_urls)} references exceed the {MAX_IMAGE_INPUT}-image limit.")
+            print("Truncating references to fit at least 1 product image.")
+            refs_truncated = reference_urls[:MAX_IMAGE_INPUT - 1]
+            combined = product_urls[:1] + refs_truncated
         else:
             print(f"WARNING: {len(combined)} total images exceed the {MAX_IMAGE_INPUT}-image limit.")
-            print(f"Keeping all {len(style_references)} style references, truncating product images to {available}.")
-            combined = list(style_references) + product_urls[:available]
+            print(f"Keeping references, truncating product images to {available}.")
+            combined = product_urls[:available] + list(reference_urls)
     return combined
 
 
-def build_prompt_text(template: dict, product_description: str | None = None) -> str:
+def build_prompt_text(
+    template: dict,
+    product_description: str | None = None,
+    *,
+    has_reference: bool = False,
+) -> str:
     """Weave template fields + product description into a Dense Narrative prompt string."""
     scene = template.get("scene", {})
     camera = template.get("camera", {})
@@ -102,6 +185,9 @@ def build_prompt_text(template: dict, product_description: str | None = None) ->
         "Do not alter, simplify, or reinterpret the product design."
     )
 
+    if has_reference:
+        parts.append(SCALE_GUARD)
+
     return " ".join(parts)
 
 
@@ -109,16 +195,33 @@ def build_prompt_json(
     template: dict,
     product_urls: list[str],
     product_analysis: dict | None = None,
+    generation_urls: list[str] | None = None,
+    product_type: str | None = None,
+    *,
+    job_ref_url: str | None = None,
+    product_ref_url: str | None = None,
 ) -> dict:
     """Build a complete Dense Narrative JSON prompt from template + product info."""
+    del product_type  # used for UI grouping only, not auto-selection
+
     product_description = None
     if product_analysis:
         product_description = product_analysis.get("product_description")
 
-    prompt_text = build_prompt_text(template, product_description)
+    ref_urls = resolve_generation_references(
+        job_ref_url=job_ref_url,
+        product_ref_url=product_ref_url,
+    )
+    resolved_ref_url = ref_urls[0] if ref_urls else None
 
-    style_refs = template.get("style_references", [])
-    image_input = compose_image_input(style_refs, product_urls)
+    prompt_text = build_prompt_text(
+        template,
+        product_description,
+        has_reference=bool(ref_urls),
+    )
+
+    gen_urls = generation_urls if generation_urls is not None else product_urls
+    image_input = compose_image_input(ref_urls, gen_urls)
 
     api_params = template.get("api_parameters", {
         "aspect_ratio": "4:5",
@@ -132,17 +235,17 @@ def build_prompt_json(
         "camera_angle": template.get("camera", {}).get("shooting_angle", ""),
         "depth_of_field": template.get("camera", {}).get("lens_behavior", ""),
         "quality": template.get("quality_directives", ""),
+        "selected_ref_url": resolved_ref_url,
+        "selected_ref_source": resolve_ref_source(template, resolved_ref_url),
     }
 
-    result = {
+    return {
         "prompt": prompt_text,
         "negative_prompt": template.get("negative_prompt", ""),
         "image_input": image_input,
         "api_parameters": api_params,
         "settings": settings,
     }
-
-    return result
 
 
 def resolve_template(name_or_path: str) -> Path:
@@ -159,6 +262,16 @@ def resolve_template(name_or_path: str) -> Path:
     sys.exit(1)
 
 
+def print_template_refs(template: dict) -> None:
+    options = collect_selectable_references(template)
+    if not options:
+        print("No selectable references.")
+        return
+    for opt in options:
+        print(f"  [{opt['source']}] {opt['label']}")
+        print(f"    {opt['url']}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Build Dense Narrative JSON prompt from template + product"
@@ -169,14 +282,26 @@ def main():
                         help="R2 URLs of raw product images (included in image_input)")
     parser.add_argument("--analysis", "-a", default=None,
                         help="Path to vision analysis JSON (from vision_analyze.py)")
-    parser.add_argument("--output", "-o", required=True,
+    parser.add_argument("--output", "-o", default=None,
                         help="Output path for the prompt JSON")
+    parser.add_argument("--ref-url", default=None,
+                        help="Explicit style/scene reference URL for image_input")
+    parser.add_argument("--list-template-refs", action="store_true",
+                        help="Print selectable references and exit")
     parser.add_argument("--print", action="store_true",
                         help="Also print the prompt JSON to stdout")
     args = parser.parse_args()
 
     template_path = resolve_template(args.template)
     template = load_json(template_path)
+
+    if args.list_template_refs:
+        print(f"Selectable references for {template_path.name}:")
+        print_template_refs(template)
+        return
+
+    if not args.output:
+        parser.error("--output is required unless --list-template-refs is used")
 
     product_analysis = None
     if args.analysis:
@@ -191,7 +316,12 @@ def main():
         if not product_urls:
             product_urls = product_analysis["_source_urls"]
 
-    prompt_json = build_prompt_json(template, product_urls, product_analysis)
+    prompt_json = build_prompt_json(
+        template,
+        product_urls,
+        product_analysis,
+        job_ref_url=args.ref_url,
+    )
 
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -202,6 +332,9 @@ def main():
     print(f"  Template: {template_path.name}")
     print(f"  Analysis: {'yes' if product_analysis else 'no (generic reference)'}")
     print(f"  image_input: {len(prompt_json['image_input'])} images")
+    ref = prompt_json.get("settings", {}).get("selected_ref_url")
+    if ref:
+        print(f"  selected_ref: {ref}")
 
     if args.print:
         print("\n" + json.dumps(prompt_json, indent=2))

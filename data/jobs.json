@@ -1,0 +1,981 @@
+[
+  {
+    "id": "5f994528",
+    "status": "success",
+    "template": "jewelry_beige_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet06",
+      "bracelet07"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet06",
+        "output_name": "catalog_bracelet06_beige_4x5_5f994528",
+        "run_id": "5f994528",
+        "status": "success",
+        "error": null,
+        "task_id": "fd73ed22bdffea5fe3c326893ae1c734",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet06_beige_4x5_5f994528.jpg",
+        "output_path": "images/jewelry/catalog_bracelet06_beige_4x5_5f994528.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet06_beige_4x5_5f994528.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet06_beige_4x5_5f994528.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782750242546_purwfg.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782750132_img_20260629_190436.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet06_beige_4x5_5f994528.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet07",
+        "output_name": "catalog_bracelet07_beige_4x5_5f994528",
+        "run_id": "5f994528",
+        "status": "success",
+        "error": null,
+        "task_id": "949fce169d7202123362053dcab25beb",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet07_beige_4x5_5f994528.jpg",
+        "output_path": "images/jewelry/catalog_bracelet07_beige_4x5_5f994528.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet07_beige_4x5_5f994528.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet07_beige_4x5_5f994528.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782750230513_2dt94f.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782750132_img_20260629_190105.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet07_beige_4x5_5f994528.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-29T16:22:12.450063+00:00",
+    "updated_at": "2026-06-29T16:24:12.218886+00:00",
+    "error": null
+  },
+  {
+    "id": "90ab1259",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": false,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet04",
+      "bracelet03",
+      "bracelet06",
+      "bracelet07",
+      "bracelet09",
+      "bracelet10"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet04",
+        "output_name": "catalog_bracelet04_eggplant_4x5_90ab1259",
+        "run_id": "90ab1259",
+        "status": "success",
+        "error": null,
+        "task_id": "43249d242bc931fe215d257ee95b5e69",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet04_eggplant_4x5_90ab1259.jpg",
+        "output_path": "images/jewelry/catalog_bracelet04_eggplant_4x5_90ab1259.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet04_eggplant_4x5_90ab1259.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet04_eggplant_4x5_90ab1259.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782749737043_144bql.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782749661_img_20260629_190323.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet04_eggplant_4x5_90ab1259.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet03",
+        "output_name": "catalog_bracelet03_eggplant_4x5_90ab1259",
+        "run_id": "90ab1259",
+        "status": "success",
+        "error": null,
+        "task_id": "5ca48e10a949c21a446c16dc75666841",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet03_eggplant_4x5_90ab1259.jpg",
+        "output_path": "images/jewelry/catalog_bracelet03_eggplant_4x5_90ab1259.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet03_eggplant_4x5_90ab1259.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet03_eggplant_4x5_90ab1259.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782749742487_ym9hb5.jpg",
+        "product_urls": [],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet03_eggplant_4x5_90ab1259.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet06",
+        "output_name": "catalog_bracelet06_eggplant_4x5_90ab1259",
+        "run_id": "90ab1259",
+        "status": "success",
+        "error": null,
+        "task_id": "0982444f2ed3615d91886a084da68fa4",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet06_eggplant_4x5_90ab1259.jpg",
+        "output_path": "images/jewelry/catalog_bracelet06_eggplant_4x5_90ab1259.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet06_eggplant_4x5_90ab1259.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet06_eggplant_4x5_90ab1259.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782749703000_2lv3ut.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782749661_img_20260629_190436.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet06_eggplant_4x5_90ab1259.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet07",
+        "output_name": "catalog_bracelet07_eggplant_4x5_90ab1259",
+        "run_id": "90ab1259",
+        "status": "success",
+        "error": null,
+        "task_id": "964909ed6fb0274ac74172a25b7315da",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet07_eggplant_4x5_90ab1259.jpg",
+        "output_path": "images/jewelry/catalog_bracelet07_eggplant_4x5_90ab1259.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet07_eggplant_4x5_90ab1259.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet07_eggplant_4x5_90ab1259.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782749747412_emi2k7.jpg",
+        "product_urls": [],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet07_eggplant_4x5_90ab1259.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet09",
+        "output_name": "catalog_bracelet09_eggplant_4x5_90ab1259",
+        "run_id": "90ab1259",
+        "status": "success",
+        "error": null,
+        "task_id": "67556629e80bb2a1579af66baa31ce5e",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet09_eggplant_4x5_90ab1259.jpg",
+        "output_path": "images/jewelry/catalog_bracelet09_eggplant_4x5_90ab1259.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet09_eggplant_4x5_90ab1259.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet09_eggplant_4x5_90ab1259.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782750072798_0m5zht.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782749960_img_20260629_190141.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet09_eggplant_4x5_90ab1259.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet10",
+        "output_name": "catalog_bracelet10_eggplant_4x5_90ab1259",
+        "run_id": "90ab1259",
+        "status": "success",
+        "error": null,
+        "task_id": "3790466d4f165f6ce4a18e40db05665e",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet10_eggplant_4x5_90ab1259.jpg",
+        "output_path": "images/jewelry/catalog_bracelet10_eggplant_4x5_90ab1259.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet10_eggplant_4x5_90ab1259.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet10_eggplant_4x5_90ab1259.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782749779855_d1a2tq.jpg",
+        "product_urls": [],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet10_eggplant_4x5_90ab1259.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-29T16:14:20.782465+00:00",
+    "updated_at": "2026-06-29T16:21:20.812146+00:00",
+    "error": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+    "id": "043f9820",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": false,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "ring03",
+      "ring04",
+      "ring05",
+      "ring06",
+      "ring07",
+      "ring08",
+      "ring09",
+      "ring10"
+    ],
+    "products": [
+      {
+        "product_id": "ring03",
+        "output_name": "catalog_ring03_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "ec6cbe6e0343c92e5bac2b5c37318371",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring03_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring03_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring03_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring03_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689546545_itj3d4.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689474_20260627_223557.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring03_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring04",
+        "output_name": "catalog_ring04_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "7cdb11827f270be050cfdfd7f2eaa6e0",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring04_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring04_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring04_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring04_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689556687_ktuc9p.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689474_20260627_223601.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring04_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring05",
+        "output_name": "catalog_ring05_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "7742d866046719936d9797673e273698",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring05_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring05_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring05_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring05_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689572181_lw9bd0.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689474_20260627_223611.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring05_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring06",
+        "output_name": "catalog_ring06_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "25fa14d2ad8a0b7d775ffe25f0068cc0",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring06_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring06_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring06_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring06_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689626662_ttu1ne.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689557_20260627_223615.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring06_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring07",
+        "output_name": "catalog_ring07_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "218f2d2518f49e7d14fd774ec5d74838",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring07_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring07_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring07_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring07_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689624848_cl69ic.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689564_20260627_223621.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring07_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring08",
+        "output_name": "catalog_ring08_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "a4574997e94abdc655f29aa04a53e53f",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring08_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring08_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring08_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring08_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689609874_jeouix.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689577_20260627_223629.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring08_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring09",
+        "output_name": "catalog_ring09_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "b9bc9081c7164b817c8003d78d216e2b",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring09_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring09_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring09_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring09_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689657641_6182va.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689615_20260627_223634.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring09_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "ring10",
+        "output_name": "catalog_ring10_eggplant_4x5_043f9820",
+        "run_id": "043f9820",
+        "status": "success",
+        "error": null,
+        "task_id": "e2dd2a619559bee5aa0d0fa6ab799095",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring10_eggplant_4x5_043f9820.jpg",
+        "output_path": "images/jewelry/catalog_ring10_eggplant_4x5_043f9820.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring10_eggplant_4x5_043f9820.json",
+        "prompt_path": "prompts/jewelry/catalog_ring10_eggplant_4x5_043f9820.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782689669041_twmrig.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782689629_20260627_223659.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring10_eggplant_4x5_043f9820.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-28T23:31:13.624618+00:00",
+    "updated_at": "2026-06-28T23:34:37.195173+00:00",
+    "error": null
+  },
+  {
+    "id": "d89e838b",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": false,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet05",
+      "bracelet03",
+      "bracelet04",
+      "bracelet06",
+      "bracelet07",
+      "bracelet08",
+      "bracelet02"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet05",
+        "output_name": "catalog_bracelet05_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "0e0ef085b09b36e92a6e386049a254b3",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet05_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet05_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet05_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet05_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782681924066_rpwiov.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681876_img_20260623_225125.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet05_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      },
+      {
+        "product_id": "bracelet03",
+        "output_name": "catalog_bracelet03_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "9c7f25cad09934879f50fa6fdac9f743",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet03_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet03_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet03_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet03_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782681978099_f0fbmp.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681876_img_20260623_224625.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet03_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      },
+      {
+        "product_id": "bracelet04",
+        "output_name": "catalog_bracelet04_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "d7f364ec4c119d04390731783c3a5ee0",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet04_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet04_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet04_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet04_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782681951769_6lytqm.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681876_img_20260623_224819.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet04_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      },
+      {
+        "product_id": "bracelet06",
+        "output_name": "catalog_bracelet06_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "a4a7bf40805972ec979a32de8b0a72c5",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet06_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet06_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet06_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet06_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782681999890_9l1eyj.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681931_img_20260623_225421.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet06_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      },
+      {
+        "product_id": "bracelet07",
+        "output_name": "catalog_bracelet07_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "a2c1d33090bc367ac8aa5d57aa024239",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet07_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet07_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet07_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet07_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782682026505_u3xr3q.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681956_img_20260623_225551.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet07_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      },
+      {
+        "product_id": "bracelet08",
+        "output_name": "catalog_bracelet08_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "1c54b8ed78ed0c3fe0a67f30024a7331",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet08_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet08_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet08_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet08_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782682080710_7uktou.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681984_img_20260623_225649.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet08_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      },
+      {
+        "product_id": "bracelet02",
+        "output_name": "catalog_bracelet02_eggplant_4x5_d89e838b",
+        "run_id": "d89e838b",
+        "status": "success",
+        "error": null,
+        "task_id": "a9c79b7ff038714ab2dae0f9e499933f",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet02_eggplant_4x5_d89e838b.jpg",
+        "output_path": "images/jewelry/catalog_bracelet02_eggplant_4x5_d89e838b.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet02_eggplant_4x5_d89e838b.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet02_eggplant_4x5_d89e838b.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782682080305_xhltjb.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782682008_file_00000000ffd4724388f69a6a22140534.png"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet02_eggplant_4x5_d89e838b.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      }
+    ],
+    "reference_mode": "job",
+    "selected_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+    "created_at": "2026-06-28T21:24:36.341724+00:00",
+    "updated_at": "2026-06-28T21:28:08.941240+00:00",
+    "error": null
+  },
+  {
+    "id": "744696be",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": false,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet05"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet05",
+        "output_name": "catalog_bracelet05_eggplant_4x5_744696be",
+        "run_id": "744696be",
+        "status": "success",
+        "error": null,
+        "task_id": "ca4c0985163f540dfc3ec55ce4a40271",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet05_eggplant_4x5_744696be.jpg",
+        "output_path": "images/jewelry/catalog_bracelet05_eggplant_4x5_744696be.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet05_eggplant_4x5_744696be.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet05_eggplant_4x5_744696be.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782681626129_gqnmz3.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782681591_img_20260623_225125.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet05_eggplant_4x5_744696be.jpg",
+        "selected_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+        "resolved_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+      }
+    ],
+    "reference_mode": "product",
+    "selected_ref_url": null,
+    "created_at": "2026-06-28T21:19:51.083060+00:00",
+    "updated_at": "2026-06-28T21:20:32.377614+00:00",
+    "error": null
+  },
+  {
+    "id": "e979bc86",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet05"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet05",
+        "output_name": "catalog_bracelet05_eggplant_4x5_e979bc86",
+        "run_id": "e979bc86",
+        "status": "success",
+        "error": null,
+        "task_id": "8686936c366888d9e7d046e0dc5d3ce2",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet05_eggplant_4x5_e979bc86.jpg",
+        "output_path": "images/jewelry/catalog_bracelet05_eggplant_4x5_e979bc86.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet05_eggplant_4x5_e979bc86.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet05_eggplant_4x5_e979bc86.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782573725207_p3p8wm.jpg",
+        "product_urls": [],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet05_eggplant_4x5_e979bc86.jpg",
+        "selected_ref_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_eggplant_4x5/scene_plate_eggplant_pillow.jpg",
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "product",
+    "selected_ref_url": null,
+    "created_at": "2026-06-27T15:12:52.037503+00:00",
+    "updated_at": "2026-06-27T15:24:49.997350+00:00",
+    "error": null
+  },
+  {
+    "id": "69901c59",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet05"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet05",
+        "output_name": "catalog_bracelet05_eggplant_4x5_69901c59",
+        "run_id": "69901c59",
+        "status": "success",
+        "error": null,
+        "task_id": "e27790797f3a06cb6eab39d1b893a0bc",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet05_eggplant_4x5_69901c59.jpg",
+        "output_path": "images/jewelry/catalog_bracelet05_eggplant_4x5_69901c59.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet05_eggplant_4x5_69901c59.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet05_eggplant_4x5_69901c59.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782568155826_ezjwze.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782568115_img_20260623_225125.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet05_eggplant_4x5_69901c59.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-27T13:48:35.124049+00:00",
+    "updated_at": "2026-06-27T13:49:27.341633+00:00",
+    "error": null
+  },
+  {
+    "id": "ced902d0",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet05"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet05",
+        "output_name": "catalog_bracelet05_eggplant_4x5_ced902d0",
+        "run_id": "ced902d0",
+        "status": "success",
+        "error": null,
+        "task_id": "805913bedd2fdcb9e4abd82ce12ad16a",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+        "output_path": "images/jewelry/catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet05_eggplant_4x5_ced902d0.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet05_eggplant_4x5_ced902d0.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782523870704_jkrolt.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782523728_img_20260623_225125.jpg",
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782523733_catalog_bracelet03_eggplant_4x5_9817cb06.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-27T01:28:47.883034+00:00",
+    "updated_at": "2026-06-27T01:34:08.478703+00:00",
+    "error": null
+  },
+  {
+    "id": "9817cb06",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet03",
+      "bracelet04",
+      "bracelet05",
+      "bracelet06",
+      "bracelet07",
+      "bracelet08",
+      "bracelet02"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet03",
+        "output_name": "catalog_bracelet03_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "cbed2ecd3efc787d9670ab07ddddd8a9",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782521537198_ybnkyc.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782521482_img_20260623_224625.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet04",
+        "output_name": "catalog_bracelet04_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "11c6847450c3215fe119d1a8750a01ac",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet04_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet04_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet04_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet04_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782521587798_xk230g.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782521543_img_20260623_224819.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet04_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet05",
+        "output_name": "catalog_bracelet05_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "07ece4575b499f2f871088e6b7e44048",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet05_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet05_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet05_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet05_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782521646651_ucwi72.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782521597_img_20260623_225125.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet05_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet06",
+        "output_name": "catalog_bracelet06_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "0b9116c560fdac7b0609062f4715b089",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet06_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet06_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet06_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet06_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782521826543_2202hu.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782521658_img_20260623_225421.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet06_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet07",
+        "output_name": "catalog_bracelet07_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "8faea671e69d8d53aa6769e13ba82fce",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet07_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet07_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet07_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet07_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782521920679_wa8dov.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782521845_img_20260623_225551.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet07_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet08",
+        "output_name": "catalog_bracelet08_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "5736d2217a58245403fb7d3c843ca46e",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet08_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet08_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet08_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet08_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782522048861_kxlkrv.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782521929_img_20260623_225649.jpg"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet08_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      },
+      {
+        "product_id": "bracelet02",
+        "output_name": "catalog_bracelet02_eggplant_4x5_9817cb06",
+        "run_id": "9817cb06",
+        "status": "success",
+        "error": null,
+        "task_id": "322085168d942808ba1fbf3753119db3",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet02_eggplant_4x5_9817cb06.jpg",
+        "output_path": "images/jewelry/catalog_bracelet02_eggplant_4x5_9817cb06.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet02_eggplant_4x5_9817cb06.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet02_eggplant_4x5_9817cb06.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782522178136_ar0rlt.jpg",
+        "product_urls": [
+          "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782522060_file_00000000ffd4724388f69a6a22140534.png"
+        ],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet02_eggplant_4x5_9817cb06.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-27T00:51:22.197628+00:00",
+    "updated_at": "2026-06-27T01:03:09.911316+00:00",
+    "error": null
+  },
+  {
+    "id": "37cc87e8",
+    "status": "success",
+    "template": "jewelry_eggplant_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "bracelet01"
+    ],
+    "products": [
+      {
+        "product_id": "bracelet01",
+        "output_name": "catalog_bracelet01_eggplant_4x5_37cc87e8",
+        "run_id": "37cc87e8",
+        "status": "success",
+        "error": null,
+        "task_id": "67eadeae899c923a04c03e6970834955",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_bracelet01_eggplant_4x5_37cc87e8.jpg",
+        "output_path": "images/jewelry/catalog_bracelet01_eggplant_4x5_37cc87e8.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_bracelet01_eggplant_4x5_37cc87e8.json",
+        "prompt_path": "prompts/jewelry/catalog_bracelet01_eggplant_4x5_37cc87e8.json",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782521077126_seoavk.jpg",
+        "product_urls": [],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet01_eggplant_4x5_37cc87e8.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-27T00:37:59.705644+00:00",
+    "updated_at": "2026-06-27T00:45:57.181632+00:00",
+    "error": null
+  },
+  {
+    "id": "50551f0a",
+    "status": "success",
+    "template": "jewelry_beige_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "ring01"
+    ],
+    "products": [
+      {
+        "product_id": "ring01",
+        "output_name": "catalog_ring01_beige_4x5_50551f0a",
+        "run_id": "50551f0a",
+        "status": "success",
+        "error": null,
+        "task_id": "b9d77075b3d2e02db148f1f9c4fef508",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring01_beige_4x5_50551f0a.jpg",
+        "output_path": "images/jewelry/catalog_ring01_beige_4x5_50551f0a.jpg",
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring01.json",
+        "prompt_path": null,
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782487845067_1tm6w6.jpg",
+        "product_urls": [],
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_ring01_beige_4x5_50551f0a.jpg",
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-26T15:23:48.901237+00:00",
+    "updated_at": "2026-06-26T16:25:38.802023+00:00",
+    "error": null
+  },
+  {
+    "id": "5454f275",
+    "status": "failed",
+    "template": "jewelry_beige 4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "ring01"
+    ],
+    "products": [
+      {
+        "product_id": "ring01",
+        "output_name": "catalog_ring01",
+        "run_id": null,
+        "status": "failed",
+        "error": "Template not found: jewelry_beige 4x5",
+        "task_id": null,
+        "output_image": null,
+        "output_path": null,
+        "prompt_file": null,
+        "prompt_path": null,
+        "image_url": null,
+        "product_urls": [],
+        "output_r2_url": null,
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-26T15:08:00.039827+00:00",
+    "updated_at": "2026-06-26T15:08:00.039827+00:00",
+    "error": "Template not found: jewelry_beige 4x5"
+  },
+  {
+    "id": "0992b9d9",
+    "status": "success",
+    "template": "jewelry_catalog_4x5",
+    "workflow": null,
+    "analyze": true,
+    "category": "jewelry",
+    "output_prefix": "catalog",
+    "product_ids": [
+      "ring01"
+    ],
+    "products": [
+      {
+        "product_id": "ring01",
+        "output_name": "catalog_ring01",
+        "run_id": null,
+        "status": "success",
+        "error": null,
+        "task_id": "81937948b2bfc7173527c06b240e5593",
+        "output_image": "/home/haridz/Development/personal/SHContent/images/jewelry/catalog_ring01.jpg",
+        "output_path": null,
+        "prompt_file": "/home/haridz/Development/personal/SHContent/prompts/jewelry/catalog_ring01.json",
+        "prompt_path": null,
+        "image_url": null,
+        "product_urls": [],
+        "output_r2_url": null,
+        "selected_ref_url": null,
+        "resolved_ref_url": null
+      }
+    ],
+    "reference_mode": "none",
+    "selected_ref_url": null,
+    "created_at": "2026-06-26T14:06:41.852528+00:00",
+    "updated_at": "2026-06-26T14:08:14.965121+00:00",
+    "error": null
+  }
+]

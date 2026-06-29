@@ -1,0 +1,176 @@
+{
+  "images/jewelry/catalog_ring01_beige_4x5_50551f0a.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-27T13:08:14.378935+00:00",
+    "product_id": "ring01",
+    "task_id": null
+  },
+  "images/jewelry/catalog_bracelet05_eggplant_4x5_9817cb06.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:08:28.497152+00:00",
+    "product_id": "bracelet05",
+    "task_id": "07ece4575b499f2f871088e6b7e44048"
+  },
+  "images/jewelry/catalog_bracelet05_eggplant_4x5_e979bc86.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:07:30.976952+00:00",
+    "product_id": "bracelet05",
+    "task_id": "8686936c366888d9e7d046e0dc5d3ce2"
+  },
+  "images/jewelry/catalog_bracelet05_eggplant_4x5_69901c59.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:07:44.100244+00:00",
+    "product_id": "bracelet05",
+    "task_id": "e27790797f3a06cb6eab39d1b893a0bc"
+  },
+  "images/jewelry/catalog_bracelet02_eggplant_4x5_9817cb06.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:33:49.758337+00:00",
+    "product_id": "bracelet02",
+    "task_id": "322085168d942808ba1fbf3753119db3"
+  },
+  "images/jewelry/catalog_bracelet08_eggplant_4x5_9817cb06.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:08:00.279314+00:00",
+    "product_id": "bracelet08",
+    "task_id": "5736d2217a58245403fb7d3c843ca46e"
+  },
+  "images/jewelry/catalog_bracelet07_eggplant_4x5_9817cb06.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:08:18.053671+00:00",
+    "product_id": "bracelet07",
+    "task_id": "8faea671e69d8d53aa6769e13ba82fce"
+  },
+  "images/jewelry/catalog_bracelet06_eggplant_4x5_9817cb06.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:08:22.163525+00:00",
+    "product_id": "bracelet06",
+    "task_id": "0b9116c560fdac7b0609062f4715b089"
+  },
+  "images/jewelry/catalog_bracelet04_eggplant_4x5_9817cb06.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:08:35.069401+00:00",
+    "product_id": "bracelet04",
+    "task_id": "11c6847450c3215fe119d1a8750a01ac"
+  },
+  "images/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:08:40.731688+00:00",
+    "product_id": "bracelet03",
+    "task_id": "cbed2ecd3efc787d9670ab07ddddd8a9"
+  },
+  "images/jewelry/catalog_bracelet01_eggplant_4x5_37cc87e8.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:08:44.327655+00:00",
+    "product_id": "bracelet01",
+    "task_id": "67eadeae899c923a04c03e6970834955"
+  },
+  "images/jewelry/catalog_ring01_eggplant_test.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:08:49.608834+00:00",
+    "product_id": "ring01",
+    "task_id": "6d14c354eafcf0318e84a2baa8e3a44b"
+  },
+  "images/jewelry/catalog_ring01_beige_test.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:09:03.659497+00:00",
+    "product_id": "ring01",
+    "task_id": "4fc1e300d9f2918d8ec24b951d1ed99e"
+  },
+  "images/jewelry/catalog_ring01.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:09:07.804918+00:00",
+    "product_id": "ring01",
+    "task_id": "81937948b2bfc7173527c06b240e5593"
+  },
+  "images/jewelry/catalog_bracelet05_eggplant_4x5_ced902d0.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:10:57.694570+00:00",
+    "product_id": "bracelet05",
+    "task_id": "805913bedd2fdcb9e4abd82ce12ad16a"
+  },
+  "images/jewelry/catalog_bracelet08_eggplant_4x5_d89e838b.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:28:57.637247+00:00",
+    "product_id": "bracelet08",
+    "task_id": "1c54b8ed78ed0c3fe0a67f30024a7331"
+  },
+  "images/jewelry/catalog_bracelet02_eggplant_4x5_d89e838b.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:29:14.776399+00:00",
+    "product_id": "bracelet02",
+    "task_id": "a9c79b7ff038714ab2dae0f9e499933f"
+  },
+  "images/jewelry/catalog_bracelet07_eggplant_4x5_d89e838b.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:29:27.039302+00:00",
+    "product_id": "bracelet07",
+    "task_id": "a2c1d33090bc367ac8aa5d57aa024239"
+  },
+  "images/jewelry/catalog_bracelet04_eggplant_4x5_d89e838b.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:30:08.987338+00:00",
+    "product_id": "bracelet04",
+    "task_id": "d7f364ec4c119d04390731783c3a5ee0"
+  },
+  "images/jewelry/catalog_bracelet05_eggplant_4x5_d89e838b.jpg": {
+    "status": "rejected",
+    "reviewed_at": "2026-06-28T21:30:21.552464+00:00",
+    "product_id": "bracelet05",
+    "task_id": "0e0ef085b09b36e92a6e386049a254b3"
+  },
+  "images/jewelry/catalog_bracelet05_eggplant_4x5_744696be.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T21:30:26.084304+00:00",
+    "product_id": "bracelet05",
+    "task_id": "ca4c0985163f540dfc3ec55ce4a40271"
+  },
+  "images/jewelry/catalog_ring10_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T23:59:33.656703+00:00",
+    "product_id": "ring10",
+    "task_id": "e2dd2a619559bee5aa0d0fa6ab799095"
+  },
+  "images/jewelry/catalog_ring09_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-28T23:59:56.191935+00:00",
+    "product_id": "ring09",
+    "task_id": "b9bc9081c7164b817c8003d78d216e2b"
+  },
+  "images/jewelry/catalog_ring06_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-29T00:00:03.861865+00:00",
+    "product_id": "ring06",
+    "task_id": "25fa14d2ad8a0b7d775ffe25f0068cc0"
+  },
+  "images/jewelry/catalog_ring07_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-29T00:00:12.369899+00:00",
+    "product_id": "ring07",
+    "task_id": "218f2d2518f49e7d14fd774ec5d74838"
+  },
+  "images/jewelry/catalog_ring08_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-29T00:00:18.303705+00:00",
+    "product_id": "ring08",
+    "task_id": "a4574997e94abdc655f29aa04a53e53f"
+  },
+  "images/jewelry/catalog_ring05_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-29T00:00:23.235886+00:00",
+    "product_id": "ring05",
+    "task_id": "7742d866046719936d9797673e273698"
+  },
+  "images/jewelry/catalog_ring04_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-29T00:00:30.496209+00:00",
+    "product_id": "ring04",
+    "task_id": "7cdb11827f270be050cfdfd7f2eaa6e0"
+  },
+  "images/jewelry/catalog_ring03_eggplant_4x5_043f9820.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-29T00:00:35.852737+00:00",
+    "product_id": "ring03",
+    "task_id": "ec6cbe6e0343c92e5bac2b5c37318371"
+  }
+}

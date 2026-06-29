@@ -73,6 +73,31 @@ def make_object_key(filepath: Path, prefix: str) -> str:
     return f"{prefix}/{timestamp}_{safe_name}"
 
 
+def upload_file_with_key(
+    s3_client,
+    config: dict,
+    filepath: Path,
+    object_key: str,
+) -> str | None:
+    """Upload a file using an explicit object key (for stable output paths on R2)."""
+    if not validate_image(filepath):
+        return None
+
+    content_type = mimetypes.guess_type(str(filepath))[0] or "image/jpeg"
+    try:
+        s3_client.upload_file(
+            str(filepath),
+            config["bucket"],
+            object_key,
+            ExtraArgs={"ContentType": content_type},
+        )
+    except (ClientError, NoCredentialsError) as e:
+        print(f"ERROR uploading {filepath.name}: {e}")
+        return None
+
+    return f"{config['public_url']}/{object_key}"
+
+
 def upload_file(s3_client, config: dict, filepath: Path, prefix: str = "products") -> str | None:
     if not validate_image(filepath):
         return None

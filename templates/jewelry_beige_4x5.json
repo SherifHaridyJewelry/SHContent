@@ -1,0 +1,57 @@
+{
+  "template_name": "Jewelry Beige 4x5",
+  "category": "jewelry",
+  "product_type": "general_jewelry",
+  "scene": {
+    "surface": "Warm cream linen-textured jewelry display cushion, matching the beige display stands used in the shop",
+    "background": "Soft warm beige matte background, tonal sand and champagne-beige gradient, no green cast, elegant and clean",
+    "props": "none",
+    "arrangement": "Single hero product centered with balanced negative space; for sets, arranged as a cohesive group with clear hierarchy"
+  },
+  "camera": {
+    "focal_length": "85mm or 100mm macro lens",
+    "aperture": "f/2.8 to f/4.0",
+    "iso": "100",
+    "lens_behavior": "Shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture and gemstones",
+    "shooting_angle": "Eye-level, straight-on or slight three-quarter perspective suited to the product type"
+  },
+  "lighting": {
+    "setup": "Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion",
+    "quality": "Soft, warm, wrap-around light with gentle shadow transitions; clean bright highlights to define metallic edges without harsh glare"
+  },
+  "style": "Minimalist luxury jewelry catalog, warm beige brand palette, high-end studio product photography",
+  "quality_directives": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional warm-neutral color grading, realistic micro-reflections on metal surfaces, clean minimalist composition, consistent beige brand palette across all product types",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, cluttered background, lens flare, dust on lens, hands, model, packaging, price tag, paper tag, product tag, hang tag, label, sticker, barcode, green background, sage background",
+  "style_references": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.jpg"
+  ],
+  "scene_references": {
+    "default": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_pillow.jpg"
+    ],
+    "bracelet": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_cylinder.jpg",
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_bracelet_chain.jpg"
+    ],
+    "ring": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring.jpg",
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring_cone.jpg",
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_ring_pillow.jpg"
+    ],
+    "necklace": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_bust.jpg"
+    ],
+    "earrings": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_earrings.jpg",
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_earrings_tbar.jpg"
+    ],
+    "half_set": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/scenes/jewelry_beige_4x5/scene_plate_beige_half_set.jpg"
+    ]
+  },
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  }
+}

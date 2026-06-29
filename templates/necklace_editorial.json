@@ -21,7 +21,7 @@
   },
   "style": "Minimalist editorial catalog, high-end lifestyle studio photography",
   "quality_directives": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional color grading, realistic micro-reflections on metal surfaces, clean minimalist composition",
-  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, specular highlights, cluttered background, lens flare, dust on lens",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, specular highlights, cluttered background, lens flare, dust on lens, price tag, paper tag, product tag, hang tag, label, sticker, barcode",
   "style_references": [
     "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp01.jpg",
     "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp02.jpg"

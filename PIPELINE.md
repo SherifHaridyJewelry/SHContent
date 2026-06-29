@@ -418,6 +418,8 @@ python scripts/product_pipeline.py (--image | --batch | --batch-dir) --template 
 | `--category`, `-c` | `jewelry` | Output subfolder under `prompts/` and `images/`. |
 | `--analyze` | Disabled | Enable Gemini 3 Flash vision analysis to generate a detailed product description for the prompt. |
 | `--hint` | None | Context hint for vision analysis (e.g., `"18k white gold engagement ring"`). Only used when `--analyze` is active. |
+| `--ref-url` | None | Explicit style or scene reference URL to include in `image_input`. If omitted, generation uses product images only. |
+| `--list-template-refs` | Disabled | Print selectable `style_references` and `scene_references` for the template, then exit. |
 | `--max-workers` | `3` | Reserved for future parallel batch processing. |
 
 #### Pipeline Steps (per product)

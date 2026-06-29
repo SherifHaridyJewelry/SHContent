@@ -135,31 +135,27 @@ def analyze_product(api_key: str, image_urls: list[str], hint: str | None = None
     print(f"Analyzing {len(image_urls)} product image(s) via Gemini 3 Flash...")
 
     try:
-        resp = requests.post(endpoint, headers=headers, json=payload, timeout=120)
+        resp = requests.post(endpoint, headers=headers, json=payload, timeout=180)
         resp.raise_for_status()
         result = resp.json()
     except requests.exceptions.HTTPError as e:
-        print(f"ERROR: Gemini API returned {e.response.status_code}")
-        print(e.response.text[:500])
-        sys.exit(1)
+        body = e.response.text[:500] if e.response is not None else ""
+        raise RuntimeError(f"Gemini API HTTP {e.response.status_code}: {body}") from e
+    except requests.exceptions.Timeout as e:
+        raise RuntimeError("Gemini API timed out after 180s") from e
     except Exception as e:
-        print(f"ERROR calling Gemini API: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Gemini API error: {e}") from e
 
     choices = result.get("choices", [])
     if not choices:
-        print("ERROR: No response from Gemini")
-        print(json.dumps(result, indent=2))
-        sys.exit(1)
+        raise RuntimeError(f"No response from Gemini: {json.dumps(result)[:500]}")
 
     content_str = choices[0].get("message", {}).get("content", "")
 
     try:
         analysis = json.loads(content_str)
-    except json.JSONDecodeError:
-        print("ERROR: Gemini returned invalid JSON:")
-        print(content_str[:500])
-        sys.exit(1)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Gemini returned invalid JSON: {content_str[:500]}") from e
 
     usage = result.get("usage", {})
     if usage:

@@ -1,0 +1,9 @@
+{
+  "prompt": "Professional jewelry catalog studio photograph of an empty display setup only. A small warm cream linen-wrapped T-bar post stand with a horizontal crossbar for dangle earrings sits centered on a soft warm beige matte background with a tonal sand and champagne-beige gradient, no green cast. No jewelry, no product, no rings, no bracelets, no necklaces, no earrings, no price tags, no labels, no hands, no packaging, no logos. Soft diffused studio lighting from camera-right with gentle fill from camera-left. Shallow depth of field, creamy background bokeh, minimalist luxury editorial product photography, 4:5 vertical composition. Tight close-up catalog hero framing, eye-level, straight-on. Empty display surface fills approximately 50-65% of frame width. Shot with 85-100mm macro lens at close distance (~30-40 cm). Product-scale shot, not a wide environmental view.",
+  "negative_prompt": "jewelry, ring, bracelet, necklace, earrings, product, price tag, paper tag, label, sticker, barcode, hands, model, packaging, watermark, text overlay, cartoon, illustration, 3D render, CGI, cluttered background, green background, sage background, eggplant background, wide shot, distant subject, tiny display, aerial view, top-down, environmental wide angle",
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  }
+}
