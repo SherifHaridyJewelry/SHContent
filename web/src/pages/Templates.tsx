@@ -81,21 +81,25 @@ export default function Templates() {
             pageSizeOptions={[6, 12, 24]}
             position="top"
           />
-          <div className="grid mt-3">
+          <div className="grid mt-4">
             {pagedTemplates.map((t) => (
-              <div key={t.name} className="card">
-                <h3>{t.template_name}</h3>
-                <p className="text-xs text-muted-foreground">
-                  {t.product_type} · {t.aspect_ratio}
-                </p>
-                <p className="text-xs">
-                  <Badge variant="default">{t.scene_ref_count} scene refs</Badge>{" "}
+              <div key={t.name} className="card flex flex-col gap-3">
+                <div>
+                  <h3 className="m-0 text-lg font-display">{t.template_name}</h3>
+                  <p className="mt-1 mb-0 text-xs text-muted-foreground">
+                    {t.product_type} · {t.aspect_ratio}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="default">{t.scene_ref_count} scene refs</Badge>
                   <Badge variant="secondary">{t.style_ref_count} legacy</Badge>
+                </div>
+                <p className="m-0 text-sm text-muted-foreground leading-relaxed">
+                  {t.background}
                 </p>
-                <p className="mt-2 text-xs">{t.background}</p>
                 <Link
                   to={`/templates/${t.name}`}
-                  className="mt-3 inline-block text-sm font-medium text-primary hover:underline"
+                  className="mt-auto text-sm font-medium text-accent hover:underline"
                 >
                   Manage template →
                 </Link>

@@ -16,18 +16,18 @@ export default function PageHeader({
   return (
     <div
       className={cn(
-        "mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between",
+        "page-header flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
         className
       )}
     >
       <div className="min-w-0">
         <h2 className="m-0">{title}</h2>
         {description && (
-          <p className="text-muted-foreground mb-0 mt-1">{description}</p>
+          <p className="text-muted-foreground mb-0 mt-2">{description}</p>
         )}
       </div>
       {actions && (
-        <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>
       )}
     </div>
   );

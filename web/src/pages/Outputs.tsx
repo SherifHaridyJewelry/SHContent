@@ -107,7 +107,7 @@ export default function Outputs() {
         }
       />
 
-      <div className="studio-tabs mb-6">
+      <div className="studio-tabs">
         {(
           [
             ["gallery", "Gallery"],
@@ -337,9 +337,9 @@ function GalleryTab({
         </p>
       )}
 
-      <div className="card form-row mb-6 flex flex-wrap items-end gap-3">
-        <div>
-          <Label className="mb-1 block text-sm font-medium">Collection</Label>
+      <div className="card filter-panel form-row mb-5 flex flex-wrap items-end gap-4">
+        <div className="space-y-1.5">
+          <Label className="text-xs font-medium uppercase tracking-wide">Collection</Label>
           <Select
             value={params.collection || "all"}
             onValueChange={(v) =>
@@ -359,8 +359,8 @@ function GalleryTab({
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <Label className="mb-1 block text-sm font-medium">Type</Label>
+        <div className="space-y-1.5">
+          <Label className="text-xs font-medium uppercase tracking-wide">Type</Label>
           <Select
             value={params.type || "all"}
             onValueChange={(v) => setParams({ type: v === "all" ? "" : v, page: "1" })}
@@ -379,8 +379,8 @@ function GalleryTab({
           </Select>
         </div>
         {tab === "gallery" && (
-          <div>
-            <Label className="mb-1 block text-sm font-medium">Review</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wide">Review</Label>
             <Select
               value={params.review || "all"}
               onValueChange={(v) =>
@@ -405,8 +405,8 @@ function GalleryTab({
             </Select>
           </div>
         )}
-        <div>
-          <Label className="mb-1 block text-sm font-medium">Sort</Label>
+        <div className="space-y-1.5">
+          <Label className="text-xs font-medium uppercase tracking-wide">Sort</Label>
           <Select
             value={params.sort || "newest"}
             onValueChange={(v) => setParams({ sort: v, page: "1" })}

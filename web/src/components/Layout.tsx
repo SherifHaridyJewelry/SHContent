@@ -16,7 +16,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pendingReview = usePendingReviewCount();
 
   return (
-    <nav>
+    <nav aria-label="Main">
       <p className="nav-section">Library</p>
       <NavLink to="/products" className={navClass} onClick={onNavigate}>
         Products
@@ -31,7 +31,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       <NavLink to="/studio" className={navClass} onClick={onNavigate}>
         Studio
         {activeCount > 0 && (
-          <span className="nav-badge">{activeCount} running</span>
+          <span className="nav-badge">{activeCount}</span>
         )}
       </NavLink>
 
@@ -39,7 +39,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       <NavLink to="/outputs" className={navClass} onClick={onNavigate}>
         Outputs
         {pendingReview > 0 && (
-          <span className="nav-badge">{pendingReview} pending</span>
+          <span className="nav-badge">{pendingReview}</span>
         )}
       </NavLink>
     </nav>

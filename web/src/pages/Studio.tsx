@@ -121,7 +121,7 @@ export default function Studio() {
         description="Select ready products, run a batch, and monitor generation jobs."
       />
 
-      <div className="studio-tabs mb-6">
+      <div className="studio-tabs">
         <button
           type="button"
           className={tab === "batch" ? "studio-tab active" : "studio-tab"}
@@ -402,10 +402,10 @@ function BatchTab() {
 
   return (
     <div>
-      <div className="studio-sticky-bar card mb-4">
+      <div className="studio-sticky-bar card">
         <div className="flex flex-wrap items-end gap-4">
-          <div>
-            <Label className="mb-1 block text-sm font-medium">Template</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wide">Template</Label>
             <Select
               value={template}
               onValueChange={handleTemplateChange}
@@ -433,8 +433,8 @@ function BatchTab() {
               Vision analysis
             </Label>
           </div>
-          <div>
-            <Label className="mb-1 block text-sm font-medium">Reference</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wide">Reference</Label>
             <Select
               value={jobRefChoice}
               onValueChange={(v) => setJobRefChoice(v as "none" | "job")}

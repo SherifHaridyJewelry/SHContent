@@ -329,12 +329,12 @@ export default function Products() {
                   ) : (
                     <div className="thumb" />
                   )}
-                  <h3 style={{ marginTop: "0.75rem" }}>{p.name}</h3>
-                  <p className="m-0 text-sm text-muted-foreground">
+                  <h3 className="mt-3 text-base">{p.name}</h3>
+                  <p className="m-0 text-xs text-muted-foreground">
                     {p.id} · {typeLabel(p.type)}
                     {p.collection && ` · ${p.collection}`}
                   </p>
-                  <div className="mt-1 flex flex-wrap gap-1">
+                  <div className="mt-2 flex flex-wrap gap-1">
                     <Badge variant={p.status === "ready" ? "default" : "secondary"}>
                       {p.status}
                     </Badge>

@@ -37,16 +37,18 @@ export default function ProductFilterBar({
   showStatus = true,
 }: ProductFilterBarProps) {
   return (
-    <div>
+    <div className="mb-6 space-y-4">
       <ProductTypeTabs
         value={typeFilter}
         onChange={onTypeChange}
         counts={typeCounts}
         total={typeTotal}
       />
-      <div className="card mt-4 mb-6 flex flex-wrap items-end gap-4">
-        <div>
-          <Label className="mb-1 block text-sm font-medium">Collection</Label>
+      <div className="card filter-panel flex flex-wrap items-end gap-4">
+        <div className="space-y-1.5">
+          <Label className="text-xs font-medium uppercase tracking-wide">
+            Collection
+          </Label>
           <Select
             value={collectionFilter || "all"}
             onValueChange={(v) => onCollectionChange(v === "all" ? "" : v)}
@@ -65,8 +67,10 @@ export default function ProductFilterBar({
           </Select>
         </div>
         {showStatus && onStatusChange && (
-          <div>
-            <Label className="mb-1 block text-sm font-medium">Status</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wide">
+              Status
+            </Label>
             <Select
               value={statusFilter || "all"}
               onValueChange={(v) =>
