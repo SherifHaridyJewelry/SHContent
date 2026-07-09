@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   api,
   SceneRefProductType,
@@ -93,7 +94,11 @@ export default function TemplateSceneRefPanel({
       <h3>Scene references ({totalRefs})</h3>
       <p className="text-muted-foreground text-sm">
         Product-free scene plates used as style guides for generation.
-        Create them on the Catalog page using the Distill button.
+        Create them from{" "}
+        <Link to="/outputs?tab=gallery" className="underline">
+          Outputs → Distill
+        </Link>
+        .
       </p>
 
       {Object.entries(sceneReferences).map(([key, urls]) =>

@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
-import TemplateSceneRefPanel from "../components/TemplateSceneRefPanel";
 import ImagePickerGrid from "../components/ImagePickerGrid";
+import PageHeader from "../components/PageHeader";
+import TemplateSceneRefPanel from "../components/TemplateSceneRefPanel";
+import { useGenerateStore } from "../stores/generateStore";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loading } from "@/components/ui/Loading";
@@ -11,9 +13,12 @@ import { Loader2 } from "lucide-react";
 
 export default function TemplateDetail() {
   const { name } = useParams<{ name: string }>();
+  const navigate = useNavigate();
+  const setTemplate = useGenerateStore((s) => s.setTemplate);
 
-  const [template, setTemplate] = useState<Record<string, unknown> | null>(null);
+  const [template, setTemplateData] = useState<Record<string, unknown> | null>(null);
   const [showJson, setShowJson] = useState(false);
+  const [showLegacy, setShowLegacy] = useState(false);
   const [legacySelected, setLegacySelected] = useState<Set<string>>(new Set());
   const [legacyUrl, setLegacyUrl] = useState("");
   const [legacySaving, setLegacySaving] = useState(false);
@@ -22,7 +27,7 @@ export default function TemplateDetail() {
     if (!name) return;
     try {
       const tmpl = await api.getTemplate(name);
-      setTemplate(tmpl);
+      setTemplateData(tmpl);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Load failed");
     }
@@ -60,22 +65,46 @@ export default function TemplateDetail() {
     }
   }
 
+  function useInStudio() {
+    setTemplate(name!);
+    toast.success(`Template set to ${name}`);
+    navigate("/studio?tab=batch");
+  }
+
   return (
     <div>
       <p>
-        <Link to="/templates" className="text-sm text-muted-foreground hover:text-foreground">← Templates</Link>
+        <Link
+          to="/templates"
+          className="text-sm text-muted-foreground hover:text-foreground"
+        >
+          ← Templates
+        </Link>
       </p>
-      <h2>{String(template.template_name ?? name)}</h2>
-      <p className="text-muted-foreground">
-        {String(template.category)} · {String((template.api_parameters as Record<string, string>)?.aspect_ratio ?? "4:5")}
-      </p>
+      <PageHeader
+        title={String(template.template_name ?? name)}
+        description={`${String(template.category)} · ${String(
+          (template.api_parameters as Record<string, string>)?.aspect_ratio ?? "4:5"
+        )}`}
+        actions={
+          <Button onClick={useInStudio}>Use in Studio</Button>
+        }
+      />
 
       <div className="card">
         <h3>Overview</h3>
-        <p><strong>Surface:</strong> {scene.surface}</p>
-        <p><strong>Background:</strong> {scene.background}</p>
-        <p><strong>Lighting:</strong> {lighting.setup}</p>
-        <p><strong>Camera:</strong> {camera.focal_length} · {camera.shooting_angle}</p>
+        <p>
+          <strong>Surface:</strong> {scene.surface}
+        </p>
+        <p>
+          <strong>Background:</strong> {scene.background}
+        </p>
+        <p>
+          <strong>Lighting:</strong> {lighting.setup}
+        </p>
+        <p>
+          <strong>Camera:</strong> {camera.focal_length} · {camera.shooting_angle}
+        </p>
         <Button
           variant="secondary"
           size="sm"
@@ -85,7 +114,7 @@ export default function TemplateDetail() {
           {showJson ? "Hide" : "Show"} raw JSON
         </Button>
         {showJson && (
-          <pre className="mt-3 text-xs overflow-auto">
+          <pre className="mt-3 overflow-auto text-xs">
             {JSON.stringify(template, null, 2)}
           </pre>
         )}
@@ -97,48 +126,62 @@ export default function TemplateDetail() {
         onUpdated={load}
       />
 
-      <div className="card mt-4">
-        <h3>Legacy style references</h3>
-        <p>
-          Use <Link to="/catalog">Catalog → Distill</Link> to create clean scene references from good outputs.
-        </p>
-        <p className="text-destructive text-sm">
-          Warning: finished product images may contaminate product design. Prefer distilled scene references.
-        </p>
-        {styleRefs.length > 0 && (
-          <ul>
-            {styleRefs.map((url) => (
-              <li key={url} className="text-xs break-all">{url}</li>
-            ))}
-          </ul>
-        )}
-        <Textarea
-          value={legacyUrl}
-          onChange={(e) => setLegacyUrl(e.target.value)}
-          placeholder="https://..."
-          className="mt-2"
-        />
-        <ImagePickerGrid
-          selected={legacySelected}
-          onToggle={(path) =>
-            setLegacySelected((prev) => {
-              const next = new Set(prev);
-              if (next.has(path)) next.delete(path);
-              else next.add(path);
-              return next;
-            })
-          }
-        />
-        <Button
-          variant="secondary"
-          className="mt-3"
-          disabled={legacySaving}
-          onClick={addLegacyRefs}
-        >
-          {legacySaving && <Loader2 className="h-4 w-4 animate-spin" />}
-          Add legacy style refs
-        </Button>
-      </div>
+      <details
+        className="card mt-4"
+        open={showLegacy}
+        onToggle={(e) => setShowLegacy((e.target as HTMLDetailsElement).open)}
+      >
+        <summary className="cursor-pointer font-medium">
+          Legacy style references ({styleRefs.length})
+        </summary>
+        <div className="mt-3">
+          <p className="text-sm">
+            Prefer distilled scene references from{" "}
+            <Link to="/outputs?tab=gallery" className="underline">
+              Outputs → Distill
+            </Link>
+            .
+          </p>
+          <p className="text-sm text-destructive">
+            Warning: finished product images may contaminate product design.
+          </p>
+          {styleRefs.length > 0 && (
+            <ul>
+              {styleRefs.map((url) => (
+                <li key={url} className="break-all text-xs">
+                  {url}
+                </li>
+              ))}
+            </ul>
+          )}
+          <Textarea
+            value={legacyUrl}
+            onChange={(e) => setLegacyUrl(e.target.value)}
+            placeholder="https://..."
+            className="mt-2"
+          />
+          <ImagePickerGrid
+            selected={legacySelected}
+            onToggle={(path) =>
+              setLegacySelected((prev) => {
+                const next = new Set(prev);
+                if (next.has(path)) next.delete(path);
+                else next.add(path);
+                return next;
+              })
+            }
+          />
+          <Button
+            variant="secondary"
+            className="mt-3"
+            disabled={legacySaving}
+            onClick={addLegacyRefs}
+          >
+            {legacySaving && <Loader2 className="h-4 w-4 animate-spin" />}
+            Add legacy style refs
+          </Button>
+        </div>
+      </details>
     </div>
   );
 }

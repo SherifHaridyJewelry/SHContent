@@ -96,7 +96,7 @@ export default function OutputPreview({ data }: { data: OutputPreviewData }) {
         {runId && (
           <div className="output-link-row">
             <span className="output-link-label">Run / job</span>
-            <Link to={`/tasks/${runId}`} className="output-link-value">
+            <Link to={`/studio/jobs/${runId}`} className="output-link-value">
               {runId}
             </Link>
           </div>

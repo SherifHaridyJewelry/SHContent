@@ -460,9 +460,6 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     }),
-  listTemplateScenePlates: (_name: string) => {
-    throw new Error("listTemplateScenePlates is deprecated. Use template scene_references directly.");
-  },
   distillSceneRef: (
     name: string,
     body: { output_path: string; scene_key: string }

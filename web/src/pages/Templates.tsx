@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, TemplateSummary } from "../api";
+import PageHeader from "../components/PageHeader";
 import Pagination from "../components/Pagination";
 import { useClientPagination } from "../hooks/useClientPagination";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/Loading";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { toast } from "sonner";
@@ -12,16 +14,6 @@ import { Settings } from "lucide-react";
 export default function Templates() {
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const {
-    page,
-    pageSize,
-    total,
-    totalPages,
-    items: pagedTemplates,
-    onPageChange,
-    onPageSizeChange,
-  } = useClientPagination(templates, 6);
 
   useEffect(() => {
     setLoading(true);
@@ -32,20 +24,50 @@ export default function Templates() {
       .finally(() => setLoading(false));
   }, []);
 
+  const jewelryTemplates = useMemo(() => {
+    const jewelry = templates.filter((t) => t.category === "jewelry");
+    return jewelry.length > 0 ? jewelry : templates;
+  }, [templates]);
+
+  const {
+    page,
+    pageSize,
+    total,
+    totalPages,
+    items: pagedTemplates,
+    onPageChange,
+    onPageSizeChange,
+  } = useClientPagination(jewelryTemplates, 6);
+
   if (loading) return <Loading variant="skeleton-grid" message="Loading templates..." />;
 
   return (
     <div>
-      <h2>Templates</h2>
-      <p className="text-muted-foreground mb-6">
-        Brand style templates lock background, lighting, and camera settings. Manage scene references on each template detail page.
-      </p>
+      <PageHeader
+        title="Templates"
+        description="Brand style templates lock background, lighting, and camera. Manage scene references on each template."
+      />
 
-      {templates.length === 0 ? (
+      {jewelryTemplates.length === 0 ? (
         <EmptyState
           title="No templates"
           description="No brand style templates have been created yet."
           icon={<Settings className="h-16 w-16" />}
+          action={
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setLoading(true);
+                api
+                  .listTemplates()
+                  .then(setTemplates)
+                  .catch((e) => toast.error(e.message))
+                  .finally(() => setLoading(false));
+              }}
+            >
+              Refresh
+            </Button>
+          }
         />
       ) : (
         <>
@@ -59,7 +81,7 @@ export default function Templates() {
             pageSizeOptions={[6, 12, 24]}
             position="top"
           />
-          <div className="grid" style={{ marginTop: "0.75rem" }}>
+          <div className="grid mt-3">
             {pagedTemplates.map((t) => (
               <div key={t.name} className="card">
                 <h3>{t.template_name}</h3>
@@ -70,10 +92,10 @@ export default function Templates() {
                   <Badge variant="default">{t.scene_ref_count} scene refs</Badge>{" "}
                   <Badge variant="secondary">{t.style_ref_count} legacy</Badge>
                 </p>
-                <p className="text-xs mt-2">{t.background}</p>
+                <p className="mt-2 text-xs">{t.background}</p>
                 <Link
                   to={`/templates/${t.name}`}
-                  className="inline-block mt-3 text-sm font-medium text-primary hover:underline"
+                  className="mt-3 inline-block text-sm font-medium text-primary hover:underline"
                 >
                   Manage template →
                 </Link>

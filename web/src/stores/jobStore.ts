@@ -52,6 +52,13 @@ async function autoRecoverStaleJobs(jobs: Job[]): Promise<void> {
   }
 }
 
+function mergeById<T extends { id: string }>(primary: T[], secondary: T[]): T[] {
+  const map = new Map<string, T>();
+  for (const item of secondary) map.set(item.id, item);
+  for (const item of primary) map.set(item.id, item);
+  return Array.from(map.values());
+}
+
 interface JobStoreState {
   jobs: Job[];
   scenePlateJobs: ScenePlateJob[];
@@ -76,38 +83,47 @@ export const useJobStore = create<JobStoreState>((set) => ({
       api.listActiveScenePlateJobs(),
     ]);
     set((state) => {
-      const activeIds = new Set(activeJobs.map((j) => j.id));
-      const inactive = state.jobs.filter((j) => !activeIds.has(j.id) && !isJobActive(j));
-      const mergedJobs = [
-        ...activeJobs,
-        ...inactive.filter((j) => !activeIds.has(j.id)),
-      ];
-      const activeSceneIds = new Set(activeSceneJobs.map((j) => j.id));
-      const inactiveScene = state.scenePlateJobs.filter(
-        (j) => !activeSceneIds.has(j.id) && !isScenePlateJobActive(j)
+      const jobs = mergeById(activeJobs, state.jobs).sort((a, b) =>
+        b.created_at.localeCompare(a.created_at)
       );
-      const mergedScene = [
-        ...activeSceneJobs,
-        ...inactiveScene.filter((j) => !activeSceneIds.has(j.id)),
-      ];
-      return { jobs: mergedJobs, scenePlateJobs: mergedScene, loading: false };
+      const scenePlateJobs = mergeById(activeSceneJobs, state.scenePlateJobs).sort(
+        (a, b) => b.created_at.localeCompare(a.created_at)
+      );
+      return { jobs, scenePlateJobs, loading: false };
     });
   },
 
   refreshJobs: async () => {
-    await useJobStore.getState().refreshActiveJobs();
+    const [jobsResp, scenePlateJobs, activeJobs, activeSceneJobs] = await Promise.all([
+      api.listJobs({ page: 1, page_size: 100 }),
+      api.listScenePlateJobs(),
+      api.listActiveJobs(),
+      api.listActiveScenePlateJobs(),
+    ]);
+    const jobs = mergeById(activeJobs, jobsResp.items).sort((a, b) =>
+      b.created_at.localeCompare(a.created_at)
+    );
+    const scenes = mergeById(activeSceneJobs, scenePlateJobs).sort((a, b) =>
+      b.created_at.localeCompare(a.created_at)
+    );
+    set({ jobs, scenePlateJobs: scenes, loading: false });
   },
 
   upsertJob: (job) => {
     set((state) => ({
-      jobs: [job, ...state.jobs.filter((j) => j.id !== job.id)],
+      jobs: [job, ...state.jobs.filter((j) => j.id !== job.id)].sort((a, b) =>
+        b.created_at.localeCompare(a.created_at)
+      ),
       loading: false,
     }));
   },
 
   upsertScenePlateJob: (job) => {
     set((state) => ({
-      scenePlateJobs: [job, ...state.scenePlateJobs.filter((j) => j.id !== job.id)],
+      scenePlateJobs: [
+        job,
+        ...state.scenePlateJobs.filter((j) => j.id !== job.id),
+      ].sort((a, b) => b.created_at.localeCompare(a.created_at)),
       loading: false,
     }));
   },
@@ -145,9 +161,12 @@ export function startJobPolling(): () => void {
   if (pollStarted) return () => undefined;
   pollStarted = true;
 
-  useJobStore.getState().refreshActiveJobs().catch(() => {
-    useJobStore.setState({ loading: false });
-  });
+  useJobStore
+    .getState()
+    .refreshJobs()
+    .catch(() => {
+      useJobStore.setState({ loading: false });
+    });
 
   schedulePoll(POLL_INTERVAL_MS);
 
