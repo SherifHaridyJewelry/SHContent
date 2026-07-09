@@ -34,3 +34,6 @@ web/dist/
 web/tsconfig.tsbuildinfo
 
 cloudflare api.txt
+# Local SQLite DB
+data/*.db
+data/*.db-*
