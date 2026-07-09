@@ -52,8 +52,8 @@
   --accent-hover: hsl(var(--accent) / 0.9);
   --danger: hsl(var(--destructive));
   --radius: 0.625rem;
-  font-family: "DM Sans", system-ui, sans-serif;
-  font-feature-settings: "ss01" on, "kern" on;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-feature-settings: "kern" on;
   line-height: 1.5;
   color: var(--text);
   background:
@@ -89,9 +89,8 @@ h3 {
 }
 
 h2 {
-  font-family: "Fraunces", Georgia, serif;
-  font-size: clamp(1.65rem, 2vw, 1.9rem);
-  font-weight: 550;
+  font-size: clamp(1.5rem, 1.8vw, 1.75rem);
+  font-weight: 650;
 }
 
 h3 {
@@ -119,10 +118,9 @@ h3 {
 }
 
 .mobile-topbar-title {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 550;
+  font-weight: 650;
   color: hsl(var(--foreground));
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .sidebar-backdrop {
@@ -143,9 +141,8 @@ h3 {
 }
 
 .sidebar h1 {
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 1.2rem;
-  font-weight: 550;
+  font-size: 1.05rem;
+  font-weight: 700;
   margin: 0 0 var(--space-8);
   padding: 0 var(--space-3);
   color: hsl(var(--foreground));

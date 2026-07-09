@@ -85,7 +85,7 @@ export default function Templates() {
             {pagedTemplates.map((t) => (
               <div key={t.name} className="card flex flex-col gap-3">
                 <div>
-                  <h3 className="m-0 text-lg font-display">{t.template_name}</h3>
+                  <h3 className="m-0 text-lg font-semibold tracking-tight">{t.template_name}</h3>
                   <p className="mt-1 mb-0 text-xs text-muted-foreground">
                     {t.product_type} · {t.aspect_ratio}
                   </p>
