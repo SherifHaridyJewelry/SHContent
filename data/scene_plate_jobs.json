@@ -1,5 +1,22 @@
 [
   {
+    "id": "distill-b0d4e990",
+    "template": "jewelry_eggplant_4x5",
+    "status": "success",
+    "plates": [
+      {
+        "id": "distill_full_set_catalog_full_set03_eggplant_4x5_b52c119a",
+        "status": "success",
+        "output_path": "/home/haridz/Development/personal/SHContent/images/jewelry/distilled_catalog_full_set03_eggplant_4x5_b52c119a.jpg",
+        "output_r2_url": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_full_set03_eggplant_4x5_b52c119a.jpg",
+        "image_url": "https://tempfile.aiquickdraw.com/workers/images/image_1782828838159_p3hc9b.jpg"
+      }
+    ],
+    "created_at": "2026-06-30T14:13:24.855404+00:00",
+    "updated_at": "2026-06-30T14:14:05.289659+00:00",
+    "error": null
+  },
+  {
     "id": "distill-8344582d",
     "template": "jewelry_eggplant_4x5",
     "status": "success",

@@ -49,6 +49,8 @@ const SCENE_KEYS = [
   { value: "necklace", label: "As necklace ref" },
   { value: "earrings", label: "As earrings ref" },
   { value: "half_set", label: "As half set ref" },
+  { value: "full_set", label: "As full set ref" },
+  { value: "general", label: "As general product ref" },
 ];
 
 function reviewLabel(value: string, count?: number): string {

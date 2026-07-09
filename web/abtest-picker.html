@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bracelet A/B Picker</title>
+  <style>
+    :root {
+      --bg: #1a1020;
+      --card: #261a30;
+      --border: #3d2d4a;
+      --text: #f5eef8;
+      --muted: #b8a8c4;
+      --accent: #c9a227;
+      --pick: #4ade80;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(26, 16, 32, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      backdrop-filter: blur(8px);
+    }
+    h1 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: end;
+    }
+    label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8rem; color: var(--muted); }
+    select, input, button, textarea {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.6rem;
+    }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.primary { background: var(--accent); color: #1a1020; border-color: var(--accent); }
+    button.save { background: #7c3aed; border-color: #7c3aed; color: white; }
+    main { padding: 1rem 1.25rem 3rem; max-width: 1400px; margin: 0 auto; }
+    .winners {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0 1.5rem;
+      padding: 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .card.picked { border-color: var(--pick); box-shadow: 0 0 0 1px var(--pick); }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+    .meta { color: var(--muted); font-size: 0.85rem; }
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 800px) { .compare { grid-template-columns: 1fr; } }
+    figure { margin: 0; }
+    figcaption { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem; }
+    img {
+      width: 100%;
+      border-radius: 8px;
+      background: #111;
+      aspect-ratio: 4/5;
+      object-fit: contain;
+    }
+    .scores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 0.75rem;
+    }
+    .scores input[type=range] { width: 140px; }
+    .status { color: var(--muted); font-size: 0.9rem; }
+    .empty { color: var(--muted); padding: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bracelet Fidelity A/B Picker</h1>
+    <p class="status" id="status">Loading…</p>
+    <div class="toolbar">
+      <label>Round
+        <select id="filterRound">
+          <option value="">All</option>
+          <option value="r1">Round 1</option>
+          <option value="r2">Round 2</option>
+        </select>
+      </label>
+      <label>Product
+        <select id="filterProduct">
+          <option value="">All</option>
+          <option value="bracelet06">bracelet06</option>
+          <option value="bracelet07">bracelet07</option>
+        </select>
+      </label>
+      <label>Variant
+        <select id="filterVariant">
+          <option value="">All</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+        </select>
+      </label>
+      <label>R1 winner 1
+        <select id="r1w1"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+      </label>
+      <label>R1 winner 2
+        <select id="r1w2"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+      </label>
+      <label>Overall winner
+        <input id="overallWinner" placeholder="e.g. r2 C N2b bracelet06" />
+      </label>
+      <button type="button" class="save" id="saveBtn">Save to results file</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="winners" id="pickedSummary"></div>
+    <div id="list"></div>
+  </main>
+
+  <script>
+    const API = '';
+    let manifest = { entries: [], anchors: {}, round1_winners: ['', ''], overall_winner: '' };
+
+    function asset(path) {
+      return `${API}/api/assets/${path}`;
+    }
+
+    function scoreLabel(v) {
+      return v == null || v === '' ? '—' : v;
+    }
+
+    function filteredEntries() {
+      const round = document.getElementById('filterRound').value;
+      const product = document.getElementById('filterProduct').value;
+      const variant = document.getElementById('filterVariant').value;
+      return manifest.entries.filter((e) => {
+        if (round && e.round !== round) return false;
+        if (product && e.product !== product) return false;
+        if (variant && e.variant !== variant) return false;
+        return true;
+      });
+    }
+
+    function renderSummary() {
+      const picked = manifest.entries.filter((e) => e.picked);
+      const el = document.getElementById('pickedSummary');
+      if (!picked.length) {
+        el.innerHTML = '<div>No picks yet. Mark ⭐ Pick on your favorites, then Save.</div>';
+        return;
+      }
+      el.innerHTML = picked.map((e) =>
+        `<div><strong>${e.product}</strong> ${e.round} ${e.variant} ${e.narrative || ''} — link ${scoreLabel(e.link_score)} / studio ${scoreLabel(e.studio_score)}</div>`
+      ).join('');
+    }
+
+    function renderList() {
+      const list = document.getElementById('list');
+      const entries = filteredEntries();
+      if (!entries.length) {
+        list.innerHTML = '<div class="empty">No entries match filters.</div>';
+        return;
+      }
+      list.innerHTML = entries.map((e) => {
+        const anchor = manifest.anchors[e.product] || '';
+        return `
+        <article class="card${e.picked ? ' picked' : ''}" data-id="${e.id}">
+          <div class="card-head">
+            <div>
+              <strong>${e.product}</strong> · ${e.round} · variant ${e.variant}
+              ${e.narrative ? `· ${e.narrative}` : ''} · sample ${e.sample}
+            </div>
+            <div class="meta">${e.model} · ${e.ar_res} · ${e.prompt_mode} / ${e.analyze_mode}</div>
+          </div>
+          <div class="compare">
+            <figure>
+              <figcaption>Raw anchor</figcaption>
+              <img src="${asset(anchor)}" alt="anchor" loading="lazy" />
+            </figure>
+            <figure>
+              <figcaption>Generated</figcaption>
+              <img src="${asset(e.image_path)}" alt="output" loading="lazy" />
+            </figure>
+          </div>
+          <div class="scores">
+            <label>Link <span id="link-val-${e.id}">${scoreLabel(e.link_score)}</span>
+              <input type="range" min="1" max="5" step="1" value="${e.link_score || 3}" data-field="link_score" data-id="${e.id}" />
+            </label>
+            <label>Studio <span id="studio-val-${e.id}">${scoreLabel(e.studio_score)}</span>
+              <input type="range" min="1" max="5" step="1" value="${e.studio_score || 3}" data-field="studio_score" data-id="${e.id}" />
+            </label>
+            <label>Notes
+              <input type="text" value="${e.notes || ''}" data-field="notes" data-id="${e.id}" style="min-width:220px" />
+            </label>
+            <button type="button" data-pick="${e.id}">${e.picked ? '⭐ Picked' : '☆ Pick'}</button>
+          </div>
+        </article>`;
+      }).join('');
+
+      list.querySelectorAll('input[type=range]').forEach((input) => {
+        input.addEventListener('input', () => {
+          const id = input.dataset.id;
+          const field = input.dataset.field;
+          const entry = manifest.entries.find((x) => x.id === id);
+          if (!entry) return;
+          entry[field] = Number(input.value);
+          document.getElementById(`${field === 'link_score' ? 'link' : 'studio'}-val-${id}`).textContent = input.value;
+        });
+      });
+      list.querySelectorAll('input[data-field=notes]').forEach((input) => {
+        input.addEventListener('change', () => {
+          const entry = manifest.entries.find((x) => x.id === input.dataset.id);
+          if (entry) entry.notes = input.value;
+        });
+      });
+      list.querySelectorAll('button[data-pick]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.pick;
+          const entry = manifest.entries.find((x) => x.id === id);
+          if (!entry) return;
+          entry.picked = !entry.picked;
+          renderList();
+          renderSummary();
+        });
+      });
+    }
+
+    async function load() {
+      const res = await fetch(`${API}/api/abtest/manifest`);
+      if (!res.ok) throw new Error(await res.text());
+      manifest = await res.json();
+      document.getElementById('r1w1').value = manifest.round1_winners?.[0] || '';
+      document.getElementById('r1w2').value = manifest.round1_winners?.[1] || '';
+      document.getElementById('overallWinner').value = manifest.overall_winner || '';
+      document.getElementById('status').textContent = `${manifest.entries.length} outputs loaded`;
+      renderSummary();
+      renderList();
+    }
+
+    async function save() {
+      manifest.round1_winners = [
+        document.getElementById('r1w1').value,
+        document.getElementById('r1w2').value,
+      ];
+      manifest.overall_winner = document.getElementById('overallWinner').value.trim();
+      const res = await fetch(`${API}/api/abtest/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entries: manifest.entries,
+          round1_winners: manifest.round1_winners,
+          overall_winner: manifest.overall_winner,
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      document.getElementById('status').textContent = 'Saved to data/bracelet_fidelity_ab_results.md';
+    }
+
+    ['filterRound', 'filterProduct', 'filterVariant'].forEach((id) => {
+      document.getElementById(id).addEventListener('change', renderList);
+    });
+    document.getElementById('saveBtn').addEventListener('click', () => save().catch((e) => {
+      document.getElementById('status').textContent = `Save failed: ${e.message}`;
+    }));
+
+    load().catch((e) => {
+      document.getElementById('status').textContent = `Load failed: ${e.message}. Run build_abtest_manifest.py and start uvicorn.`;
+    });
+  </script>
+</body>
+</html>

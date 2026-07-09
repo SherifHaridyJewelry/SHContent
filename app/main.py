@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from app.api import catalog, history, jobs, products, reviews, scene_plates, templates
+from app.api import abtest, catalog, history, jobs, products, reviews, scene_plates, templates
 from app.config import PROJECT_ROOT
 
 app = FastAPI(title="Jewelry Workflow", version="0.1.0")
@@ -27,6 +27,15 @@ app.include_router(history.router, prefix="/api")
 app.include_router(catalog.router, prefix="/api")
 app.include_router(reviews.router, prefix="/api")
 app.include_router(scene_plates.router, prefix="/api")
+app.include_router(abtest.router, prefix="/api")
+
+
+@app.get("/abtest-picker.html")
+def abtest_picker_page() -> FileResponse:
+    path = PROJECT_ROOT / "web" / "abtest-picker.html"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Picker page not found")
+    return FileResponse(path)
 
 
 @app.get("/api/health")

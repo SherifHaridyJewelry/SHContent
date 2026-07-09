@@ -172,5 +172,11 @@
     "reviewed_at": "2026-06-29T00:00:35.852737+00:00",
     "product_id": "ring03",
     "task_id": "ec6cbe6e0343c92e5bac2b5c37318371"
+  },
+  "images/jewelry/catalog_full_set03_eggplant_4x5_b52c119a.jpg": {
+    "status": "approved",
+    "reviewed_at": "2026-06-30T14:05:32.427952+00:00",
+    "product_id": "full_set03",
+    "task_id": "7b5b991dd8e52eaad73411788ecf89e5"
   }
 }

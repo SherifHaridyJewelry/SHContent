@@ -376,5 +376,131 @@
     "last_output": "images/jewelry/catalog_bracelet10_eggplant_4x5_90ab1259.jpg",
     "approved_output": null,
     "review_status": null
+  },
+  {
+    "id": "full_set01",
+    "name": "Full set 01",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260624_205038.jpg",
+        "path": "raw/jewelry/full_set01/20260624_205038.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set01_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": null,
+    "review_status": null
+  },
+  {
+    "id": "full_set02",
+    "name": "Full set 02",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260624_210918.jpg",
+        "path": "raw/jewelry/full_set02/20260624_210918.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set02_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": null,
+    "review_status": null
+  },
+  {
+    "id": "full_set03",
+    "name": "Full set 03",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260624_213225.jpg",
+        "path": "raw/jewelry/full_set03/20260624_213225.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set03_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": "images/jewelry/catalog_full_set03_eggplant_4x5_b52c119a.jpg",
+    "review_status": null
+  },
+  {
+    "id": "full_set04",
+    "name": "Full set 04",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260627_212609.jpg",
+        "path": "raw/jewelry/full_set04/20260627_212609.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set04_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": null,
+    "review_status": null
+  },
+  {
+    "id": "full_set05",
+    "name": "Full set 05",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260627_213247.jpg",
+        "path": "raw/jewelry/full_set05/20260627_213247.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set05_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": null,
+    "review_status": null
+  },
+  {
+    "id": "full_set06",
+    "name": "Full set 06",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260627_214510.jpg",
+        "path": "raw/jewelry/full_set06/20260627_214510.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set06_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": null,
+    "review_status": null
+  },
+  {
+    "id": "full_set07",
+    "name": "Full set 07",
+    "type": "full_set",
+    "collection": "Zahya",
+    "status": "generated",
+    "images": [
+      {
+        "filename": "20260627_215207.jpg",
+        "path": "raw/jewelry/full_set07/20260627_215207.jpg",
+        "role": "anchor"
+      }
+    ],
+    "last_job_id": "b186f5e6",
+    "last_output": "images/jewelry/catalog_full_set07_eggplant_4x5_b186f5e6.jpg",
+    "approved_output": null,
+    "review_status": null
   }
 ]

@@ -1,0 +1,13 @@
+{
+  "name": "photoroom_eggplant_staging",
+  "description": "PhotoRoom Product Staging settings derived from templates/jewelry_eggplant_4x5.json",
+  "source_template": "jewelry_eggplant_4x5",
+  "aspect_ratio": "4:5",
+  "brand_style": "Minimalist luxury jewelry photography with a beige and deep eggplant (aubergine) brand palette. High-end editorial studio look: soft diffused lighting with crisp metal highlights and gemstone sparkle, shallow depth of field, creamy background bokeh. Products sit on warm cream linen-textured display cushions. Backgrounds are rich matte eggplant with a subtle luxury gradient — no green or sage tones. Clean centered hero compositions with balanced negative space. Professional neutral color grading, realistic micro-reflections, extreme fabric and metal detail. Avoid cartoon or CGI looks, harsh shadows, clutter, text overlays, hands, models, or plastic oversaturation.",
+  "staging_prompt": "Studio hero photograph of the jewelry on a warm cream linen display cushion, centered with balanced negative space. Deep eggplant matte background with a subtle luxury gradient. Soft diffused studio lighting from camera-right with gentle fill; background slightly darker than the product for premium contrast. Eye-level macro shot, sharp focus on metal texture and gemstones.",
+  "api": {
+    "endpoint": "https://image-api.photoroom.com/v2/edit",
+    "editWithAI_mode": "ai.auto",
+    "editWithAI_prompt_template": "Make it a professional lifestyle photoshoot with the provided object or subject as the focus of the scene. {brand_style} {staging_prompt} Ensure the image highlights what is unique about the object. The lighting should create a natural and elegant atmosphere with excellent composition and a refined mood, achieving high-end jewelry photography."
+  }
+}
