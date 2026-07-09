@@ -1,16 +1,18 @@
-"""Scene plate distillation jobs — extract product-free scene plates from catalog outputs."""
+"""Scene plate distillation jobs backed by database."""
 
 from __future__ import annotations
 
-import json
 import sys
 import threading
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
-from app.config import DATA_DIR, PROJECT_ROOT, SCRIPTS_DIR, WORKFLOWS_DIR
+from app.config import PROJECT_ROOT, SCRIPTS_DIR
+from app.db.engine import get_session
+from app.db.repositories.scene_plates import ACTIVE_STATUSES, ScenePlateRepository
 from app.models.schemas import ScenePlateJob, ScenePlateJobStatus
-from app.services import template_service
+from app.services import catalog_service, template_service
 
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -18,30 +20,26 @@ if str(SCRIPTS_DIR) not in sys.path:
 from generate_kie import create_task, download_image, get_api_key, poll_task  # noqa: E402
 from r2_upload import get_r2_config, get_s3_client, upload_file_with_key  # noqa: E402
 
-JOBS_FILE = DATA_DIR / "scene_plate_jobs.json"
 _lock = threading.Lock()
 _jobs: dict[str, ScenePlateJob] = {}
-
-from datetime import datetime, timezone
 
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _persist_jobs() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    data = [j.model_dump() for j in sorted(_jobs.values(), key=lambda x: x.created_at, reverse=True)]
-    JOBS_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-
-
 def _ensure_loaded() -> None:
     global _jobs
     if _jobs:
         return
-    if JOBS_FILE.exists():
-        raw = json.loads(JOBS_FILE.read_text(encoding="utf-8"))
-        _jobs = {j["id"]: ScenePlateJob(**j) for j in raw}
+    with get_session() as session:
+        for job in ScenePlateRepository(session).list_recent(limit=500):
+            _jobs[job.id] = job
+
+
+def _persist_job(job: ScenePlateJob) -> None:
+    with get_session() as session:
+        ScenePlateRepository(session).save(job)
 
 
 def get_job(job_id: str) -> ScenePlateJob | None:
@@ -57,6 +55,12 @@ def list_jobs(limit: int = 50) -> list[ScenePlateJob]:
         return jobs[:limit]
 
 
+def list_active_jobs() -> list[ScenePlateJob]:
+    with _lock:
+        _ensure_loaded()
+        return [j for j in _jobs.values() if j.status in ACTIVE_STATUSES]
+
+
 class _MockArgs:
     aspect_ratio = None
     resolution = None
@@ -65,11 +69,6 @@ class _MockArgs:
 
 
 def _resolve_r2_url(output_path: str, template_name: str) -> tuple[str, str]:
-    """Resolve a catalog output path to an R2 URL. Cache strategy: use catalog lookup,
-    or re-upload from local filesystem.
-
-    Returns (r2_url, local_resolved_path).
-    """
     normalized = output_path.replace("\\", "/")
     local_path = (PROJECT_ROOT / normalized).resolve()
     root = PROJECT_ROOT.resolve()
@@ -77,7 +76,6 @@ def _resolve_r2_url(output_path: str, template_name: str) -> tuple[str, str]:
     if not str(local_path).startswith(str(root)):
         raise ValueError(f"Unsupported output path: {output_path}")
 
-    sys.path.insert(0, str(SCRIPTS_DIR))
     from r2_upload import get_r2_config, get_s3_client, upload_file_with_key  # noqa: E402
 
     config = get_r2_config()
@@ -98,7 +96,6 @@ def _distill_one(
     api_key: str,
 ) -> dict:
     template = template_service.load_template_dict(template_name)
-
     r2_source_url, _ = _resolve_r2_url(output_path, template_name)
 
     prompt_payload = {
@@ -119,11 +116,10 @@ def _distill_one(
             f"altered shadows, cartoon, illustration, 3D render, CGI"
         ),
         "image_input": [r2_source_url],
-        "api_parameters": template.get("api_parameters", {
-            "aspect_ratio": "4:5",
-            "resolution": "2K",
-            "output_format": "jpg",
-        }),
+        "api_parameters": template.get(
+            "api_parameters",
+            {"aspect_ratio": "4:5", "resolution": "2K", "output_format": "jpg"},
+        ),
     }
 
     args = _MockArgs()
@@ -146,13 +142,26 @@ def _distill_one(
     object_key = f"references/distilled/{template_name}/{output_path_local.name}"
     r2_url = upload_file_with_key(s3, config, output_path_local, object_key)
 
-    if not r2_url:
-        r2_url = None
-
     template_service.add_scene_references(
         template_name,
         product_type=scene_key,
         urls=[r2_url] if r2_url else [],
+    )
+
+    rel_path = str(output_path_local.relative_to(PROJECT_ROOT)).replace("\\", "/")
+    catalog_service.register_catalog_output(
+        output_path=rel_path,
+        product_id=None,
+        source="scene_plate",
+        task_id=task_id,
+        template=template_name,
+        timestamp=_now(),
+        image_url=image_url,
+        product_urls=[],
+        output_r2_url=r2_url,
+        prompt_path=None,
+        job_id=None,
+        run_id=None,
     )
 
     return {
@@ -175,7 +184,7 @@ def _run_distill_job(
         job = _jobs[job_id]
         job.status = ScenePlateJobStatus.generating
         job.updated_at = _now()
-        _persist_jobs()
+        _persist_job(job)
 
     plate_results = []
     any_failed = False
@@ -186,11 +195,13 @@ def _run_distill_job(
         plate_results.append(result)
     except Exception as e:
         any_failed = True
-        plate_results.append({
-            "id": f"distill_{scene_key}",
-            "status": "failed",
-            "error": str(e),
-        })
+        plate_results.append(
+            {
+                "id": f"distill_{scene_key}",
+                "status": "failed",
+                "error": str(e),
+            }
+        )
 
     with _lock:
         _ensure_loaded()
@@ -200,7 +211,7 @@ def _run_distill_job(
         job.updated_at = _now()
         if any_failed:
             job.error = "Distillation failed"
-        _persist_jobs()
+        _persist_job(job)
 
 
 def start_distillation(
@@ -215,17 +226,19 @@ def start_distillation(
         id=job_id,
         template=template_name,
         status=ScenePlateJobStatus.pending,
-        plates=[{
-            "id": f"distill_{scene_key}_{source_stem}",
-            "status": "pending",
-        }],
+        plates=[
+            {
+                "id": f"distill_{scene_key}_{source_stem}",
+                "status": "pending",
+            }
+        ],
         created_at=now,
         updated_at=now,
     )
     with _lock:
         _ensure_loaded()
         _jobs[job_id] = job
-        _persist_jobs()
+        _persist_job(job)
 
     thread = threading.Thread(
         target=_run_distill_job,

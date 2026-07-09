@@ -9,8 +9,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from app.config import DEFAULT_WORKFLOW, MAX_PARALLEL_PRODUCTS, PROJECT_ROOT, SCRIPTS_DIR, WORKFLOWS_DIR
-from app.models.schemas import JobCreate, JobStatus, ProductStatus
-from app.services import job_store, product_store
+from app.db.engine import get_session
+from app.db.repositories.history import HistoryRepository
+from app.db.repositories.products import ProductRepository
+from app.models.schemas import Job, JobCreate, JobStatus, ProductStatus
+from app.services import catalog_service, job_store, product_store
 from app.services.path_utils import normalize_project_path
 from app.services.template_service import resolve_template_path
 
@@ -22,7 +25,7 @@ from product_pipeline import process_single_product  # noqa: E402
 from prompt_builder import load_json, collect_selectable_url_set  # noqa: E402
 from r2_upload import get_r2_config, get_s3_client  # noqa: E402
 from vision_analyze import get_api_key  # noqa: E402
-from generate_kie import fetch_task, download_image, log_task  # noqa: E402
+from generate_kie import fetch_task, download_image  # noqa: E402
 
 _running_jobs: set[str] = set()
 _running_threads: dict[str, threading.Thread] = {}
@@ -90,6 +93,62 @@ def _product_output_fields(result: dict) -> dict:
     }
 
 
+def _register_pipeline_output(
+    *,
+    job_id: str,
+    product_id: str,
+    result: dict,
+    template_name: str,
+) -> None:
+    output_path = normalize_project_path(result.get("output_image"))
+    if not output_path:
+        return
+
+    product = product_store.get_product(product_id)
+    anchor_path = None
+    with get_session() as session:
+        anchor_path = ProductRepository(session).get_anchor_path(product_id)
+
+    catalog_service.register_catalog_output(
+        output_path=output_path,
+        product_id=product_id,
+        source="history",
+        task_id=result.get("task_id"),
+        template=template_name,
+        timestamp=result.get("completed_at") or result.get("timestamp"),
+        image_url=result.get("image_url"),
+        product_urls=result.get("product_urls") or [],
+        output_r2_url=result.get("output_r2_url"),
+        prompt_path=normalize_project_path(result.get("prompt_file")),
+        job_id=job_id,
+        run_id=job_id,
+        product_name=product.name,
+        product_type=product.type.value,
+        collection=product.collection,
+        anchor_path=anchor_path,
+    )
+
+    task_id = result.get("task_id")
+    if task_id:
+        with get_session() as session:
+            HistoryRepository(session).upsert(
+                {
+                    "task_id": task_id,
+                    "timestamp": result.get("timestamp") or job_store.get_job(job_id).created_at if job_store.get_job(job_id) else "",
+                    "state": "success",
+                    "prompt_file": result.get("prompt_file"),
+                    "output_file": result.get("output_image"),
+                    "template": template_name,
+                    "pipeline": True,
+                    "job_id": job_id,
+                    "image_url": result.get("image_url"),
+                    "product_urls": result.get("product_urls") or [],
+                    "output_r2_url": result.get("output_r2_url"),
+                    "completed_at": result.get("completed_at"),
+                }
+            )
+
+
 def _process_job_product(
     *,
     job_id: str,
@@ -120,11 +179,19 @@ def _process_job_product(
             status = JobStatus(step)
         except ValueError:
             return
-        job_store.update_job_status(job_id, status)
-        job_store.update_product_result(job_id, pid, status=status)
+        job_store.begin_batch(job_id)
+        try:
+            job_store.update_job_status(job_id, status)
+            job_store.update_product_result(job_id, pid, status=status)
+        finally:
+            job_store.end_batch(job_id)
 
     def on_task_created(task_id: str, pid=prod_result.product_id) -> None:
-        job_store.update_product_result(job_id, pid, task_id=task_id)
+        job_store.begin_batch(job_id)
+        try:
+            job_store.update_product_result(job_id, pid, task_id=task_id)
+        finally:
+            job_store.end_batch(job_id)
 
     job_store.update_product_result(
         job_id, prod_result.product_id, status=JobStatus.pending
@@ -206,15 +273,25 @@ def _run_job(job_id: str) -> None:
             for future in as_completed(futures):
                 product_id, result = future.result()
                 if result["status"] == "success":
-                    job_store.update_product_result(
-                        job_id,
-                        product_id,
-                        **_product_output_fields(result),
-                    )
+                    job_store.begin_batch(job_id)
+                    try:
+                        job_store.update_product_result(
+                            job_id,
+                            product_id,
+                            **_product_output_fields(result),
+                        )
+                    finally:
+                        job_store.end_batch(job_id)
                     product_store.set_last_job(
                         product_id,
                         job_id,
                         output=result.get("output_image"),
+                    )
+                    _register_pipeline_output(
+                        job_id=job_id,
+                        product_id=product_id,
+                        result=result,
+                        template_name=template_name,
                     )
                 else:
                     any_failed = True
@@ -321,7 +398,7 @@ def recover_job(job_id: str) -> tuple[dict, int]:
 
         if prompt_path.exists() and not _history_has_task(prod.task_id):
             prompt_json = json.loads(prompt_path.read_text(encoding="utf-8"))
-            log_task({
+            history_entry = {
                 "timestamp": job.created_at,
                 "task_id": prod.task_id,
                 "prompt_file": str(prompt_path),
@@ -337,7 +414,9 @@ def recover_job(job_id: str) -> tuple[dict, int]:
                 "job_id": job_id,
                 "product_urls": prod.product_urls or [],
                 "output_r2_url": output_r2_url,
-            })
+            }
+            with get_session() as session:
+                HistoryRepository(session).upsert(history_entry)
 
         fields = {
             "status": JobStatus.success,
@@ -352,6 +431,20 @@ def recover_job(job_id: str) -> tuple[dict, int]:
         }
         job_store.update_product_result(job_id, prod.product_id, **fields)
         product_store.set_last_job(prod.product_id, job_id, output=str(image_path))
+        _register_pipeline_output(
+            job_id=job_id,
+            product_id=prod.product_id,
+            result={
+                "task_id": prod.task_id,
+                "output_image": str(image_path),
+                "prompt_file": str(prompt_path) if prompt_path.exists() else prod.prompt_file,
+                "image_url": image_url,
+                "product_urls": prod.product_urls or [],
+                "output_r2_url": output_r2_url,
+                "completed_at": data.get("updateTime") or job.updated_at,
+            },
+            template_name=template_name,
+        )
         recovered.append({"product_id": prod.product_id, "status": "success", "output": str(image_path)})
 
     job = job_store.get_job(job_id)
@@ -383,20 +476,8 @@ def recover_job(job_id: str) -> tuple[dict, int]:
 
 
 def _history_has_task(task_id: str) -> bool:
-    from app.config import HISTORY_FILE
-
-    if not HISTORY_FILE.exists():
-        return False
-    for line in HISTORY_FILE.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        try:
-            entry = json.loads(line)
-            if entry.get("task_id") == task_id and entry.get("state") == "success":
-                return True
-        except json.JSONDecodeError:
-            continue
-    return False
+    with get_session() as session:
+        return HistoryRepository(session).has_success_task(task_id)
 
 
 def _validate_job_references(data: JobCreate, template: dict) -> None:

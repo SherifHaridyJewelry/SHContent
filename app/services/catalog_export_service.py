@@ -15,7 +15,10 @@ import requests
 from fastapi import HTTPException
 from fastapi.responses import FileResponse, RedirectResponse
 
-from app.config import CATALOG_EXPORTS_FILE, EXPORTS_CATALOG_DIR, PROJECT_ROOT
+from app.config import EXPORTS_CATALOG_DIR, PROJECT_ROOT
+from app.db.engine import get_session
+from app.db.repositories.catalog_outputs import CatalogOutputRepository
+from app.db.repositories.exports import ExportRepository
 from app.models.schemas import (
     CatalogExportCounts,
     CatalogExportCreate,
@@ -25,7 +28,7 @@ from app.models.schemas import (
     CatalogExportStatus,
     CatalogItem,
 )
-from app.services.catalog_service import list_catalog, normalize_output_path
+from app.services.catalog_service import _row_to_item, normalize_output_path
 
 _lock = threading.Lock()
 _running_exports: set[str] = set()
@@ -38,51 +41,22 @@ def _now() -> str:
 
 
 def _ensure_dirs() -> None:
-    CATALOG_EXPORTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     EXPORTS_CATALOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def _load_exports() -> list[dict]:
-    _ensure_dirs()
-    if not CATALOG_EXPORTS_FILE.exists():
-        return []
-    return json.loads(CATALOG_EXPORTS_FILE.read_text(encoding="utf-8"))
-
-
-def _save_exports(exports: list[dict]) -> None:
-    _ensure_dirs()
-    CATALOG_EXPORTS_FILE.write_text(
-        json.dumps(exports, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-
-
 def _persist_export(job: CatalogExportJob) -> CatalogExportJob:
-    exports = _load_exports()
-    for i, e in enumerate(exports):
-        if e["id"] == job.id:
-            exports[i] = job.model_dump()
-            _save_exports(exports)
-            return job
-    exports.append(job.model_dump())
-    _save_exports(exports)
-    return job
+    with get_session() as session:
+        return ExportRepository(session).save(job)
 
 
 def list_exports(page: int = 1, page_size: int = 20) -> tuple[list[CatalogExportJob], int]:
-    exports = _load_exports()
-    exports.sort(key=lambda e: e.get("created_at", ""), reverse=True)
-    total = len(exports)
-    start = max(0, (page - 1) * page_size)
-    page_items = exports[start : start + page_size]
-    return [CatalogExportJob(**e) for e in page_items], total
+    with get_session() as session:
+        return ExportRepository(session).list_paginated(page, page_size)
 
 
 def get_export(export_id: str) -> CatalogExportJob | None:
-    for e in _load_exports():
-        if e["id"] == export_id:
-            return CatalogExportJob(**e)
-    return None
+    with get_session() as session:
+        return ExportRepository(session).get(export_id)
 
 
 def _friendly_filename(item: CatalogItem) -> str:
@@ -125,38 +99,45 @@ def _find_catalog_item(output_path: str) -> CatalogItem | None:
     normalized = normalize_output_path(output_path)
     if not normalized:
         return None
-    for item in list_catalog():
-        if item.output_path == normalized:
-            return item
-    return None
+    with get_session() as session:
+        row = CatalogOutputRepository(session).get(normalized)
+        if not row:
+            return None
+        return _row_to_item(row, None, None)
 
 
 def _items_for_export(data: CatalogExportCreate) -> list[CatalogItem]:
-    if data.scope == CatalogExportScope.selected:
-        if not data.output_paths:
-            raise HTTPException(status_code=400, detail="No output_paths provided for selected scope")
-        all_items = {i.output_path: i for i in list_catalog()}
-        items: list[CatalogItem] = []
-        for path in data.output_paths:
-            normalized = normalize_output_path(path)
-            if not normalized:
-                continue
-            item = all_items.get(normalized)
-            if item:
-                items.append(item)
-        return items
+    with get_session() as session:
+        repo = CatalogOutputRepository(session)
+        if data.scope == CatalogExportScope.selected:
+            if not data.output_paths:
+                raise HTTPException(
+                    status_code=400, detail="No output_paths provided for selected scope"
+                )
+            normalized_paths = [
+                normalize_output_path(path)
+                for path in data.output_paths
+                if normalize_output_path(path)
+            ]
+            by_path = repo.get_by_paths(normalized_paths)
+            return [
+                _row_to_item(by_path[path], None, None)
+                for path in normalized_paths
+                if path in by_path
+            ]
 
-    if data.scope == CatalogExportScope.all_catalog:
-        return list_catalog()
-
-    filters = data.filters or CatalogExportFilters()
-    return list_catalog(
-        collection=filters.collection,
-        product_type=filters.product_type,
-        review_status=filters.review_status,
-        scene_plates_only=filters.scene_plates_only,
-        sort=filters.sort,
-    )
+        if data.scope == CatalogExportScope.all_catalog:
+            rows = repo.list_paths_for_export()
+        else:
+            filters = data.filters or CatalogExportFilters()
+            rows = repo.list_paths_for_export(
+                collection=filters.collection,
+                product_type=filters.product_type,
+                review_status=filters.review_status,
+                scene_plates_only=filters.scene_plates_only,
+                sort=filters.sort,
+            )
+        return [_row_to_item(row, None, None) for row in rows]
 
 
 def download_catalog_image(output_path: str) -> FileResponse | RedirectResponse:
@@ -324,9 +305,7 @@ def _run_export(export_id: str) -> None:
 
         if counts.exported == 0:
             job.status = CatalogExportStatus.failed
-            job.error = (
-                f"No images exported ({counts.skipped} skipped, {counts.failed} failed)"
-            )
+            job.error = f"No images exported ({counts.skipped} skipped, {counts.failed} failed)"
             job.zip_path = None
             zip_path.unlink(missing_ok=True)
         else:

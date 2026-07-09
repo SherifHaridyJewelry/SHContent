@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from app.config import PROJECT_ROOT
 
@@ -30,7 +29,6 @@ def write_results_markdown(data: dict) -> None:
     overall = data.get("overall_winner", "")
 
     picked = [e for e in entries if e.get("picked")]
-    r1_picked = [e for e in picked if e.get("round") == "r1"]
 
     lines = [
         "# Bracelet Fidelity A/B Test Results",

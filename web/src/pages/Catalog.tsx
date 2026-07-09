@@ -7,7 +7,6 @@ import {
   CatalogExportFilters,
   CatalogItem,
   CatalogReviewResult,
-  Product,
   triggerDownload,
 } from "../api";
 import CatalogExportDialog from "../components/CatalogExportDialog";
@@ -20,6 +19,7 @@ import SelectionBar from "../components/SelectionBar";
 import { useUrlParams } from "../hooks/useUrlParams";
 import { useSelectionSet } from "../hooks/useSelectionSet";
 import { formatGenerationLabel } from "../lib/outputNaming";
+import { anchorPathFromItem, reviewBadgeVariant, reviewLabel } from "../lib/reviewUi";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -53,22 +53,9 @@ const SCENE_KEYS = [
   { value: "general", label: "As general product ref" },
 ];
 
-function reviewLabel(value: string, count?: number): string {
-  const base = value.charAt(0).toUpperCase() + value.slice(1);
-  return count !== undefined ? `${base} (${count})` : base;
-}
-
-function reviewBadgeVariant(status: string | null | undefined): "default" | "secondary" | "destructive" | "outline" {
-  if (status === "approved") return "default";
-  if (status === "rejected") return "destructive";
-  return "outline";
-}
-
 export default function Catalog() {
   const { params, setParams } = useUrlParams(DEFAULTS);
   const [data, setData] = useState<Awaited<ReturnType<typeof api.listCatalog>> | null>(null);
-  const [meta, setMeta] = useState<Awaited<ReturnType<typeof api.getCatalogMeta>> | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [previewItem, setPreviewItem] = useState<CatalogItem | null>(null);
   const [previewIndex, setPreviewIndex] = useState(0);
@@ -90,22 +77,16 @@ export default function Catalog() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [catalog, catalogMeta, prods] = await Promise.all([
-        api.listCatalog({
-          page,
-          page_size: pageSize,
-          collection: params.collection || undefined,
-          product_type: params.type || undefined,
-          review_status: params.review || undefined,
-          sort: params.sort || "newest",
-          scene_plates_only: params.scene_plates === "true",
-        }),
-        api.getCatalogMeta(),
-        api.listProducts({ page: 1, page_size: 1000 }),
-      ]);
+      const catalog = await api.listCatalog({
+        page,
+        page_size: pageSize,
+        collection: params.collection || undefined,
+        product_type: params.type || undefined,
+        review_status: params.review || undefined,
+        sort: params.sort || "newest",
+        scene_plates_only: params.scene_plates === "true",
+      });
       setData(catalog);
-      setMeta(catalogMeta);
-      setProducts(prods.items);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load catalog");
     } finally {
@@ -162,17 +143,6 @@ export default function Catalog() {
 
   const items = data?.items ?? [];
 
-  function productForItem(item: CatalogItem): Product | undefined {
-    if (!item.product_id) return undefined;
-    return products.find((p) => p.id === item.product_id);
-  }
-
-  function anchorPath(product: Product | undefined): string | null {
-    if (!product) return null;
-    const anchor = product.images.find((i) => i.role === "anchor");
-    return anchor?.path ?? product.images[0]?.path ?? null;
-  }
-
   function handleReviewUpdated(result: CatalogReviewResult, item?: CatalogItem) {
     const targetPath = result.output_path;
     setData((prev) => {
@@ -192,11 +162,6 @@ export default function Catalog() {
         ),
       };
     });
-    if (result.product) {
-      setProducts((prev) =>
-        prev.map((p) => (p.id === result.product!.id ? result.product! : p))
-      );
-    }
     if (item && previewItem?.output_path === targetPath) {
       setPreviewItem((s) =>
         s
@@ -257,6 +222,7 @@ export default function Catalog() {
     return () => window.removeEventListener("keydown", onKey);
   }, [previewItem, previewIndex, items]);
 
+  const meta = data?.meta ?? null;
   const collections = meta?.collections ?? [];
   const reviewCounts = meta?.counts_by_review ?? {};
 
@@ -515,10 +481,9 @@ export default function Catalog() {
               <div>
                 <p className="text-muted-foreground">Raw (anchor)</p>
                 {(() => {
-                  const product = productForItem(previewItem);
-                  const raw = anchorPath(product);
+                  const raw = anchorPathFromItem(previewItem);
                   return raw ? (
-                    <img src={assetUrl(raw)} alt="Raw" />
+                    <img src={assetUrl(raw)} alt="Raw" loading="lazy" />
                   ) : (
                     <p className="text-muted-foreground">No linked product anchor</p>
                   );

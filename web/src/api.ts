@@ -162,6 +162,11 @@ export interface CatalogItem {
   is_scene_plate: boolean;
   is_canonical: boolean;
   output_label: string | null;
+  anchor_path: string | null;
+}
+
+export interface CatalogListResponse extends PaginatedResponse<CatalogItem> {
+  meta: CatalogMeta;
 }
 
 export interface PaginatedResponse<T> {
@@ -470,6 +475,8 @@ export const api = {
   getScenePlateJob: (jobId: string) =>
     request<ScenePlateJob>(`/scene-plate-jobs/${jobId}`),
   listScenePlateJobs: () => request<ScenePlateJob[]>("/scene-plate-jobs"),
+  listActiveJobs: () => request<Job[]>("/jobs/active"),
+  listActiveScenePlateJobs: () => request<ScenePlateJob[]>("/scene-plate-jobs/active"),
   listJobs: (params?: { page?: number; page_size?: number }) => {
     const q = new URLSearchParams();
     if (params?.page) q.set("page", String(params.page));
@@ -539,7 +546,7 @@ export const api = {
     if (params?.sort) q.set("sort", params.sort);
     if (params?.scene_plates_only) q.set("scene_plates_only", "true");
     const qs = q.toString();
-    return request<PaginatedResponse<CatalogItem>>(`/catalog${qs ? `?${qs}` : ""}`);
+    return request<CatalogListResponse>(`/catalog${qs ? `?${qs}` : ""}`);
   },
   createCatalogExport: (body: {
     scope: CatalogExportScope;

@@ -1,15 +1,16 @@
-"""CRUD for jewelry products manifest and raw image files."""
+"""CRUD for jewelry products via PostgreSQL/SQLite."""
 
 from __future__ import annotations
 
-import json
 import re
 import shutil
 from pathlib import Path
 
 from fastapi import HTTPException, UploadFile
 
-from app.config import PRODUCTS_FILE, PROJECT_ROOT, RAW_JEWELRY_DIR
+from app.config import PROJECT_ROOT, RAW_JEWELRY_DIR
+from app.db.engine import get_session
+from app.db.repositories.products import ProductRepository
 from app.models.schemas import (
     ImageRole,
     ImportFolderInfo,
@@ -31,23 +32,7 @@ SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 
 
 def _ensure_data_dir() -> None:
-    PRODUCTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     RAW_JEWELRY_DIR.mkdir(parents=True, exist_ok=True)
-
-
-def _load_raw() -> list[dict]:
-    _ensure_data_dir()
-    if not PRODUCTS_FILE.exists():
-        return []
-    return json.loads(PRODUCTS_FILE.read_text(encoding="utf-8"))
-
-
-def _save_raw(products: list[dict]) -> None:
-    _ensure_data_dir()
-    PRODUCTS_FILE.write_text(
-        json.dumps(products, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
 
 
 def _product_dir(product_id: str) -> Path:
@@ -78,7 +63,8 @@ def _filter_products(
     product_type: ProductType | None = None,
     generatable: bool = False,
 ) -> list[Product]:
-    products = [Product(**p) for p in _load_raw()]
+    with get_session() as session:
+        products = ProductRepository(session).list_all()
     if collection:
         products = [p for p in products if p.collection == collection]
     if generatable:
@@ -128,56 +114,41 @@ def list_products_paginated(
 
 
 def list_collections() -> list[str]:
-    collections: set[str] = set()
-    for p in _load_raw():
-        if p.get("collection"):
-            collections.add(p["collection"])
-    return sorted(collections)
+    with get_session() as session:
+        return ProductRepository(session).list_collections()
 
 
 def count_by_type() -> dict[str, int]:
-    counts = {t.value: 0 for t in ProductType}
-    for p in _load_raw():
-        t = p.get("type", ProductType.general.value)
-        counts[t] = counts.get(t, 0) + 1
-    return counts
+    with get_session() as session:
+        return ProductRepository(session).count_by_type()
 
 
 def _counts_by_type_for_statuses(statuses: set[ProductStatus]) -> dict[str, int]:
-    counts = {t.value: 0 for t in ProductType}
-    for p in _load_raw():
-        if ProductStatus(p.get("status", ProductStatus.draft.value)) not in statuses:
-            continue
-        t = p.get("type", ProductType.general.value)
-        counts[t] = counts.get(t, 0) + 1
-    return counts
+    with get_session() as session:
+        return ProductRepository(session).count_by_type_for_statuses(statuses)
 
 
 def get_product_meta() -> ProductMeta:
-    products = _load_raw()
-    generatable_statuses = {ProductStatus.ready, ProductStatus.generated}
-    return ProductMeta(
-        collections=list_collections(),
-        counts_by_type=count_by_type(),
-        counts_by_type_ready=_counts_by_type_for_statuses({ProductStatus.ready}),
-        counts_by_type_generatable=_counts_by_type_for_statuses(generatable_statuses),
-        total=len(products),
-    )
+    with get_session() as session:
+        repo = ProductRepository(session)
+        generatable_statuses = {ProductStatus.ready, ProductStatus.generated}
+        return ProductMeta(
+            collections=repo.list_collections(),
+            counts_by_type=repo.count_by_type(),
+            counts_by_type_ready=repo.count_by_type_for_statuses({ProductStatus.ready}),
+            counts_by_type_generatable=repo.count_by_type_for_statuses(generatable_statuses),
+            total=repo.total_count(),
+        )
 
 
 def _all_ids() -> set[str]:
-    return {p["id"] for p in _load_raw()}
+    with get_session() as session:
+        return ProductRepository(session).all_ids()
 
 
-def _persist_product(product: Product) -> None:
-    products = _load_raw()
-    for i, p in enumerate(products):
-        if p["id"] == product.id:
-            products[i] = product.model_dump()
-            _save_raw(products)
-            return
-    products.append(product.model_dump())
-    _save_raw(products)
+def _persist_product(product: Product) -> Product:
+    with get_session() as session:
+        return ProductRepository(session).save(product)
 
 
 def _save_upload_to_product(
@@ -209,17 +180,20 @@ def _save_upload_to_product(
 
 
 def get_product(product_id: str) -> Product:
-    for p in _load_raw():
-        if p["id"] == product_id:
-            return Product(**p)
-    raise HTTPException(status_code=404, detail=f"Product not found: {product_id}")
+    with get_session() as session:
+        product = ProductRepository(session).get(product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail=f"Product not found: {product_id}")
+    return product
 
 
 def create_product(data: ProductCreate) -> Product:
     _validate_id(data.id)
-    products = _load_raw()
-    if any(p["id"] == data.id for p in products):
-        raise HTTPException(status_code=409, detail=f"Product already exists: {data.id}")
+    _ensure_data_dir()
+    with get_session() as session:
+        repo = ProductRepository(session)
+        if repo.get(data.id):
+            raise HTTPException(status_code=409, detail=f"Product already exists: {data.id}")
 
     product_dir = _product_dir(data.id)
     product_dir.mkdir(parents=True, exist_ok=True)
@@ -232,42 +206,33 @@ def create_product(data: ProductCreate) -> Product:
         status=ProductStatus.draft,
         images=[],
     )
-    products.append(product.model_dump())
-    _save_raw(products)
-    return product
+    return _persist_product(product)
 
 
 def update_product(product_id: str, data: ProductUpdate) -> Product:
-    products = _load_raw()
-    for i, p in enumerate(products):
-        if p["id"] == product_id:
-            product = Product(**p)
-            if data.name is not None:
-                product.name = data.name
-            if data.type is not None:
-                product.type = data.type
-            if data.collection is not None:
-                product.collection = data.collection
-            if data.status is not None:
-                product.status = data.status
-            if data.clear_review_status:
-                product.review_status = None
-            elif data.review_status is not None:
-                product.review_status = data.review_status
-            if data.status is None:
-                product.status = _compute_status(product.images)
-            products[i] = product.model_dump()
-            _save_raw(products)
-            return product
-    raise HTTPException(status_code=404, detail=f"Product not found: {product_id}")
+    product = get_product(product_id)
+    if data.name is not None:
+        product.name = data.name
+    if data.type is not None:
+        product.type = data.type
+    if data.collection is not None:
+        product.collection = data.collection
+    if data.status is not None:
+        product.status = data.status
+    if data.clear_review_status:
+        product.review_status = None
+    elif data.review_status is not None:
+        product.review_status = data.review_status
+    if data.status is None:
+        product.status = _compute_status(product.images)
+    return _persist_product(product)
 
 
 def delete_product(product_id: str) -> None:
-    products = _load_raw()
-    filtered = [p for p in products if p["id"] != product_id]
-    if len(filtered) == len(products):
+    with get_session() as session:
+        deleted = ProductRepository(session).delete(product_id)
+    if not deleted:
         raise HTTPException(status_code=404, detail=f"Product not found: {product_id}")
-    _save_raw(filtered)
 
 
 def add_image(
@@ -278,8 +243,7 @@ def add_image(
     product = get_product(product_id)
     _save_upload_to_product(product, upload, role)
     product.status = _compute_status(product.images)
-    _persist_product(product)
-    return product
+    return _persist_product(product)
 
 
 def delete_image(product_id: str, filename: str) -> Product:
@@ -298,8 +262,7 @@ def delete_image(product_id: str, filename: str) -> Product:
         file_path.unlink()
 
     product.status = _compute_status(product.images)
-    _persist_product(product)
-    return product
+    return _persist_product(product)
 
 
 def update_image_role(product_id: str, filename: str, role: ImageRole) -> Product:
@@ -313,20 +276,13 @@ def update_image_role(product_id: str, filename: str, role: ImageRole) -> Produc
     if not found:
         raise HTTPException(status_code=404, detail=f"Image not found: {filename}")
 
-    # Only one anchor per product
     if role == ImageRole.anchor:
         for img in product.images:
             if img.filename != filename and img.role == ImageRole.anchor:
                 img.role = ImageRole.analysis_only
 
     product.status = _compute_status(product.images)
-    products = _load_raw()
-    for i, p in enumerate(products):
-        if p["id"] == product_id:
-            products[i] = product.model_dump()
-            break
-    _save_raw(products)
-    return product
+    return _persist_product(product)
 
 
 def set_last_job(product_id: str, job_id: str, output: str | None = None) -> Product:
@@ -334,13 +290,16 @@ def set_last_job(product_id: str, job_id: str, output: str | None = None) -> Pro
     product.last_job_id = job_id
     if output:
         normalized = normalize_project_path(output, allowed_prefixes=("images/",)) or output
-        prev = normalize_project_path(product.last_output, allowed_prefixes=("images/",)) if product.last_output else None
+        prev = (
+            normalize_project_path(product.last_output, allowed_prefixes=("images/",))
+            if product.last_output
+            else None
+        )
         if prev != normalized:
             product.review_status = None
         product.last_output = normalized
         product.status = ProductStatus.generated
-    _persist_product(product)
-    return product
+    return _persist_product(product)
 
 
 def set_canonical_output(product_id: str, output_path: str | None) -> Product:
@@ -356,7 +315,6 @@ def set_canonical_output(product_id: str, output_path: str | None) -> Product:
 
 
 def sync_review_status_from_canonical(product: Product) -> Product:
-    """Sync product.review_status from the canonical output's per-image review."""
     from app.services import review_store
 
     if not product.approved_output:
@@ -368,14 +326,10 @@ def sync_review_status_from_canonical(product: Product) -> Product:
 
 def save_product(product: Product) -> Product:
     product = sync_review_status_from_canonical(product)
-    _persist_product(product)
-    return product
+    return _persist_product(product)
 
 
 def resolve_pipeline_paths(product: Product, max_generation_refs: int = 2) -> dict:
-    """Return image path lists for pipeline: all, generation, analysis."""
-    from app.config import PROJECT_ROOT
-
     active = [img for img in product.images if img.role != ImageRole.archived]
     if not active:
         raise HTTPException(status_code=400, detail=f"No images for product {product.id}")
@@ -388,7 +342,8 @@ def resolve_pipeline_paths(product: Product, max_generation_refs: int = 2) -> di
     generation_paths = [PROJECT_ROOT / img.path for img in gen_images]
 
     analysis_images = [
-        img for img in active
+        img
+        for img in active
         if img.role in (ImageRole.anchor, ImageRole.detail, ImageRole.analysis_only)
     ]
     analysis_paths = [PROJECT_ROOT / img.path for img in analysis_images]
@@ -452,8 +407,7 @@ def batch_create_products(
 
     for key, uploads in sorted(groups.items()):
         image_uploads = [
-            (u, p) for u, p in uploads
-            if product_naming.is_image_file(u.filename or p)
+            (u, p) for u, p in uploads if product_naming.is_image_file(u.filename or p)
         ]
         if not image_uploads:
             skipped.append(ProductBatchSkipped(key=key, reason="No image files in group"))
@@ -512,8 +466,7 @@ def scan_orphan_folders() -> list[ImportFolderInfo]:
         if not subdir.is_dir() or subdir.name in known:
             continue
         images = [
-            p for p in subdir.iterdir()
-            if p.is_file() and product_naming.is_image_file(p.name)
+            p for p in subdir.iterdir() if p.is_file() and product_naming.is_image_file(p.name)
         ]
         if images:
             orphans.append(ImportFolderInfo(folder_id=subdir.name, image_count=len(images)))
@@ -543,14 +496,17 @@ def import_orphan_folders(
             continue
 
         images = sorted(
-            p for p in folder_path.iterdir()
-            if p.is_file() and product_naming.is_image_file(p.name)
+            p for p in folder_path.iterdir() if p.is_file() and product_naming.is_image_file(p.name)
         )
         if not images:
             errors.append(f"No images in {folder_id}")
             continue
 
-        product_id = folder_id if SLUG_RE.match(folder_id) else product_naming.slugify_folder_name(folder_id)
+        product_id = (
+            folder_id
+            if SLUG_RE.match(folder_id)
+            else product_naming.slugify_folder_name(folder_id)
+        )
         if product_id in reserved:
             product_id = product_naming.next_product_id(reserved, product_type.value)
         reserved.add(product_id)

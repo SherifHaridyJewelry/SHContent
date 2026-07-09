@@ -1,98 +1,61 @@
-"""Per-output catalog review persistence."""
+"""Per-output catalog review persistence with in-process cache."""
 
 from __future__ import annotations
 
-import json
-from datetime import datetime, timezone
+import threading
 
-from app.config import CATALOG_REVIEWS_FILE, PRODUCTS_FILE
+from app.db.engine import get_session
+from app.db.repositories.reviews import ReviewRepository
 from app.services.path_utils import normalize_project_path
 
 VALID_STATUSES = frozenset({"approved", "rejected"})
 
-
-def _utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
-
-def _ensure_data_dir() -> None:
-    CATALOG_REVIEWS_FILE.parent.mkdir(parents=True, exist_ok=True)
-
-
-def _load_raw() -> dict[str, dict]:
-    _ensure_data_dir()
-    if not CATALOG_REVIEWS_FILE.exists():
-        return {}
-    return json.loads(CATALOG_REVIEWS_FILE.read_text(encoding="utf-8"))
-
-
-def _save_raw(data: dict[str, dict]) -> None:
-    _ensure_data_dir()
-    CATALOG_REVIEWS_FILE.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+_lock = threading.Lock()
+_cache: dict[str, dict] | None = None
+_cache_valid = False
 
 
 def _normalize_output(output_path: str) -> str | None:
     return normalize_project_path(output_path, allowed_prefixes=("images/",))
 
 
-def _migrate_from_products(data: dict[str, dict]) -> dict[str, dict]:
-    """Seed reviews from legacy product.review_status on last_output only."""
-    if not PRODUCTS_FILE.exists():
-        return data
-    products = json.loads(PRODUCTS_FILE.read_text(encoding="utf-8"))
-    changed = False
-    products_changed = False
-    for p in products:
-        status = p.get("review_status")
-        if status not in VALID_STATUSES:
-            continue
-        output = _normalize_output(p.get("last_output"))
-        if not output or output in data:
-            continue
-        data[output] = {
-            "status": status,
-            "reviewed_at": _utc_now(),
-            "product_id": p.get("id"),
-            "task_id": None,
-        }
-        changed = True
-        if not p.get("approved_output"):
-            p["approved_output"] = output
-            products_changed = True
-    if changed:
-        _save_raw(data)
-    if products_changed:
-        PRODUCTS_FILE.write_text(
-            json.dumps(products, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-    return data
+def _invalidate_cache() -> None:
+    global _cache_valid
+    _cache_valid = False
 
 
 def load_reviews() -> dict[str, dict]:
-    data = _load_raw()
-    if not data and PRODUCTS_FILE.exists():
-        products = json.loads(PRODUCTS_FILE.read_text(encoding="utf-8"))
-        if any(p.get("review_status") in VALID_STATUSES for p in products):
-            return _migrate_from_products(data)
-    return data
+    global _cache, _cache_valid
+    with _lock:
+        if _cache_valid and _cache is not None:
+            return dict(_cache)
+        with get_session() as session:
+            _cache = ReviewRepository(session).all_reviews()
+        _cache_valid = True
+        return dict(_cache)
 
 
 def get_review(output_path: str) -> dict | None:
     normalized = _normalize_output(output_path)
     if not normalized:
         return None
-    return load_reviews().get(normalized)
+    with _lock:
+        if _cache_valid and _cache is not None:
+            return _cache.get(normalized)
+    with get_session() as session:
+        return ReviewRepository(session).get(normalized)
 
 
 def get_review_status(output_path: str) -> str | None:
-    review = get_review(output_path)
-    if not review:
+    normalized = _normalize_output(output_path)
+    if not normalized:
         return None
-    return review.get("status")
+    with _lock:
+        if _cache_valid and _cache is not None:
+            entry = _cache.get(normalized)
+            return entry.get("status") if entry else None
+    with get_session() as session:
+        return ReviewRepository(session).get_status(normalized)
 
 
 def set_review(
@@ -108,28 +71,42 @@ def set_review(
     if status not in VALID_STATUSES:
         raise ValueError(f"Invalid review status: {status}")
 
-    data = load_reviews()
-    entry = {
-        "status": status,
-        "reviewed_at": _utc_now(),
-        "product_id": product_id,
-        "task_id": task_id,
-    }
-    data[normalized] = entry
-    _save_raw(data)
-    return {"output_path": normalized, **entry}
+    with get_session() as session:
+        result = ReviewRepository(session).set_review(
+            normalized,
+            status,
+            product_id=product_id,
+            task_id=task_id,
+        )
+    with _lock:
+        if _cache is not None:
+            _cache[normalized] = {
+                "status": result["status"],
+                "reviewed_at": result["reviewed_at"],
+                "product_id": product_id,
+                "task_id": task_id,
+            }
+        _cache_valid = True
+    from app.services import catalog_index
+
+    catalog_index.invalidate()
+    return result
 
 
 def clear_review(output_path: str) -> bool:
     normalized = _normalize_output(output_path)
     if not normalized:
         return False
-    data = load_reviews()
-    if normalized not in data:
-        return False
-    del data[normalized]
-    _save_raw(data)
-    return True
+    with get_session() as session:
+        cleared = ReviewRepository(session).clear(normalized)
+    if cleared:
+        with _lock:
+            if _cache is not None and normalized in _cache:
+                del _cache[normalized]
+        from app.services import catalog_index
+
+        catalog_index.invalidate()
+    return cleared
 
 
 def all_reviews() -> dict[str, dict]:

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { api, isJobActive, Job, JobProductResult, ScenePlateJob } from "../api";
 
 const POLL_INTERVAL_MS = 2000;
+const HIDDEN_POLL_INTERVAL_MS = 10000;
 const STALE_JOB_MS = 60_000;
 
 const autoRecoverAttempted = new Set<string>();
@@ -41,7 +42,7 @@ async function autoRecoverStaleJobs(jobs: Job[]): Promise<void> {
     autoRecoverAttempted.add(job.id);
     try {
       const result = await api.recoverJob(job.id);
-      await useJobStore.getState().refreshJobs();
+      await useJobStore.getState().refreshActiveJobs();
       if (result.still_waiting?.length) {
         autoRecoverAttempted.delete(job.id);
       }
@@ -56,6 +57,7 @@ interface JobStoreState {
   scenePlateJobs: ScenePlateJob[];
   loading: boolean;
   selectedTask: SelectedTask | null;
+  refreshActiveJobs: () => Promise<void>;
   refreshJobs: () => Promise<void>;
   upsertJob: (job: Job) => void;
   upsertScenePlateJob: (job: ScenePlateJob) => void;
@@ -68,12 +70,32 @@ export const useJobStore = create<JobStoreState>((set) => ({
   loading: true,
   selectedTask: null,
 
-  refreshJobs: async () => {
-    const [jobsResp, scenePlateJobs] = await Promise.all([
-      api.listJobs({ page: 1, page_size: 500 }),
-      api.listScenePlateJobs(),
+  refreshActiveJobs: async () => {
+    const [activeJobs, activeSceneJobs] = await Promise.all([
+      api.listActiveJobs(),
+      api.listActiveScenePlateJobs(),
     ]);
-    set({ jobs: jobsResp.items, scenePlateJobs, loading: false });
+    set((state) => {
+      const activeIds = new Set(activeJobs.map((j) => j.id));
+      const inactive = state.jobs.filter((j) => !activeIds.has(j.id) && !isJobActive(j));
+      const mergedJobs = [
+        ...activeJobs,
+        ...inactive.filter((j) => !activeIds.has(j.id)),
+      ];
+      const activeSceneIds = new Set(activeSceneJobs.map((j) => j.id));
+      const inactiveScene = state.scenePlateJobs.filter(
+        (j) => !activeSceneIds.has(j.id) && !isScenePlateJobActive(j)
+      );
+      const mergedScene = [
+        ...activeSceneJobs,
+        ...inactiveScene.filter((j) => !activeSceneIds.has(j.id)),
+      ];
+      return { jobs: mergedJobs, scenePlateJobs: mergedScene, loading: false };
+    });
+  },
+
+  refreshJobs: async () => {
+    await useJobStore.getState().refreshActiveJobs();
   },
 
   upsertJob: (job) => {
@@ -102,27 +124,35 @@ export function useActiveTaskCount(): number {
 }
 
 let pollStarted = false;
+let pollTimer: ReturnType<typeof setTimeout> | null = null;
+
+function schedulePoll(intervalMs: number) {
+  if (pollTimer) clearTimeout(pollTimer);
+  pollTimer = setTimeout(async () => {
+    const hidden = document.hidden;
+    const { jobs, scenePlateJobs } = useJobStore.getState();
+    const hasActive =
+      jobs.some(isJobActive) || scenePlateJobs.some(isScenePlateJobActive);
+    if (hasActive) {
+      await useJobStore.getState().refreshActiveJobs().catch(() => undefined);
+      await autoRecoverStaleJobs(useJobStore.getState().jobs).catch(() => undefined);
+    }
+    schedulePoll(hidden ? HIDDEN_POLL_INTERVAL_MS : POLL_INTERVAL_MS);
+  }, intervalMs);
+}
 
 export function startJobPolling(): () => void {
   if (pollStarted) return () => undefined;
   pollStarted = true;
 
-  const tick = async () => {
-    const { jobs, scenePlateJobs } = useJobStore.getState();
-    const hasActive =
-      jobs.some(isJobActive) || scenePlateJobs.some(isScenePlateJobActive);
-    if (!hasActive) return;
-    await useJobStore.getState().refreshJobs().catch(() => undefined);
-    await autoRecoverStaleJobs(useJobStore.getState().jobs).catch(() => undefined);
-  };
-
-  useJobStore.getState().refreshJobs().catch(() => {
+  useJobStore.getState().refreshActiveJobs().catch(() => {
     useJobStore.setState({ loading: false });
   });
 
-  const interval = setInterval(tick, POLL_INTERVAL_MS);
+  schedulePoll(POLL_INTERVAL_MS);
+
   return () => {
-    clearInterval(interval);
+    if (pollTimer) clearTimeout(pollTimer);
     pollStarted = false;
   };
 }

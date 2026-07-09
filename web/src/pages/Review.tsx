@@ -5,6 +5,7 @@ import Pagination from "../components/Pagination";
 import ReviewActions from "../components/ReviewActions";
 import { useUrlParams } from "../hooks/useUrlParams";
 import { parseProductIdFromOutput } from "../lib/outputNaming";
+import { reviewBadgeVariant } from "../lib/reviewUi";
 import { selectableRowClass } from "../lib/selectionStyles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -119,12 +120,6 @@ export default function Review() {
   }
 
   const items = data?.items ?? [];
-
-  function reviewBadgeVariant(status: string | null | undefined): "default" | "secondary" | "destructive" | "outline" {
-    if (status === "approved") return "default";
-    if (status === "rejected") return "destructive";
-    return "outline";
-  }
 
   return (
     <div>

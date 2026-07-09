@@ -10,6 +10,11 @@ from app.services import job_store, pipeline_service
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
 
+@router.get("/active", response_model=list[Job])
+def list_active_jobs() -> list[Job]:
+    return job_store.list_active_jobs()
+
+
 @router.get("", response_model=PaginatedResponse[Job])
 def list_jobs(page: int = 1, page_size: int = 25) -> PaginatedResponse[Job]:
     result = job_store.list_jobs_paginated(page=page, page_size=page_size)

@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { memo, ReactNode } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -18,7 +18,7 @@ interface SelectableImageCardProps {
   className?: string
 }
 
-export default function SelectableImageCard({
+function SelectableImageCard({
   imageSrc,
   imageAlt,
   label,
@@ -75,6 +75,7 @@ export default function SelectableImageCard({
         className="thumb"
         src={imageSrc}
         alt={imageAlt}
+        loading="lazy"
         onError={onImageError}
       />
       <div className="mt-3 text-base">{label}</div>
@@ -82,3 +83,5 @@ export default function SelectableImageCard({
     </div>
   )
 }
+
+export default memo(SelectableImageCard)

@@ -299,6 +299,16 @@ class CatalogItem(BaseModel):
     is_scene_plate: bool = False
     is_canonical: bool = False
     output_label: str | None = None
+    anchor_path: str | None = None
+
+
+class CatalogListResponse(BaseModel):
+    items: list[CatalogItem]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+    meta: CatalogMeta
 
 
 class CatalogExportScope(str, Enum):

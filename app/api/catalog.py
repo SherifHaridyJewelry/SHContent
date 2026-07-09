@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 from app.models.schemas import (
     CatalogExportCreate,
     CatalogExportJob,
-    CatalogItem,
+    CatalogListResponse,
     CatalogMeta,
     PaginatedResponse,
 )
@@ -59,7 +59,7 @@ def download_catalog_export(export_id: str) -> FileResponse:
     return catalog_export_service.download_export_zip(export_id)
 
 
-@router.get("", response_model=PaginatedResponse[CatalogItem])
+@router.get("", response_model=CatalogListResponse)
 def list_catalog(
     page: int = 1,
     page_size: int = 24,
@@ -68,7 +68,7 @@ def list_catalog(
     review_status: str | None = None,
     sort: str = "newest",
     scene_plates_only: bool = False,
-) -> PaginatedResponse[CatalogItem]:
+) -> CatalogListResponse:
     return catalog_service.list_catalog_paginated(
         page=page,
         page_size=page_size,

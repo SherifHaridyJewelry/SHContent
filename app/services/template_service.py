@@ -12,7 +12,6 @@ from urllib.parse import unquote, urlparse
 
 from app.config import PROJECT_ROOT, SCRIPTS_DIR, TEMPLATES_DIR
 from app.models.schemas import ProductType, TemplateSummary
-from app.services import catalog_service
 from app.services.path_utils import normalize_project_path
 
 if str(SCRIPTS_DIR) not in sys.path:
@@ -82,11 +81,16 @@ def _template_path(name: str) -> Path:
 
 
 def _catalog_r2_lookup() -> dict[str, str]:
+    from app.db.engine import get_session
+    from app.db.repositories.catalog_outputs import CatalogOutputRepository
+
     lookup: dict[str, str] = {}
-    for item in catalog_service.list_catalog():
-        normalized = normalize_project_path(item.output_path, ("images/",))
-        if normalized and item.output_r2_url:
-            lookup[normalized] = item.output_r2_url
+    with get_session() as session:
+        repo = CatalogOutputRepository(session)
+        rows = repo.list_paths_for_export()
+        for row in rows:
+            if row.output_r2_url:
+                lookup[row.output_path] = row.output_r2_url
     return lookup
 
 

@@ -7,14 +7,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 from app.api import abtest, catalog, history, jobs, products, reviews, scene_plates, templates
-from app.config import PROJECT_ROOT
+from app.config import ALLOWED_ORIGINS, APP_ENV, PROJECT_ROOT
+from app.middleware.auth import AuthMiddleware
 
-app = FastAPI(title="Jewelry Workflow", version="0.1.0")
+app = FastAPI(title="Jewelry Workflow", version="0.2.0")
 
+app.add_middleware(AuthMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_origin_regex=r"http://(192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}):5173",
+    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=(
+        r"http://(192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}):5173"
+        if APP_ENV == "development"
+        else None
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,7 +46,7 @@ def abtest_picker_page() -> FileResponse:
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok"}
+    return {"status": "ok", "env": APP_ENV}
 
 
 @app.get("/api/assets/{path:path}")
@@ -49,6 +55,11 @@ def serve_asset(path: str) -> FileResponse:
     allowed_prefixes = ("raw/", "images/", "prompts/")
     if not any(path.startswith(p) for p in allowed_prefixes):
         raise HTTPException(status_code=404, detail="Path not allowed")
+
+    if APP_ENV != "development":
+        if path.startswith("raw/") or path.startswith("prompts/"):
+            raise HTTPException(status_code=403, detail="Asset path requires authentication")
+
     file_path = (PROJECT_ROOT / path).resolve()
     root = PROJECT_ROOT.resolve()
     if not str(file_path).startswith(str(root)):
