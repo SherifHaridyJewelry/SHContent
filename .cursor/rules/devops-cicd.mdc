@@ -1,0 +1,18 @@
+---
+description: SHContent VPS deploy via systemd and GitHub Actions
+globs: deploy/**,.github/**
+alwaysApply: false
+---
+
+# SHContent DevOps
+
+**Production:** https://workflow.sherifharidyjewelry.com · **VPS:** `/opt/shcontent`  
+**Runtime:** Python API via `systemctl shcontent-api` (not Docker Traefik stack yet).
+
+## Deploy
+
+Push to `main` runs `.github/workflows/deploy.yml`: rsync → `pip install` → `alembic upgrade head` → `systemctl restart shcontent-api`.
+
+Secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.
+
+When adding Traefik routing, follow `sh-ops/docs/DEVOPS.md` (workflow subdomain, `root_default`, domains overlay).
