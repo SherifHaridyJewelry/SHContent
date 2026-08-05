@@ -100,6 +100,7 @@ def create_job(
             template=data.template,
             workflow=data.workflow,
             analyze=data.analyze,
+            model=data.model,
             category=category,
             output_prefix=output_prefix,
             product_ids=data.product_ids,
@@ -114,17 +115,26 @@ def create_job(
         return job
 
 
+def _sanitize_job(job: Job) -> Job:
+    """Drop stale error text once a job has succeeded."""
+    if job.status == JobStatus.success and job.error:
+        job.error = None
+        _mark_dirty(job.id)
+    return job
+
+
 def get_job(job_id: str) -> Job | None:
     with _lock:
         _ensure_loaded()
-        return _jobs.get(job_id)
+        job = _jobs.get(job_id)
+        return _sanitize_job(job) if job else None
 
 
 def list_jobs(limit: int = 50) -> list[Job]:
     with _lock:
         _ensure_loaded()
         jobs = sorted(_jobs.values(), key=lambda j: j.created_at, reverse=True)
-        return jobs[:limit]
+        return [_sanitize_job(j) for j in jobs[:limit]]
 
 
 def list_jobs_paginated(page: int = 1, page_size: int = 25) -> dict:
@@ -141,7 +151,7 @@ def list_jobs_paginated(page: int = 1, page_size: int = 25) -> dict:
         start = (page - 1) * page_size
         end = start + page_size
         return {
-            "items": jobs[start:end],
+            "items": [_sanitize_job(j) for j in jobs[start:end]],
             "total": total,
             "page": page,
             "page_size": page_size,
@@ -169,8 +179,12 @@ def update_job_status(job_id: str, status: JobStatus, error: str | None = None) 
     if not job:
         return None
     job.status = status
-    if error:
-        job.error = error
+    if status == JobStatus.failed:
+        if error:
+            job.error = error
+    else:
+        # Clear stale errors when the job is retried or completes
+        job.error = None
     return update_job(job)
 
 

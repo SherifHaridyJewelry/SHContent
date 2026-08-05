@@ -1,4 +1,4 @@
-"""Orchestrate per-output reviews with product canonical output."""
+"""Orchestrate per-output Keep/Reject reviews and optional product hero picks."""
 
 from __future__ import annotations
 
@@ -20,10 +20,11 @@ def apply_review(
     output_path: str,
     status: ReviewStatus,
     *,
-    set_canonical: bool = True,
+    set_canonical: bool = False,
     product_id: str | None = None,
     task_id: str | None = None,
 ) -> CatalogReviewResult:
+    """Apply Keep/Reject/Pending. Hero is only set when set_canonical=True explicitly."""
     normalized = _normalize_output(output_path)
 
     if status == ReviewStatus.pending:
@@ -73,17 +74,27 @@ def apply_review(
     )
 
 
-def set_canonical(product_id: str, output_path: str) -> CatalogReviewResult:
+def set_canonical(product_id: str, output_path: str | None) -> CatalogReviewResult:
+    """Set or clear the product hero. Setting requires the output to already be Kept."""
+    if output_path is None:
+        product = product_store.set_canonical_output(product_id, None)
+        return CatalogReviewResult(
+            output_path="",
+            status=None,
+            product_id=product_id,
+            is_canonical=False,
+            product=product,
+        )
+
     normalized = _normalize_output(output_path)
     review = review_store.get_review(normalized)
     if not review or review.get("status") != "approved":
         raise HTTPException(
             status_code=400,
-            detail="Only approved outputs can be set as canonical",
+            detail="Only kept outputs can be set as the product hero",
         )
 
     product = product_store.set_canonical_output(product_id, normalized)
-    product = product_store.save_product(product)
 
     return CatalogReviewResult(
         output_path=normalized,
@@ -93,3 +104,9 @@ def set_canonical(product_id: str, output_path: str) -> CatalogReviewResult:
         is_canonical=True,
         product=product,
     )
+
+
+def clear_all_heroes() -> dict[str, int]:
+    """Clear approved_output (hero) on every product. Keep/Reject reviews are untouched."""
+    cleared = product_store.clear_all_canonical_outputs()
+    return {"cleared": cleared}

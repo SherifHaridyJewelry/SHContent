@@ -8,7 +8,11 @@ import {
 } from "../api";
 import OutputPreview from "./OutputPreview";
 import ReviewActions from "./ReviewActions";
-import { anchorPathFromItem, reviewBadgeVariant } from "../lib/reviewUi";
+import {
+  anchorPathFromItem,
+  reviewBadgeVariant,
+  reviewStatusLabel,
+} from "../lib/reviewUi";
 import { formatGenerationLabel } from "../lib/outputNaming";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,14 +26,15 @@ import {
 import { Download, Loader2 } from "lucide-react";
 
 export const SCENE_KEYS = [
-  { value: "default", label: "As general ref" },
-  { value: "ring", label: "As ring ref" },
-  { value: "bracelet", label: "As bracelet ref" },
-  { value: "necklace", label: "As necklace ref" },
-  { value: "earrings", label: "As earrings ref" },
-  { value: "half_set", label: "As half set ref" },
-  { value: "full_set", label: "As full set ref" },
-  { value: "general", label: "As general product ref" },
+  { value: "default", label: "Default" },
+  { value: "ring", label: "Ring" },
+  { value: "twin_rings", label: "Twin rings" },
+  { value: "bracelet", label: "Bracelet" },
+  { value: "necklace", label: "Necklace" },
+  { value: "earrings", label: "Earrings" },
+  { value: "half_set", label: "Half set" },
+  { value: "full_set", label: "Full set" },
+  { value: "general", label: "General" },
 ];
 
 interface OutputLightboxProps {
@@ -87,9 +92,9 @@ export default function OutputLightbox({
           </Button>
         </div>
         <div className="mb-3 flex flex-wrap gap-1">
-          {item.is_canonical && <Badge variant="default">canonical</Badge>}
+          {item.is_canonical && <Badge variant="default">Hero</Badge>}
           <Badge variant={reviewBadgeVariant(item.review_status)}>
-            {item.review_status ?? "pending"}
+            {reviewStatusLabel(item.review_status)}
           </Badge>
         </div>
         <div className="compare">
@@ -128,49 +133,61 @@ export default function OutputLightbox({
               onError={onError}
             />
             {showDistill && item.template && onDistill && (
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className="text-xs text-muted-foreground">Reuse as reference:</span>
-                <Select
-                  value={distillSceneKey || undefined}
-                  onValueChange={onDistillSceneKeyChange}
-                >
-                  <SelectTrigger className="h-8 w-[160px] text-xs">
-                    <SelectValue placeholder="Distill to scene ref..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SCENE_KEYS.map((sk) => (
-                      <SelectItem key={sk.value} value={sk.value}>
-                        {sk.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={!distillSceneKey || distilling}
-                  onClick={onDistill}
-                >
-                  {distilling ? (
-                    <>
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" /> Distilling...
-                    </>
-                  ) : (
-                    "Distill"
-                  )}
-                </Button>
-                {distillJobId && (
-                  <Link
-                    to={`/studio/jobs/scene-plate/${distillJobId}`}
-                    className="text-xs"
-                  >
-                    Job →
+              <div className="mt-3 space-y-2">
+                <p className="m-0 text-xs text-muted-foreground">
+                  Create scene reference (empty set) for template{" "}
+                  <Link to={`/templates/${item.template}`} className="underline">
+                    {item.template}
                   </Link>
-                )}
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Select
+                    value={distillSceneKey || undefined}
+                    onValueChange={onDistillSceneKeyChange}
+                  >
+                    <SelectTrigger className="h-8 w-[180px] text-xs">
+                      <SelectValue placeholder="Assign to type…" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SCENE_KEYS.map((sk) => (
+                        <SelectItem key={sk.value} value={sk.value}>
+                          {sk.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={!distillSceneKey || distilling}
+                    onClick={onDistill}
+                  >
+                    {distilling ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Creating…
+                      </>
+                    ) : (
+                      "Create scene reference"
+                    )}
+                  </Button>
+                  {distillJobId && (
+                    <Link
+                      to={`/studio/jobs/scene-plate/${distillJobId}`}
+                      className="text-xs"
+                    >
+                      Job →
+                    </Link>
+                  )}
+                  {item.template && (
+                    <Link to={`/templates/${item.template}`} className="text-xs">
+                      Scene library →
+                    </Link>
+                  )}
+                </div>
               </div>
             )}
             <p className="mt-2 text-xs text-muted-foreground">
-              Shortcuts: A approve · R reject · P reset · Esc close · ← → navigate
+              Shortcuts: A keep · R reject · P reset · Esc close · ← → navigate
             </p>
           </div>
         )}

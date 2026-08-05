@@ -8,6 +8,12 @@ from typing import Any, Generic, Literal, TypeVar
 from pydantic import BaseModel, Field
 
 ReferenceMode = Literal["none", "job", "product"]
+GenerationModel = Literal["nano-banana-2", "gpt-image-2-image-to-image"]
+DEFAULT_GENERATION_MODEL: GenerationModel = "nano-banana-2"
+GENERATION_MODELS: tuple[GenerationModel, ...] = (
+    "nano-banana-2",
+    "gpt-image-2-image-to-image",
+)
 
 T = TypeVar("T")
 
@@ -21,6 +27,7 @@ class ImageRole(str, Enum):
 
 class ProductType(str, Enum):
     ring = "ring"
+    twin_rings = "twin_rings"
     bracelet = "bracelet"
     earrings = "earrings"
     necklace = "necklace"
@@ -128,6 +135,7 @@ class ProductMeta(BaseModel):
     counts_by_type_ready: dict[str, int] = Field(default_factory=dict)
     counts_by_type_generatable: dict[str, int] = Field(default_factory=dict)
     total: int = 0
+    ids: list[str] = Field(default_factory=list)
 
 
 class ProductBatchSkipped(BaseModel):
@@ -190,6 +198,7 @@ class Job(BaseModel):
     template: str
     workflow: str | None = None
     analyze: bool = True
+    model: GenerationModel = DEFAULT_GENERATION_MODEL
     category: str = "jewelry"
     output_prefix: str = "catalog"
     product_ids: list[str] = Field(default_factory=list)
@@ -206,6 +215,7 @@ class JobCreate(BaseModel):
     template: str = "jewelry_catalog_4x5"
     workflow: str | None = None
     analyze: bool = True
+    model: GenerationModel = DEFAULT_GENERATION_MODEL
     output_prefix: str | None = None
     reference_mode: ReferenceMode = "none"
     selected_ref_url: str | None = None
@@ -221,6 +231,9 @@ class TemplateSummary(BaseModel):
     aspect_ratio: str
     style_ref_count: int
     scene_ref_count: int = 0
+    preview_url: str | None = None
+    types_covered: int = 0
+    types_missing: int = 0
 
 
 class TemplateStyleReferenceRequest(BaseModel):
@@ -368,14 +381,16 @@ class ReviewStatus(str, Enum):
 class CatalogReviewUpdate(BaseModel):
     output_path: str
     status: ReviewStatus
-    set_canonical: bool = True
+    # Keep (approved) never implies hero; hero is set via set-canonical only.
+    set_canonical: bool = False
     product_id: str | None = None
     task_id: str | None = None
 
 
 class SetCanonicalRequest(BaseModel):
     product_id: str
-    output_path: str
+    # None clears the product hero / catalog pick.
+    output_path: str | None = None
 
 
 class CatalogReviewResult(BaseModel):

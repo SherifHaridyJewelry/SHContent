@@ -8,8 +8,16 @@ export function reviewBadgeVariant(
   return "outline";
 }
 
+/** User-facing label for review_status values. */
+export function reviewStatusLabel(status: string | null | undefined): string {
+  if (status === "approved") return "Kept";
+  if (status === "rejected") return "Rejected";
+  if (status === "pending" || !status) return "Pending";
+  return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
 export function reviewLabel(value: string, count?: number): string {
-  const base = value.charAt(0).toUpperCase() + value.slice(1);
+  const base = reviewStatusLabel(value === "approved" ? "approved" : value);
   return count !== undefined ? `${base} (${count})` : base;
 }
 

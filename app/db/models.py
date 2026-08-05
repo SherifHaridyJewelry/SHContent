@@ -62,6 +62,9 @@ class JobRow(Base):
     template: Mapped[str] = mapped_column(String(256), nullable=False)
     workflow: Mapped[str | None] = mapped_column(String(512), nullable=True)
     analyze: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    model: Mapped[str] = mapped_column(
+        String(64), nullable=False, default="nano-banana-2"
+    )
     category: Mapped[str] = mapped_column(String(64), nullable=False, default="jewelry")
     output_prefix: Mapped[str] = mapped_column(String(128), nullable=False, default="catalog")
     product_ids: Mapped[list] = mapped_column(JSON, nullable=False, default=list)

@@ -1,0 +1,11 @@
+.git
+.env
+.venv
+__pycache__
+.pytest_cache
+.ruff_cache
+.kilo
+web/node_modules
+images
+exports
+data

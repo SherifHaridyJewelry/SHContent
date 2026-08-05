@@ -138,6 +138,7 @@ def get_product_meta() -> ProductMeta:
             counts_by_type_ready=repo.count_by_type_for_statuses({ProductStatus.ready}),
             counts_by_type_generatable=repo.count_by_type_for_statuses(generatable_statuses),
             total=repo.total_count(),
+            ids=sorted(repo.all_ids()),
         )
 
 
@@ -312,6 +313,24 @@ def set_canonical_output(product_id: str, output_path: str | None) -> Product:
     else:
         product.approved_output = None
     return save_product(product)
+
+
+def clear_all_canonical_outputs() -> int:
+    """Clear hero (approved_output) on every product. Keep/Reject reviews stay intact."""
+    from app.services import catalog_index
+
+    cleared = 0
+    with get_session() as session:
+        repo = ProductRepository(session)
+        for product in repo.list_all():
+            if not product.approved_output and not product.review_status:
+                continue
+            product.approved_output = None
+            product.review_status = None
+            repo.save(product)
+            cleared += 1
+    catalog_index.invalidate()
+    return cleared
 
 
 def sync_review_status_from_canonical(product: Product) -> Product:

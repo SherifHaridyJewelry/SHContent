@@ -68,6 +68,8 @@ def list_catalog(
     review_status: str | None = None,
     sort: str = "newest",
     scene_plates_only: bool = False,
+    exclude_scene_plates: bool = False,
+    product_id: str | None = None,
 ) -> CatalogListResponse:
     return catalog_service.list_catalog_paginated(
         page=page,
@@ -77,4 +79,6 @@ def list_catalog(
         review_status=review_status,
         sort=sort,
         scene_plates_only=scene_plates_only,
+        exclude_scene_plates=exclude_scene_plates,
+        product_id=product_id,
     )

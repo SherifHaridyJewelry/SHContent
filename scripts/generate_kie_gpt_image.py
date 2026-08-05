@@ -71,11 +71,13 @@ def build_payload(prompt_data: dict, args) -> dict:
     resolution = args.resolution or api_params.get("resolution", "1K")
 
     if aspect_ratio not in GPT_ASPECT_RATIOS:
-        print(f"ERROR: Invalid aspect_ratio '{aspect_ratio}'. Use: {', '.join(sorted(GPT_ASPECT_RATIOS))}")
-        sys.exit(1)
+        raise ValueError(
+            f"Invalid aspect_ratio '{aspect_ratio}'. Use: {', '.join(sorted(GPT_ASPECT_RATIOS))}"
+        )
     if resolution not in GPT_RESOLUTIONS:
-        print(f"ERROR: Invalid resolution '{resolution}'. Use: {', '.join(sorted(GPT_RESOLUTIONS))}")
-        sys.exit(1)
+        raise ValueError(
+            f"Invalid resolution '{resolution}'. Use: {', '.join(sorted(GPT_RESOLUTIONS))}"
+        )
 
     if (
         model == "gpt-image-2-image-to-image"
@@ -97,8 +99,9 @@ def build_payload(prompt_data: dict, args) -> dict:
     input_urls = prompt_data.get("input_urls") or prompt_data.get("image_input")
     if model == "gpt-image-2-image-to-image":
         if not input_urls:
-            print("ERROR: image-to-image requires input_urls (or image_input) in the prompt file.")
-            sys.exit(1)
+            raise ValueError(
+                "image-to-image requires input_urls (or image_input) in the prompt file."
+            )
         input_payload["input_urls"] = input_urls
 
     return {"model": model, "input": input_payload}
@@ -132,7 +135,11 @@ def main():
     with open(prompt_path, "r", encoding="utf-8") as f:
         prompt_data = json.load(f)
 
-    payload = build_payload(prompt_data, args)
+    try:
+        payload = build_payload(prompt_data, args)
+    except ValueError as e:
+        print(f"ERROR: {e}")
+        sys.exit(1)
     api_key = get_api_key()
     task_id = create_task(api_key, payload)
     print(f"Task created: {task_id}")

@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   api,
   assetUrl,
+  GENERATION_MODELS,
+  GenerationModel,
   isJobActive,
   Job,
   JobStatus,
@@ -31,8 +33,10 @@ import { typeLabel } from "../lib/productTypes";
 import { selectableRowClass } from "../lib/selectionStyles";
 import {
   buildSelectableReferences,
+  preferredSceneRefUrl,
   referenceLabel,
   SelectableReference,
+  shortReferenceLabel,
 } from "../lib/templateRefs";
 import { useGenerateStore } from "../stores/generateStore";
 import {
@@ -54,8 +58,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { AlertCircle, Loader2, X } from "lucide-react";
+import { AlertCircle, ChevronDown, Loader2, X } from "lucide-react";
 
 const BATCH_DEFAULTS = {
   page: "1",
@@ -74,7 +79,7 @@ function scenePlateProgressSummary(job: ScenePlateJob): string {
   const done = job.plates.filter(
     (p) => p.status === "success" || p.status === "failed"
   ).length;
-  return `${done}/${total} plates`;
+  return `${done}/${total} refs`;
 }
 
 function isScenePlateActive(job: ScenePlateJob): boolean {
@@ -118,7 +123,7 @@ export default function Studio() {
     <div>
       <PageHeader
         title="Studio"
-        description="Select ready products, run a batch, and monitor generation jobs."
+        description="Select ready products, choose a shared scene reference, and run a batch."
       />
 
       <div className="studio-tabs">
@@ -151,7 +156,9 @@ function BatchTab() {
 
   const selectedProductIds = useGenerateStore((s) => s.selectedProductIds);
   const template = useGenerateStore((s) => s.template);
+  const selectedTemplates = useGenerateStore((s) => s.selectedTemplates);
   const analyze = useGenerateStore((s) => s.analyze);
+  const model = useGenerateStore((s) => s.model);
   const jobRefChoice = useGenerateStore((s) => s.jobRefChoice);
   const jobRefUrl = useGenerateStore((s) => s.jobRefUrl);
   const productRefs = useGenerateStore((s) => s.productRefs);
@@ -161,13 +168,15 @@ function BatchTab() {
   const removeFromSelection = useGenerateStore((s) => s.removeFromSelection);
   const setSelectedProductIds = useGenerateStore((s) => s.setSelectedProductIds);
   const setTemplate = useGenerateStore((s) => s.setTemplate);
+  const toggleTemplate = useGenerateStore((s) => s.toggleTemplate);
+  const setSelectedTemplates = useGenerateStore((s) => s.setSelectedTemplates);
   const setAnalyze = useGenerateStore((s) => s.setAnalyze);
+  const setModel = useGenerateStore((s) => s.setModel);
   const setJobRefChoice = useGenerateStore((s) => s.setJobRefChoice);
   const setJobRefUrl = useGenerateStore((s) => s.setJobRefUrl);
   const setProductRef = useGenerateStore((s) => s.setProductRef);
   const setShowPerProductRefs = useGenerateStore((s) => s.setShowPerProductRefs);
   const resetTemplateRefs = useGenerateStore((s) => s.resetTemplateRefs);
-  const buildReferencePayload = useGenerateStore((s) => s.buildReferencePayload);
 
   const selected = useMemo(() => new Set(selectedProductIds), [selectedProductIds]);
   const page = Number(params.page) || 1;
@@ -196,7 +205,9 @@ function BatchTab() {
   const templateDetailCache = useRef<Record<string, Record<string, unknown>>>({});
 
   const products = productData?.items ?? [];
-  const needsTemplateDetail = jobRefChoice === "job" || showPerProductRefs;
+  const [showAdvancedRefs, setShowAdvancedRefs] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const autoRefForTemplate = useRef<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -208,10 +219,19 @@ function BatchTab() {
         const jewelry = tmpls.filter((t) => t.category === "jewelry");
         const list = jewelry.length > 0 ? jewelry : tmpls;
         setTemplates(list);
-        if (list.length > 0 && !list.some((t) => t.name === template)) {
-          const preferred =
-            list.find((t) => t.name === "jewelry_catalog_4x5") ?? list[0];
-          setTemplate(preferred.name);
+        if (list.length > 0) {
+          const known = new Set(list.map((t) => t.name));
+          const state = useGenerateStore.getState();
+          const current = state.selectedTemplates.filter((n) => known.has(n));
+          if (current.length === 0) {
+            const preferred =
+              list.find((t) => t.name === "jewelry_catalog_4x5") ?? list[0];
+            setSelectedTemplates([preferred.name]);
+            setTemplate(preferred.name);
+          } else if (!known.has(state.template)) {
+            setTemplate(current[0]);
+            setSelectedTemplates(current);
+          }
         }
       })
       .catch((e) => {
@@ -223,7 +243,7 @@ function BatchTab() {
     return () => {
       cancelled = true;
     };
-  }, [setTemplate, template]);
+  }, [setTemplate, setSelectedTemplates]);
 
   const loadProducts = useCallback(async () => {
     setProductsLoading(true);
@@ -253,7 +273,7 @@ function BatchTab() {
   }, [loadProducts]);
 
   useEffect(() => {
-    if (!template || !needsTemplateDetail) return;
+    if (!template) return;
     const cached = templateDetailCache.current[template];
     if (cached) {
       setTemplateDetail(cached);
@@ -277,7 +297,7 @@ function BatchTab() {
     return () => {
       cancelled = true;
     };
-  }, [template, needsTemplateDetail]);
+  }, [template]);
 
   useEffect(() => {
     if (!selectedProductIds.length) return;
@@ -307,11 +327,35 @@ function BatchTab() {
     () => (templateDetail ? buildSelectableReferences(templateDetail) : []),
     [templateDetail]
   );
+  const sceneRefs = useMemo(
+    () => selectableRefs.filter((r) => r.source === "scene"),
+    [selectableRefs]
+  );
+  const styleRefsList = useMemo(
+    () => selectableRefs.filter((r) => r.source === "style"),
+    [selectableRefs]
+  );
+
+  useEffect(() => {
+    if (!template || !templateDetail) return;
+    if (autoRefForTemplate.current === template) return;
+    autoRefForTemplate.current = template;
+    const preferred = preferredSceneRefUrl(buildSelectableReferences(templateDetail));
+    if (preferred) {
+      setJobRefChoice("job");
+      setJobRefUrl(preferred);
+    }
+  }, [template, templateDetail, setJobRefChoice, setJobRefUrl]);
 
   const selectedTemplate = templates.find((t) => t.name === template);
   const collections = meta?.collections ?? [];
   const generatableCounts = meta?.counts_by_type_generatable ?? {};
   const generatableTotal = Object.values(generatableCounts).reduce((a, b) => a + b, 0);
+  const generateCount = selected.size * selectedTemplates.length;
+  const canGenerate =
+    selected.size > 0 &&
+    selectedTemplates.length > 0 &&
+    !(jobRefChoice === "job" && !jobRefUrl);
 
   const selectedProducts = useMemo(
     () =>
@@ -356,10 +400,39 @@ function BatchTab() {
       ? "indeterminate"
       : false;
 
-  function handleTemplateChange(name: string) {
+  function focusTemplate(name: string) {
+    if (name === template) return;
+    autoRefForTemplate.current = null;
     resetTemplateRefs();
+    setShowAdvancedRefs(false);
     setTemplate(name);
     setTemplateDetail(templateDetailCache.current[name] ?? null);
+  }
+
+  function handleToggleTemplate(name: string) {
+    const wasSelected = selectedTemplates.includes(name);
+    if (wasSelected && selectedTemplates.length <= 1) return;
+    toggleTemplate(name);
+    if (!wasSelected) {
+      focusTemplate(name);
+    } else if (template === name) {
+      const next = selectedTemplates.find((t) => t !== name);
+      if (next) focusTemplate(next);
+    }
+  }
+
+  function handleChipClick(name: string) {
+    if (!selectedTemplates.includes(name)) {
+      handleToggleTemplate(name);
+      return;
+    }
+    focusTemplate(name);
+  }
+
+  function handleChipRemove(e: MouseEvent, name: string) {
+    e.stopPropagation();
+    if (selectedTemplates.length <= 1) return;
+    handleToggleTemplate(name);
   }
 
   function anchorPath(product: Product): string | null {
@@ -368,27 +441,65 @@ function BatchTab() {
   }
 
   function refThumbnail(ref: SelectableReference): string {
+    if (ref.thumbnailPath?.startsWith("http")) return ref.thumbnailPath;
     if (ref.thumbnailPath) return assetUrl(ref.thumbnailPath);
     return ref.url;
   }
 
+  async function resolveRefPayloadForTemplate(tmplName: string): Promise<{
+    reference_mode: "none" | "job" | "product";
+    selected_ref_url?: string;
+    product_refs?: Record<string, string>;
+  }> {
+    if (jobRefChoice === "none") {
+      return { reference_mode: "none" };
+    }
+    if (tmplName === template && jobRefUrl) {
+      return { reference_mode: "job", selected_ref_url: jobRefUrl };
+    }
+    let detail = templateDetailCache.current[tmplName];
+    if (!detail) {
+      detail = await api.getTemplate(tmplName);
+      templateDetailCache.current[tmplName] = detail;
+    }
+    const preferred = preferredSceneRefUrl(buildSelectableReferences(detail));
+    if (preferred) {
+      return { reference_mode: "job", selected_ref_url: preferred };
+    }
+    return { reference_mode: "none" };
+  }
+
   async function startGeneration() {
-    if (!selected.size || !template) return;
+    const templateNames =
+      selectedTemplates.length > 0 ? selectedTemplates : template ? [template] : [];
+    if (!selected.size || !templateNames.length) return;
     setSubmitting(true);
     const ids = Array.from(selected);
     try {
-      const refPayload = buildReferencePayload(selected);
-      const created = await api.createJob({
-        product_ids: ids,
-        template,
-        analyze,
-        ...refPayload,
-      });
-      upsertJob(created);
+      const createdJobs = [];
+      for (const tmplName of templateNames) {
+        const refPayload = await resolveRefPayloadForTemplate(tmplName);
+        const created = await api.createJob({
+          product_ids: ids,
+          template: tmplName,
+          analyze,
+          model,
+          ...refPayload,
+        });
+        upsertJob(created);
+        createdJobs.push(created);
+      }
       await refreshJobs();
       clearSelection();
-      toast.success("Generation started");
-      navigate(`/studio/jobs/${created.id}`);
+      if (createdJobs.length === 1) {
+        toast.success("Generation started");
+        navigate(`/studio/jobs/${createdJobs[0].id}`);
+      } else {
+        toast.success(
+          `Started ${createdJobs.length} jobs · ${ids.length} product(s) each`
+        );
+        navigate("/studio?tab=jobs");
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Job failed to start");
     } finally {
@@ -401,329 +512,508 @@ function BatchTab() {
   }
 
   return (
-    <div>
-      <div className="studio-sticky-bar card">
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium uppercase tracking-wide">Template</Label>
-            <Select
-              value={template}
-              onValueChange={handleTemplateChange}
-              disabled={templates.length === 0}
-            >
-              <SelectTrigger className="w-[250px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {templates.map((t) => (
-                  <SelectItem key={t.name} value={t.name}>
-                    {t.template_name} ({t.aspect_ratio})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex items-center gap-2 pb-2">
-            <Checkbox
-              id="vision-analysis"
-              checked={analyze}
-              onCheckedChange={(checked) => setAnalyze(checked === true)}
-            />
-            <Label htmlFor="vision-analysis" className="cursor-pointer font-normal">
-              Vision analysis
-            </Label>
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium uppercase tracking-wide">Reference</Label>
-            <Select
-              value={jobRefChoice}
-              onValueChange={(v) => setJobRefChoice(v as "none" | "job")}
-            >
-              <SelectTrigger className="w-[280px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None (product images only)</SelectItem>
-                <SelectItem value="job">Shared reference for all</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <Button
-            className="ml-auto"
-            disabled={
-              !selected.size ||
-              submitting ||
-              !template ||
-              (jobRefChoice === "job" && !jobRefUrl)
+    <div className="studio-batch">
+      <section className="studio-products">
+        <ProductFilterBar
+          typeFilter={typeFilter}
+          onTypeChange={(v) => setParams({ type: v, page: "1" })}
+          collectionFilter={collectionFilter}
+          onCollectionChange={(v) => setParams({ collection: v, page: "1" })}
+          collections={collections}
+          typeCounts={generatableCounts}
+          typeTotal={generatableTotal}
+          showStatus={false}
+        />
+
+        <SelectionBar
+          count={selected.size}
+          onClearAll={clearSelection}
+          onSelectAllOnPage={toggleAllOnPage}
+        >
+          {selectedProductIds.map((id) => {
+            const p = selectedProductsCache[id];
+            return (
+              <Badge key={id} variant="secondary" className="gap-1">
+                {p?.name ?? id}
+                <button
+                  type="button"
+                  className="ml-1 inline-flex"
+                  aria-label={`Remove ${p?.name ?? id}`}
+                  onClick={() => removeFromSelection([id])}
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            );
+          })}
+        </SelectionBar>
+
+        {productsLoading && !productData ? (
+          <Loading variant="skeleton-list" message="Loading products..." />
+        ) : products.length === 0 && !productsLoading ? (
+          <EmptyState
+            title="No generatable products"
+            description="Assign exactly one anchor image on Products to make a SKU ready for Studio."
+            icon={<AlertCircle className="h-16 w-16" />}
+            action={
+              <Button asChild>
+                <Link to="/products">Go to Products</Link>
+              </Button>
             }
-            onClick={startGeneration}
-          >
-            {submitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Starting...
-              </>
-            ) : (
-              `Generate ${selected.size} product(s)`
+          />
+        ) : (
+          <>
+            {productData && (
+              <Pagination
+                page={productData.page}
+                pageSize={productData.page_size}
+                total={productData.total}
+                totalPages={productData.total_pages}
+                onPageChange={(p) => setParams({ page: String(p) })}
+                onPageSizeChange={(s) =>
+                  setParams({ page: "1", page_size: String(s) })
+                }
+                position="top"
+              />
             )}
+            <div className="relative mt-3">
+              {productsLoading && (
+                <div className="table-loading-overlay">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              )}
+              <div className="table-scroll">
+                <table className="card">
+                  <thead>
+                    <tr>
+                      <th className="w-10">
+                        <Checkbox
+                          checked={headerCheckboxState}
+                          onCheckedChange={toggleAllOnPage}
+                          aria-label="Select all on page"
+                        />
+                      </th>
+                      <th></th>
+                      <th>Product</th>
+                      <th>Type</th>
+                      <th>Collection</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((p) => {
+                      const thumb = anchorPath(p);
+                      const isRowSelected = selected.has(p.id);
+                      return (
+                        <tr
+                          key={p.id}
+                          className={selectableRowClass(
+                            isRowSelected,
+                            "cursor-pointer"
+                          )}
+                          onClick={() => handleToggleProduct(p)}
+                        >
+                          <td onClick={(e) => e.stopPropagation()}>
+                            <Checkbox
+                              checked={isRowSelected}
+                              onCheckedChange={() => handleToggleProduct(p)}
+                              aria-label={`Select ${p.name}`}
+                            />
+                          </td>
+                          <td>
+                            {thumb ? (
+                              <img
+                                src={assetUrl(thumb)}
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                className="product-thumb"
+                              />
+                            ) : (
+                              "—"
+                            )}
+                          </td>
+                          <td>
+                            {p.name}
+                            <div className="text-muted-foreground text-xs">
+                              {p.id}
+                            </div>
+                          </td>
+                          <td>{typeLabel(p.type)}</td>
+                          <td>{p.collection ?? "—"}</td>
+                          <td>
+                            <Badge
+                              variant={
+                                p.status === "generated" ? "secondary" : "default"
+                              }
+                            >
+                              {p.status}
+                            </Badge>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            {productData && (
+              <Pagination
+                page={productData.page}
+                pageSize={productData.page_size}
+                total={productData.total}
+                totalPages={productData.total_pages}
+                onPageChange={(p) => setParams({ page: String(p) })}
+                onPageSizeChange={(s) =>
+                  setParams({ page: "1", page_size: String(s) })
+                }
+                position="bottom"
+              />
+            )}
+          </>
+        )}
+      </section>
+
+      <section className="studio-look card">
+        <div className="studio-look-header">
+          <div>
+            <Label className="text-xs font-medium uppercase tracking-wide">
+              Templates
+            </Label>
+            {selectedTemplates.length > 1 && selectedTemplate && (
+              <p className="text-muted-foreground mt-1 mb-0 text-xs">
+                Editing scene for {selectedTemplate.template_name}
+              </p>
+            )}
+          </div>
+          <Button asChild variant="ghost" size="sm" className="h-auto px-1">
+            <Link to={`/templates/${template}`}>Manage scene library</Link>
           </Button>
         </div>
-        {selectedTemplate && (
-          <p className="text-muted-foreground mt-2 mb-0 text-sm">
+
+        <div className="studio-template-chips">
+          {templates.length === 0 ? (
+            <p className="m-0 text-xs text-muted-foreground">No templates</p>
+          ) : (
+            templates.map((t) => {
+              const checked = selectedTemplates.includes(t.name);
+              const focused = template === t.name;
+              return (
+                <button
+                  key={t.name}
+                  type="button"
+                  className={cn(
+                    "studio-template-chip",
+                    checked && "is-selected",
+                    focused && "is-focused"
+                  )}
+                  onClick={() => handleChipClick(t.name)}
+                  aria-pressed={checked}
+                  aria-current={focused ? "true" : undefined}
+                >
+                  <span className="studio-template-chip-label">
+                    {t.template_name}
+                    <span className="text-muted-foreground">
+                      {" "}
+                      ({t.aspect_ratio})
+                    </span>
+                  </span>
+                  {checked && selectedTemplates.length > 1 && (
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className="studio-template-chip-remove"
+                      aria-label={`Remove ${t.template_name}`}
+                      onClick={(e) => handleChipRemove(e, t.name)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleToggleTemplate(t.name);
+                        }
+                      }}
+                    >
+                      <X className="h-3 w-3" />
+                    </span>
+                  )}
+                </button>
+              );
+            })
+          )}
+        </div>
+
+        {selectedTemplate?.background && (
+          <p className="text-muted-foreground mt-3 mb-0 text-sm">
             {selectedTemplate.background}
           </p>
         )}
 
         {jobRefChoice === "job" && (
-          <div className="mt-3">
+          <div className="mt-4">
+            <div className="studio-look-header mb-2">
+              <p className="mb-0 text-xs text-muted-foreground">
+                Pick any empty set — type does not have to match the product.
+              </p>
+            </div>
             {templateDetailLoading ? (
-              <p className="text-muted-foreground text-sm">Loading references...</p>
-            ) : selectableRefs.length === 0 ? (
               <p className="text-muted-foreground text-sm">
-                No style or scene references on this template yet.
+                Loading scene references…
+              </p>
+            ) : sceneRefs.length === 0 ? (
+              <p className="text-muted-foreground text-sm">
+                No scene references on this template yet.{" "}
+                <Link to={`/templates/${template}`} className="underline">
+                  Open scene library
+                </Link>{" "}
+                to distill an empty set (any type can be used for this batch).
               </p>
             ) : (
               <div className="ref-grid">
-                {selectableRefs.map((ref) => (
-                  <Button
-                    key={ref.url}
-                    type="button"
-                    variant="secondary"
-                    className="h-auto flex-col gap-1 p-1.5"
-                    style={{
-                      border:
-                        jobRefUrl === ref.url
-                          ? "2px solid var(--accent, #6b8afd)"
-                          : "1px solid var(--border-color)",
-                    }}
-                    onClick={() => setJobRefUrl(ref.url)}
-                    aria-label={`Select reference: ${ref.label}`}
-                  >
-                    <img
-                      src={refThumbnail(ref)}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="ref-thumb"
-                    />
-                    <span className="block text-xs">{ref.label}</span>
-                  </Button>
-                ))}
+                {sceneRefs.map((ref) => {
+                  const selected = jobRefUrl === ref.url;
+                  return (
+                    <button
+                      key={ref.url}
+                      type="button"
+                      className={cn("ref-tile", selected && "is-selected")}
+                      onClick={() => setJobRefUrl(ref.url)}
+                      aria-label={`Select reference: ${shortReferenceLabel(ref.label)}`}
+                      aria-pressed={selected}
+                    >
+                      <img
+                        src={refThumbnail(ref)}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="ref-thumb"
+                      />
+                      <span className="ref-tile-label">
+                        {shortReferenceLabel(ref.label)}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
         )}
 
-        {jobRefChoice === "none" && selected.size > 0 && (
-          <div className="mt-3">
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              className="mb-3"
-              onClick={() => setShowPerProductRefs(!showPerProductRefs)}
+        {jobRefChoice === "none" && (
+          <p className="text-muted-foreground mt-4 mb-0 text-sm">
+            Shared scene reference is off. Configure per-product references in
+            Advanced below.
+          </p>
+        )}
+      </section>
+
+      <div className="studio-sticky-bar studio-run-bar card">
+        <div className="studio-run-row">
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wide">
+              Model
+            </Label>
+            <Select
+              value={model}
+              onValueChange={(v) => setModel(v as GenerationModel)}
             >
-              {showPerProductRefs ? "Hide" : "Show"} per-product references
-            </Button>
-            {showPerProductRefs &&
-              (templateDetailLoading ? (
-                <p className="text-muted-foreground text-sm">Loading references...</p>
-              ) : selectableRefs.length > 0 ? (
-                <div className="table-scroll">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Type</th>
-                        <th>Reference</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedProducts.map((p) => (
-                        <tr key={p.id}>
-                          <td>{p.name}</td>
-                          <td>{typeLabel(p.type)}</td>
-                          <td>
-                            <Select
-                              value={productRefs[p.id] || "none"}
-                              onValueChange={(v) =>
-                                setProductRef(p.id, v === "none" ? "" : v)
-                              }
-                            >
-                              <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="None" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="none">None</SelectItem>
-                                {selectableRefs.map((ref) => (
-                                  <SelectItem key={ref.url} value={ref.url}>
-                                    {ref.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+              <SelectTrigger className="w-[220px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {GENERATION_MODELS.map((m) => (
+                  <SelectItem key={m.value} value={m.value}>
+                    {m.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="studio-advanced-toggle"
+            onClick={() => setShowAdvanced((v) => !v)}
+            aria-expanded={showAdvanced}
+          >
+            Advanced
+            <ChevronDown
+              className={cn(
+                "ml-1 h-4 w-4 transition-transform",
+                showAdvanced && "rotate-180"
+              )}
+            />
+          </Button>
+
+          <div className="studio-run-cta">
+            {selected.size > 0 && selectedTemplates.length > 1 && (
+              <p className="text-muted-foreground mb-1 text-xs">
+                {selected.size} products · {selectedTemplates.length} templates
+              </p>
+            )}
+            <Button
+              disabled={!canGenerate || submitting}
+              onClick={startGeneration}
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Starting...
+                </>
+              ) : selected.size === 0 ? (
+                "Select products"
               ) : (
-                <p className="text-muted-foreground text-sm">
-                  No references on this template.
-                </p>
-              ))}
+                `Generate ${generateCount}`
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {showAdvanced && (
+          <div className="studio-advanced mt-4 space-y-4 border-t border-border pt-4">
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="vision-analysis"
+                  checked={analyze}
+                  onCheckedChange={(checked) => setAnalyze(checked === true)}
+                />
+                <Label
+                  htmlFor="vision-analysis"
+                  className="cursor-pointer font-normal"
+                >
+                  Vision analysis
+                </Label>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium uppercase tracking-wide">
+                  Scene reference
+                </Label>
+                <Select
+                  value={jobRefChoice}
+                  onValueChange={(v) => setJobRefChoice(v as "none" | "job")}
+                >
+                  <SelectTrigger className="w-[280px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No scene reference</SelectItem>
+                    <SelectItem value="job">Shared scene reference</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {model === "gpt-image-2-image-to-image" && (
+              <p className="text-muted-foreground m-0 text-sm">
+                GPT Image 2: 4:5 / 5:4 may run at 1K.
+              </p>
+            )}
+
+            {jobRefChoice === "job" && styleRefsList.length > 0 && (
+              <div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowAdvancedRefs((v) => !v)}
+                >
+                  {showAdvancedRefs ? "Hide" : "Show"} advanced style references
+                </Button>
+                {showAdvancedRefs && (
+                  <div className="ref-grid mt-2">
+                    {styleRefsList.map((ref) => {
+                      const selected = jobRefUrl === ref.url;
+                      return (
+                        <button
+                          key={ref.url}
+                          type="button"
+                          className={cn("ref-tile", selected && "is-selected")}
+                          onClick={() => setJobRefUrl(ref.url)}
+                          aria-pressed={selected}
+                        >
+                          <img
+                            src={refThumbnail(ref)}
+                            alt=""
+                            className="ref-thumb"
+                            loading="lazy"
+                          />
+                          <span className="ref-tile-label">{ref.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {jobRefChoice === "none" && selected.size > 0 && (
+              <div>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  className="mb-3"
+                  onClick={() => setShowPerProductRefs(!showPerProductRefs)}
+                >
+                  {showPerProductRefs ? "Hide" : "Show"} per-product references
+                </Button>
+                {showPerProductRefs &&
+                  (templateDetailLoading ? (
+                    <p className="text-muted-foreground text-sm">
+                      Loading references...
+                    </p>
+                  ) : selectableRefs.length > 0 ? (
+                    <div className="table-scroll">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Reference</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedProducts.map((p) => (
+                            <tr key={p.id}>
+                              <td>{p.name}</td>
+                              <td>{typeLabel(p.type)}</td>
+                              <td>
+                                <Select
+                                  value={productRefs[p.id] || "none"}
+                                  onValueChange={(v) =>
+                                    setProductRef(p.id, v === "none" ? "" : v)
+                                  }
+                                >
+                                  <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="None" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="none">None</SelectItem>
+                                    {selectableRefs.map((ref) => (
+                                      <SelectItem key={ref.url} value={ref.url}>
+                                        {ref.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">
+                      No references on this template.
+                    </p>
+                  ))}
+              </div>
+            )}
           </div>
         )}
       </div>
-
-      <ProductFilterBar
-        typeFilter={typeFilter}
-        onTypeChange={(v) => setParams({ type: v, page: "1" })}
-        collectionFilter={collectionFilter}
-        onCollectionChange={(v) => setParams({ collection: v, page: "1" })}
-        collections={collections}
-        typeCounts={generatableCounts}
-        typeTotal={generatableTotal}
-        showStatus={false}
-      />
-
-      <SelectionBar
-        count={selected.size}
-        onClearAll={clearSelection}
-        onSelectAllOnPage={toggleAllOnPage}
-      >
-        {selectedProductIds.map((id) => {
-          const p = selectedProductsCache[id];
-          return (
-            <Badge key={id} variant="secondary" className="gap-1">
-              {p?.name ?? id}
-              <button
-                type="button"
-                className="ml-1 inline-flex"
-                aria-label={`Remove ${p?.name ?? id}`}
-                onClick={() => removeFromSelection([id])}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          );
-        })}
-      </SelectionBar>
-
-      {productsLoading && !productData ? (
-        <Loading variant="skeleton-list" message="Loading products..." />
-      ) : products.length === 0 && !productsLoading ? (
-        <EmptyState
-          title="No generatable products"
-          description="Assign exactly one anchor image on Products to make a SKU ready for Studio."
-          icon={<AlertCircle className="h-16 w-16" />}
-          action={
-            <Button asChild>
-              <Link to="/products">Go to Products</Link>
-            </Button>
-          }
-        />
-      ) : (
-        <>
-          {productData && (
-            <Pagination
-              page={productData.page}
-              pageSize={productData.page_size}
-              total={productData.total}
-              totalPages={productData.total_pages}
-              onPageChange={(p) => setParams({ page: String(p) })}
-              onPageSizeChange={(s) => setParams({ page: "1", page_size: String(s) })}
-              position="top"
-            />
-          )}
-          <div className="relative mt-3">
-            {productsLoading && (
-              <div className="table-loading-overlay">
-                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              </div>
-            )}
-            <div className="table-scroll">
-              <table className="card">
-                <thead>
-                  <tr>
-                    <th className="w-10">
-                      <Checkbox
-                        checked={headerCheckboxState}
-                        onCheckedChange={toggleAllOnPage}
-                        aria-label="Select all on page"
-                      />
-                    </th>
-                    <th></th>
-                    <th>Product</th>
-                    <th>Type</th>
-                    <th>Collection</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((p) => {
-                    const thumb = anchorPath(p);
-                    const isRowSelected = selected.has(p.id);
-                    return (
-                      <tr
-                        key={p.id}
-                        className={selectableRowClass(isRowSelected, "cursor-pointer")}
-                        onClick={() => handleToggleProduct(p)}
-                      >
-                        <td onClick={(e) => e.stopPropagation()}>
-                          <Checkbox
-                            checked={isRowSelected}
-                            onCheckedChange={() => handleToggleProduct(p)}
-                            aria-label={`Select ${p.name}`}
-                          />
-                        </td>
-                        <td>
-                          {thumb ? (
-                            <img
-                              src={assetUrl(thumb)}
-                              alt=""
-                              loading="lazy"
-                              decoding="async"
-                              className="product-thumb"
-                            />
-                          ) : (
-                            "—"
-                          )}
-                        </td>
-                        <td>
-                          {p.name}
-                          <div className="text-muted-foreground text-xs">{p.id}</div>
-                        </td>
-                        <td>{typeLabel(p.type)}</td>
-                        <td>{p.collection ?? "—"}</td>
-                        <td>
-                          <Badge
-                            variant={p.status === "generated" ? "secondary" : "default"}
-                          >
-                            {p.status}
-                          </Badge>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          {productData && (
-            <Pagination
-              page={productData.page}
-              pageSize={productData.page_size}
-              total={productData.total}
-              totalPages={productData.total_pages}
-              onPageChange={(p) => setParams({ page: String(p) })}
-              onPageSizeChange={(s) => setParams({ page: "1", page_size: String(s) })}
-              position="bottom"
-            />
-          )}
-        </>
-      )}
     </div>
   );
 }
@@ -871,7 +1161,7 @@ function JobsTab() {
   return (
     <div>
       <p className="text-muted-foreground mb-4">
-        Catalog and scene-plate jobs.
+        Catalog and scene-reference jobs.
         {activeCount > 0 && (
           <Badge variant="default" className="ml-2">
             {activeCount} running
@@ -884,7 +1174,7 @@ function JobsTab() {
       ) : taskRows.length === 0 ? (
         <EmptyState
           title="No jobs yet"
-          description="Start a catalog batch from the New batch tab."
+          description="Add products, pick a shared scene reference from Templates, then start a catalog batch."
           action={
             <Button onClick={() => navigate("/studio?tab=batch")}>Start a batch</Button>
           }
@@ -930,7 +1220,7 @@ function JobsTab() {
                     </td>
                     <td>
                       <Badge variant="secondary">
-                        {row.kind === "scene_plate" ? "scene plates" : "catalog"}
+                        {row.kind === "scene_plate" ? "scene refs" : "catalog"}
                       </Badge>
                     </td>
                     <td className="text-xs">{row.created_at.slice(0, 19)}</td>
@@ -1043,8 +1333,15 @@ function CatalogJobDetail({
       </div>
       {job.error && <p className="text-destructive text-sm">{job.error}</p>}
       <p className="text-muted-foreground text-xs">
-        {jobProgressSummary(job)} · Template: {job.template} · Analyze:{" "}
-        {job.analyze ? "yes" : "no"} · Reference:{" "}
+        {jobProgressSummary(job)} · Template:{" "}
+        <Link to={`/templates/${job.template}`} className="underline">
+          {job.template}
+        </Link>{" "}
+        · Model:{" "}
+        {GENERATION_MODELS.find((m) => m.value === job.model)?.label ??
+          job.model ??
+          "Nano Banana 2"}{" "}
+        · Analyze: {job.analyze ? "yes" : "no"} · Reference:{" "}
         {job.reference_mode === "none"
           ? "none"
           : job.reference_mode === "job"
@@ -1061,6 +1358,21 @@ function CatalogJobDetail({
             : "per-product"}
         {" · "}Updated: {job.updated_at.slice(0, 19)}
       </p>
+      {job.reference_mode === "job" && job.selected_ref_url && (
+        <div className="mt-3 flex items-center gap-3">
+          <img
+            src={job.selected_ref_url}
+            alt="Selected scene reference"
+            className="h-16 w-12 rounded object-cover border"
+          />
+          <div className="text-sm">
+            <p className="m-0 font-medium">Shared scene reference</p>
+            <Button asChild variant="ghost" size="sm" className="h-auto px-0">
+              <Link to={`/templates/${job.template}`}>Open scene library</Link>
+            </Button>
+          </div>
+        </div>
+      )}
 
       <h4 className="mb-3 mt-5">Overall progress</h4>
       <TaskStepper status={job.status} analyze={job.analyze} />
@@ -1119,7 +1431,7 @@ function ScenePlateJobDetail({ job }: { job: ScenePlateJob }) {
   return (
     <div className="card mt-6">
       <h3>
-        Scene plate job {job.id}{" "}
+        Scene reference job {job.id}{" "}
         <Badge
           variant={
             job.status === "failed"
@@ -1140,7 +1452,7 @@ function ScenePlateJobDetail({ job }: { job: ScenePlateJob }) {
       {isScenePlateActive(job) && (
         <p className="task-live-hint">Updating every few seconds…</p>
       )}
-      <h4 className="mb-3 mt-5">Plates ({job.plates.length})</h4>
+      <h4 className="mb-3 mt-5">Scene references ({job.plates.length})</h4>
       <ul className="m-0 pl-5">
         {job.plates.map((plate) => (
           <li key={plate.id} className="mb-1">

@@ -1,3 +1,4 @@
+import { Check, Circle, Loader2, X } from "lucide-react";
 import { Job, JobProductResult, JobStatus, isJobActive } from "../api";
 
 export interface ProgressStep {
@@ -23,9 +24,13 @@ export const PROGRESS_STEPS: ProgressStep[] = [
   {
     id: "generating",
     label: "Generate",
-    description: "Nano Banana 2 image generation (may take 1–3 min)",
+    description: "Image generation (may take 1–3 min)",
   },
-  { id: "success", label: "Done", description: "Output saved to images/jewelry/" },
+  {
+    id: "success",
+    label: "Finished",
+    description: "Output saved to images/jewelry/",
+  },
 ];
 
 export type StepVisualState = "done" | "active" | "pending" | "failed" | "skipped";
@@ -88,6 +93,26 @@ export function jobProgressSummary(job: Job): string {
   return `${done}/${total} products processed`;
 }
 
+function StepMarker({ state }: { state: StepVisualState }) {
+  if (state === "done") {
+    return <Check className="task-step-icon" strokeWidth={3} aria-hidden />;
+  }
+  if (state === "active") {
+    return <Loader2 className="task-step-icon task-step-icon-spin" aria-hidden />;
+  }
+  if (state === "failed") {
+    return <X className="task-step-icon" strokeWidth={3} aria-hidden />;
+  }
+  return <Circle className="task-step-icon task-step-icon-pending" aria-hidden />;
+}
+
+function stateStatusText(state: StepVisualState): string | null {
+  if (state === "done") return "Done";
+  if (state === "active") return "In progress";
+  if (state === "failed") return "Failed";
+  return null;
+}
+
 interface TaskStepperProps {
   status: JobStatus;
   analyze: boolean;
@@ -101,11 +126,19 @@ export function TaskStepper({ status, analyze, compact = false }: TaskStepperPro
     <ol className={`task-stepper${compact ? " task-stepper-compact" : ""}`}>
       {steps.map((step) => {
         const state = stepVisualState(step.id, status, analyze);
+        const statusText = stateStatusText(state);
         return (
           <li key={step.id} className={`task-step task-step-${state}`}>
-            <span className="task-step-marker" aria-hidden />
+            <span className="task-step-marker" aria-hidden>
+              <StepMarker state={state} />
+            </span>
             <div className="task-step-body">
-              <strong>{step.label}</strong>
+              <strong>
+                {step.label}
+                {statusText && !compact && (
+                  <span className="task-step-status">{statusText}</span>
+                )}
+              </strong>
               {!compact && <span>{step.description}</span>}
             </div>
           </li>

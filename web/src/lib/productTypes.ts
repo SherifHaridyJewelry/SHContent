@@ -2,6 +2,7 @@ import type { ProductType } from "../api";
 
 export const PRODUCT_TYPES: ProductType[] = [
   "ring",
+  "twin_rings",
   "bracelet",
   "earrings",
   "necklace",
@@ -12,6 +13,7 @@ export const PRODUCT_TYPES: ProductType[] = [
 
 export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
   ring: "Ring",
+  twin_rings: "Twin rings",
   bracelet: "Bracelet",
   earrings: "Earrings",
   necklace: "Necklace",

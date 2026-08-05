@@ -8,7 +8,13 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.db.models import JobProductRow, JobRow
-from app.models.schemas import Job, JobProductResult, JobStatus
+from app.models.schemas import (
+    DEFAULT_GENERATION_MODEL,
+    GenerationModel,
+    Job,
+    JobProductResult,
+    JobStatus,
+)
 
 ACTIVE_STATUSES = {
     JobStatus.pending,
@@ -22,6 +28,13 @@ def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _row_model(row: JobRow) -> GenerationModel:
+    raw = getattr(row, "model", None) or DEFAULT_GENERATION_MODEL
+    if raw in ("nano-banana-2", "gpt-image-2-image-to-image"):
+        return raw  # type: ignore[return-value]
+    return DEFAULT_GENERATION_MODEL
+
+
 def _row_to_job(row: JobRow) -> Job:
     return Job(
         id=row.id,
@@ -29,6 +42,7 @@ def _row_to_job(row: JobRow) -> Job:
         template=row.template,
         workflow=row.workflow,
         analyze=row.analyze,
+        model=_row_model(row),
         category=row.category,
         output_prefix=row.output_prefix,
         product_ids=list(row.product_ids or []),
@@ -104,6 +118,7 @@ class JobRepository:
             template=job.template,
             workflow=job.workflow,
             analyze=job.analyze,
+            model=job.model,
             category=job.category,
             output_prefix=job.output_prefix,
             product_ids=job.product_ids,
@@ -149,6 +164,7 @@ class JobRepository:
         row.template = job.template
         row.workflow = job.workflow
         row.analyze = job.analyze
+        row.model = job.model
         row.category = job.category
         row.output_prefix = job.output_prefix
         row.product_ids = job.product_ids

@@ -86,11 +86,18 @@ def list_catalog_paginated(
     product_type: str | None = None,
     review_status: str | None = None,
     scene_plates_only: bool = False,
+    exclude_scene_plates: bool = False,
+    product_id: str | None = None,
     sort: str = "newest",
     include_meta: bool = True,
 ) -> CatalogListResponse:
     page = max(1, page)
     page_size = max(1, min(page_size, 100))
+
+    # Status filters are for product Keep/Reject. Scene plates are excluded unless
+    # the user explicitly asks for scene plates only.
+    if review_status and not scene_plates_only:
+        exclude_scene_plates = True
 
     cache_key_args = dict(
         page=page,
@@ -99,6 +106,8 @@ def list_catalog_paginated(
         product_type=product_type or "",
         review_status=review_status or "",
         scene_plates_only=scene_plates_only,
+        exclude_scene_plates=exclude_scene_plates,
+        product_id=product_id or "",
         sort=sort,
         include_meta=include_meta,
     )
@@ -115,6 +124,8 @@ def list_catalog_paginated(
             product_type=product_type,
             review_status=review_status,
             scene_plates_only=scene_plates_only,
+            exclude_scene_plates=exclude_scene_plates,
+            product_id=product_id,
             sort=sort,
         )
         meta_dict = repo.meta(
@@ -122,6 +133,7 @@ def list_catalog_paginated(
             product_type=product_type,
             review_status=review_status,
             scene_plates_only=scene_plates_only,
+            product_id=product_id,
         ) if include_meta else catalog_meta_from_db(session)
         items = [
             _row_to_item(row, review_status, approved)

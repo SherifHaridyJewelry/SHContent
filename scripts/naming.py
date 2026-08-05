@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 
 PRODUCT_ID_RE = re.compile(
-    r"^(?:half_set|full_set|ring|bracelet|earrings|necklace|general)\d{2,}$"
+    r"^(?:half_set|full_set|twin_rings|ring|bracelet|earrings|necklace|general)\d{2,}$"
 )
 
 
@@ -50,7 +50,7 @@ def parse_output_name(stem: str) -> ParsedOutputName | None:
     without_run = stem[: -(len(run_id) + 1)] if run_id else stem
 
     match = re.match(
-        r"^(catalog|product)_((?:half_set|full_set|ring|bracelet|earrings|necklace|general)\d{2,})(?:_(.+))?$",
+        r"^(catalog|product)_((?:half_set|full_set|twin_rings|ring|bracelet|earrings|necklace|general)\d{2,})(?:_(.+))?$",
         without_run,
     )
     if match:
@@ -75,8 +75,8 @@ def parse_product_id_from_output(stem: str) -> str | None:
 
 
 def format_product_id_label(product_id: str) -> str:
-    """ring01 -> Ring 01; half_set03 -> Half set 03."""
-    for prefix in ("half_set", "full_set"):
+    """ring01 -> Ring 01; half_set03 -> Half set 03; twin_rings01 -> Twin rings 01."""
+    for prefix in ("half_set", "full_set", "twin_rings"):
         if product_id.startswith(prefix):
             suffix = product_id[len(prefix) :]
             if suffix.isdigit():

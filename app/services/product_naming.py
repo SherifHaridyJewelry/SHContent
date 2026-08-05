@@ -9,6 +9,7 @@ from app.models.schemas import ProductType
 
 TYPE_LABELS: dict[str, str] = {
     ProductType.ring.value: "Ring",
+    ProductType.twin_rings.value: "Twin rings",
     ProductType.bracelet.value: "Bracelet",
     ProductType.earrings.value: "Earrings",
     ProductType.necklace.value: "Necklace",

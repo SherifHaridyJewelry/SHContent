@@ -31,7 +31,7 @@ def log_task(entry: dict) -> None:
         f.write(json.dumps(entry) + "\n")
 
 
-def create_task(api_key: str, payload: dict) -> str:
+def create_task(api_key: str, payload: dict, *, exit_on_error: bool = True) -> str:
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}",
@@ -45,13 +45,17 @@ def create_task(api_key: str, payload: dict) -> str:
         print(f"ERROR creating task: {e}")
         if "resp" in locals():
             print(resp.text)
-        sys.exit(1)
+        if exit_on_error:
+            sys.exit(1)
+        raise RuntimeError(f"KIE createTask failed: {e}") from e
 
     task_id = result.get("data", {}).get("taskId")
     if not task_id:
-        print("ERROR: No taskId returned")
-        print(json.dumps(result, indent=2))
-        sys.exit(1)
+        msg = f"No taskId returned: {json.dumps(result, indent=2)}"
+        print(f"ERROR: {msg}")
+        if exit_on_error:
+            sys.exit(1)
+        raise RuntimeError(msg)
     return task_id
 
 

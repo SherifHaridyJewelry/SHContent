@@ -160,6 +160,7 @@ def _process_job_product(
     output_prefix: str,
     max_gen_refs: int,
     analyze: bool,
+    model: str,
     api_key: str,
     s3_client,
     r2_config: dict,
@@ -219,6 +220,7 @@ def _process_job_product(
         product_type=product.type.value,
         job_ref_url=job_ref_url,
         product_ref_url=product_ref_url,
+        model=model,
     )
     resolved = result.get("resolved_ref_url")
     if resolved:
@@ -263,6 +265,7 @@ def _run_job(job_id: str) -> None:
                     output_prefix=job.output_prefix,
                     max_gen_refs=max_gen_refs,
                     analyze=job.analyze,
+                    model=getattr(job, "model", None) or "nano-banana-2",
                     api_key=api_key,
                     s3_client=s3_client,
                     r2_config=r2_config,
@@ -329,6 +332,13 @@ def resume_job(job_id: str) -> dict:
     incomplete = [p for p in job.products if p.status != JobStatus.success]
     if not incomplete:
         raise ValueError("No products to resume")
+
+    job_store.update_job_status(job_id, JobStatus.pending)
+    # Clear stale product errors for items we will retry
+    for prod in incomplete:
+        job_store.update_product_result(
+            job_id, prod.product_id, status=JobStatus.pending, error=None
+        )
 
     _clear_stale_running(job_id)
     if not _spawn_job_thread(job_id):

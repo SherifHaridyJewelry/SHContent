@@ -75,6 +75,9 @@ export default function Layout() {
       )}
       <aside className={`sidebar${mobileOpen ? " sidebar-open" : ""}`}>
         <h1>Jewelry Workflow</h1>
+        <p className="sidebar-tagline">
+          Products → Templates → Studio → Outputs
+        </p>
         <SidebarNav onNavigate={() => setMobileOpen(false)} />
       </aside>
       <main className="main">

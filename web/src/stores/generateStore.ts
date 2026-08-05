@@ -1,12 +1,16 @@
 import { create } from "zustand";
-import { ProductType, ReferenceMode } from "../api";
+import { GenerationModel, ProductType, ReferenceMode } from "../api";
 
 type JobRefChoice = "none" | "job";
 
 interface GenerateStoreState {
   selectedProductIds: string[];
+  /** Focused template (scene-ref picker + library link). */
   template: string;
+  /** One or more templates to run for the same product set. */
+  selectedTemplates: string[];
   analyze: boolean;
+  model: GenerationModel;
   typeFilter: ProductType | "";
   collectionFilter: string;
   jobRefChoice: JobRefChoice;
@@ -18,7 +22,10 @@ interface GenerateStoreState {
   clearSelection: () => void;
   removeFromSelection: (ids: string[]) => void;
   setTemplate: (template: string) => void;
+  toggleTemplate: (template: string) => void;
+  setSelectedTemplates: (templates: string[]) => void;
   setAnalyze: (analyze: boolean) => void;
+  setModel: (model: GenerationModel) => void;
   setTypeFilter: (type: ProductType | "") => void;
   setCollectionFilter: (collection: string) => void;
   setJobRefChoice: (choice: JobRefChoice) => void;
@@ -33,10 +40,14 @@ interface GenerateStoreState {
   };
 }
 
+const DEFAULT_TEMPLATE = "jewelry_catalog_4x5";
+
 export const useGenerateStore = create<GenerateStoreState>((set, get) => ({
   selectedProductIds: [],
-  template: "jewelry_catalog_4x5",
+  template: DEFAULT_TEMPLATE,
+  selectedTemplates: [DEFAULT_TEMPLATE],
   analyze: true,
+  model: "nano-banana-2",
   typeFilter: "",
   collectionFilter: "",
   jobRefChoice: "none",
@@ -68,9 +79,41 @@ export const useGenerateStore = create<GenerateStoreState>((set, get) => ({
     }));
   },
 
-  setTemplate: (template) => set({ template }),
+  setTemplate: (template) =>
+    set((state) => {
+      const selected = state.selectedTemplates.includes(template)
+        ? state.selectedTemplates
+        : [...state.selectedTemplates, template];
+      return { template, selectedTemplates: selected };
+    }),
+
+  toggleTemplate: (name) =>
+    set((state) => {
+      const has = state.selectedTemplates.includes(name);
+      if (has) {
+        if (state.selectedTemplates.length <= 1) return state;
+        const selectedTemplates = state.selectedTemplates.filter((t) => t !== name);
+        const template =
+          state.template === name ? selectedTemplates[0] : state.template;
+        return { selectedTemplates, template };
+      }
+      return {
+        selectedTemplates: [...state.selectedTemplates, name],
+        template: name,
+      };
+    }),
+
+  setSelectedTemplates: (templates) => {
+    if (!templates.length) return;
+    set((state) => ({
+      selectedTemplates: templates,
+      template: templates.includes(state.template) ? state.template : templates[0],
+    }));
+  },
 
   setAnalyze: (analyze) => set({ analyze }),
+
+  setModel: (model) => set({ model }),
 
   setTypeFilter: (typeFilter) => set({ typeFilter }),
 

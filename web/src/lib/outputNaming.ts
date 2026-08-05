@@ -1,7 +1,7 @@
 /** Match scripts/naming.py helpers for client-side lookups and labels. */
 
 const PRODUCT_ID_PATTERN =
-  /^(?:half_set|full_set|ring|bracelet|earrings|necklace|general)\d{2,}$/;
+  /^(?:half_set|full_set|twin_rings|ring|bracelet|earrings|necklace|general)\d{2,}$/;
 
 export function parseProductIdFromOutput(stem: string): string | null {
   const parsed = parseOutputName(stem);
@@ -25,7 +25,7 @@ export function parseOutputName(stem: string): {
   const withoutRun = runMatch ? runMatch[1] : stem;
 
   const match = withoutRun.match(
-    /^(catalog|product)_((?:half_set|full_set|ring|bracelet|earrings|necklace|general)\d{2,})(?:_(.+))?$/
+    /^(catalog|product)_((?:half_set|full_set|twin_rings|ring|bracelet|earrings|necklace|general)\d{2,})(?:_(.+))?$/
   );
   if (!match) return null;
 
@@ -38,7 +38,7 @@ export function parseOutputName(stem: string): {
 }
 
 export function formatProductIdLabel(productId: string): string {
-  for (const prefix of ["half_set", "full_set"]) {
+  for (const prefix of ["half_set", "full_set", "twin_rings"]) {
     if (productId.startsWith(prefix)) {
       const suffix = productId.slice(prefix.length);
       if (/^\d+$/.test(suffix)) {

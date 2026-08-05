@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api, CatalogReviewResult } from "../api";
-import { Button } from "@/components/ui/button"
-import { ThumbsUp, ThumbsDown } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Check, Star, ThumbsDown, Undo2 } from "lucide-react";
 
 export type ReviewStatusValue = "approved" | "rejected" | "pending";
 
@@ -28,17 +28,14 @@ export default function ReviewActions({
 }: ReviewActionsProps) {
   const [busy, setBusy] = useState(false);
 
-  async function apply(
-    status: ReviewStatusValue,
-    setCanonical = status === "approved"
-  ) {
+  async function apply(status: ReviewStatusValue) {
     if (!outputPath) return;
     setBusy(true);
     try {
       const result = await api.setCatalogReview({
         output_path: outputPath,
         status,
-        set_canonical: setCanonical,
+        set_canonical: false,
         product_id: productId ?? undefined,
         task_id: taskId ?? undefined,
       });
@@ -50,7 +47,7 @@ export default function ReviewActions({
     }
   }
 
-  async function setCanonicalOnly() {
+  async function setHero() {
     if (!productId) return;
     setBusy(true);
     try {
@@ -60,38 +57,46 @@ export default function ReviewActions({
       });
       onUpdated?.(result);
     } catch (e) {
-      onError?.(e instanceof Error ? e.message : "Could not set canonical");
+      onError?.(e instanceof Error ? e.message : "Could not set hero");
     } finally {
       setBusy(false);
     }
   }
+
+  async function clearHero() {
+    if (!productId) return;
+    setBusy(true);
+    try {
+      const result = await api.setCanonicalOutput({
+        product_id: productId,
+        output_path: null,
+      });
+      onUpdated?.(result);
+    } catch (e) {
+      onError?.(e instanceof Error ? e.message : "Could not clear hero");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const isKept = currentStatus === "approved";
 
   return (
     <div className="flex flex-wrap items-center gap-1">
       <Button
         variant="default"
         size={compact ? "sm" : "default"}
-        disabled={busy || (currentStatus === "approved" && isCanonical)}
-        onClick={() => apply("approved", true)}
+        disabled={busy || isKept}
+        onClick={() => apply("approved")}
       >
-        <ThumbsUp className="h-3.5 w-3.5" />
-        Approve
+        <Check className="h-3.5 w-3.5" />
+        Keep
       </Button>
-      {productId && (
-        <Button
-          variant="secondary"
-          size={compact ? "sm" : "default"}
-          disabled={busy}
-          onClick={() => apply("approved", false)}
-        >
-          Approve only
-        </Button>
-      )}
       <Button
         variant="destructive"
         size={compact ? "sm" : "default"}
-        disabled={busy}
-        onClick={() => apply("rejected", false)}
+        disabled={busy || currentStatus === "rejected"}
+        onClick={() => apply("rejected")}
       >
         <ThumbsDown className="h-3.5 w-3.5" />
         Reject
@@ -101,19 +106,31 @@ export default function ReviewActions({
           variant="secondary"
           size={compact ? "sm" : "default"}
           disabled={busy}
-          onClick={() => apply("pending", false)}
+          onClick={() => apply("pending")}
         >
+          <Undo2 className="h-3.5 w-3.5" />
           Reset
         </Button>
       )}
-      {productId && currentStatus === "approved" && !isCanonical && (
+      {productId && isKept && !isCanonical && (
         <Button
           variant="secondary"
           size={compact ? "sm" : "default"}
           disabled={busy}
-          onClick={setCanonicalOnly}
+          onClick={setHero}
         >
-          Set canonical
+          <Star className="h-3.5 w-3.5" />
+          Set as hero
+        </Button>
+      )}
+      {productId && isCanonical && (
+        <Button
+          variant="outline"
+          size={compact ? "sm" : "default"}
+          disabled={busy}
+          onClick={clearHero}
+        >
+          Clear hero
         </Button>
       )}
     </div>

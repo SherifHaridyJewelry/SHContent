@@ -57,7 +57,7 @@ export default function TemplateDetail() {
       setLegacySelected(new Set());
       setLegacyUrl("");
       await load();
-      toast.success("Legacy style refs added");
+      toast.success("Style refs added");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed");
     } finally {
@@ -132,18 +132,12 @@ export default function TemplateDetail() {
         onToggle={(e) => setShowLegacy((e.target as HTMLDetailsElement).open)}
       >
         <summary className="cursor-pointer font-medium">
-          Legacy style references ({styleRefs.length})
+          Advanced · style references ({styleRefs.length})
         </summary>
         <div className="mt-3">
-          <p className="text-sm">
-            Prefer distilled scene references from{" "}
-            <Link to="/outputs?tab=gallery" className="underline">
-              Outputs → Distill
-            </Link>
-            .
-          </p>
-          <p className="text-sm text-destructive">
-            Warning: finished product images may contaminate product design.
+          <p className="text-sm text-muted-foreground">
+            Prefer the Scene library above. Style refs may include finished products and
+            can contaminate design fidelity.
           </p>
           {styleRefs.length > 0 && (
             <ul>
@@ -178,7 +172,7 @@ export default function TemplateDetail() {
             onClick={addLegacyRefs}
           >
             {legacySaving && <Loader2 className="h-4 w-4 animate-spin" />}
-            Add legacy style refs
+            Add style refs
           </Button>
         </div>
       </details>

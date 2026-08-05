@@ -16,13 +16,19 @@ import CatalogExportsPanel from "../components/CatalogExportsPanel";
 import OutputLightbox from "../components/OutputLightbox";
 import PageHeader from "../components/PageHeader";
 import Pagination from "../components/Pagination";
+import PendingReviewStack from "../components/PendingReviewStack";
 import SelectableImageCard from "../components/SelectableImageCard";
 import SelectionBar from "../components/SelectionBar";
 import { useCatalogQuery } from "../hooks/useCatalogQuery";
+import { notifyPendingReviewChanged } from "../hooks/usePendingReviewCount";
 import { useSelectionSet } from "../hooks/useSelectionSet";
 import { useUrlParams } from "../hooks/useUrlParams";
 import { formatGenerationLabel } from "../lib/outputNaming";
-import { reviewBadgeVariant, reviewLabel } from "../lib/reviewUi";
+import {
+  reviewBadgeVariant,
+  reviewLabel,
+  reviewStatusLabel,
+} from "../lib/reviewUi";
 import { selectableRowClass } from "../lib/selectionStyles";
 import { useJobStore } from "../stores/jobStore";
 import { Badge } from "@/components/ui/badge";
@@ -54,6 +60,7 @@ const DEFAULTS = {
   review: "",
   sort: "newest",
   scene_plates: "",
+  include_assets: "",
   product: "",
   failed_page: "1",
   failed_page_size: "12",
@@ -93,18 +100,19 @@ export default function Outputs() {
     setParams({ tab, page: "1", failed_page: "1" });
   }
 
+  const handleMeta = useCallback((pending: number, total: number) => {
+    setMetaBootstrap((prev) => {
+      if (prev && prev.pending === pending && prev.total === total) return prev;
+      return { pending, total };
+    });
+    notifyPendingReviewChanged(pending);
+  }, []);
+
   return (
     <div>
       <PageHeader
         title="Outputs"
-        description="Review generated images, triage failures, and export for social or web."
-        actions={
-          resolvedTab !== "exports" && resolvedTab !== "failed" ? (
-            <Button variant="secondary" size="sm" onClick={() => setTab("exports")}>
-              Exports
-            </Button>
-          ) : undefined
-        }
+        description="Keep a shortlist, pick product heroes later, triage failures, and export."
       />
 
       <div className="studio-tabs">
@@ -130,13 +138,13 @@ export default function Outputs() {
         ))}
       </div>
 
-      {(resolvedTab === "gallery" || resolvedTab === "pending") && (
+      {resolvedTab === "pending" && <PendingReviewStack onMeta={handleMeta} />}
+      {resolvedTab === "gallery" && (
         <GalleryTab
-          tab={resolvedTab}
           params={params}
           setParams={setParams}
           upsertScenePlateJob={upsertScenePlateJob}
-          onMeta={(pending, total) => setMetaBootstrap({ pending, total })}
+          onMeta={handleMeta}
         />
       )}
       {resolvedTab === "failed" && (
@@ -148,13 +156,11 @@ export default function Outputs() {
 }
 
 function GalleryTab({
-  tab,
   params,
   setParams,
   upsertScenePlateJob,
   onMeta,
 }: {
-  tab: "gallery" | "pending";
   params: Record<string, string>;
   setParams: (patch: Record<string, string>) => void;
   upsertScenePlateJob: (job: Awaited<ReturnType<typeof api.distillSceneRef>>) => void;
@@ -162,8 +168,9 @@ function GalleryTab({
 }) {
   const page = Number(params.page) || 1;
   const pageSize = Number(params.page_size) || 12;
-  const reviewStatus =
-    tab === "pending" ? "pending" : params.review || undefined;
+  const reviewStatus = params.review || undefined;
+
+  const includeTemplateAssets = params.include_assets === "true";
 
   const { data, loading, reload, items, meta } = useCatalogQuery({
     page,
@@ -172,7 +179,9 @@ function GalleryTab({
     productType: params.type || undefined,
     reviewStatus,
     sort: params.sort || "newest",
-    scenePlatesOnly: params.scene_plates === "true",
+    scenePlatesOnly: false,
+    excludeScenePlates: !includeTemplateAssets,
+    productId: params.product || undefined,
   });
 
   useEffect(() => {
@@ -181,10 +190,7 @@ function GalleryTab({
     }
   }, [meta, onMeta]);
 
-  const filteredItems = useMemo(() => {
-    if (!params.product) return items;
-    return items.filter((i) => i.product_id === params.product);
-  }, [items, params.product]);
+  const filteredItems = items;
 
   const [previewItem, setPreviewItem] = useState<CatalogItem | null>(null);
   const [previewIndex, setPreviewIndex] = useState(0);
@@ -206,9 +212,9 @@ function GalleryTab({
       product_type: params.type || null,
       review_status: reviewStatus || null,
       sort: params.sort || "newest",
-      scene_plates_only: params.scene_plates === "true",
+      scene_plates_only: false,
     }),
-    [params.collection, params.type, reviewStatus, params.sort, params.scene_plates]
+    [params.collection, params.type, reviewStatus, params.sort]
   );
 
   const filterSummary = useMemo(() => {
@@ -216,10 +222,16 @@ function GalleryTab({
     if (params.collection) parts.push(params.collection);
     if (params.type) parts.push(params.type);
     if (reviewStatus) parts.push(reviewStatus);
-    if (params.scene_plates === "true") parts.push("scene plates only");
+    if (includeTemplateAssets) parts.push("including template assets");
     if (params.product) parts.push(`product ${params.product}`);
     return parts.join(" · ");
-  }, [params.collection, params.type, reviewStatus, params.scene_plates, params.product]);
+  }, [
+    params.collection,
+    params.type,
+    reviewStatus,
+    includeTemplateAssets,
+    params.product,
+  ]);
 
   function downloadItem(item: CatalogItem, e?: React.MouseEvent) {
     e?.stopPropagation();
@@ -236,9 +248,19 @@ function GalleryTab({
       });
       upsertScenePlateJob(job);
       setDistillJobIds((prev) => ({ ...prev, [item.output_path]: job.id }));
-      toast.success("Distillation started");
+      const tmpl = item.template!;
+      const key = distillSceneKey;
+      toast.success(`Creating scene reference · ${key}`, {
+        description: `Will be added to ${tmpl} when the job finishes.`,
+        action: {
+          label: "Scene library",
+          onClick: () => {
+            window.location.href = `/templates/${tmpl}`;
+          },
+        },
+      });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Distillation failed");
+      toast.error(e instanceof Error ? e.message : "Could not create scene reference");
     } finally {
       setDistillingItems((prev) => ({ ...prev, [item.output_path]: false }));
       setDistillSceneKey("");
@@ -259,6 +281,7 @@ function GalleryTab({
       );
     }
     reload();
+    notifyPendingReviewChanged();
   }
 
   function openPreview(item: CatalogItem, index: number) {
@@ -297,7 +320,7 @@ function GalleryTab({
           const result = await api.setCatalogReview({
             output_path: item.output_path,
             status,
-            set_canonical: key === "a",
+            set_canonical: false,
             product_id: item.product_id,
             task_id: item.task_id ?? undefined,
           });
@@ -317,24 +340,45 @@ function GalleryTab({
   return (
     <div>
       {meta && (
-        <p className="text-muted-foreground mb-4 text-sm">
-          {meta.total} total · {meta.scene_plate_count} scene plates ·{" "}
-          {meta.canonical_count} canonical
-          {params.product && (
-            <>
-              {" · "}
-              Filtered to product <code>{params.product}</code>{" "}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-auto px-1"
-                onClick={() => setParams({ product: "" })}
-              >
-                Clear
-              </Button>
-            </>
+        <div className="outputs-summary mb-5">
+          <p className="text-muted-foreground m-0 text-sm">
+            <span>{meta.total} outputs</span>
+            <span className="outputs-summary-sep">·</span>
+            <span>{reviewCounts.approved ?? 0} kept</span>
+            <span className="outputs-summary-sep">·</span>
+            <span>{reviewCounts.pending ?? 0} pending</span>
+            <span className="outputs-summary-sep">·</span>
+            <span>{meta.canonical_count} heroes</span>
+            {params.product && (
+              <>
+                <span className="outputs-summary-sep">·</span>
+                <span>
+                  Product <code>{params.product}</code>{" "}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-auto px-1"
+                    onClick={() => setParams({ product: "" })}
+                  >
+                    Clear
+                  </Button>
+                </span>
+              </>
+            )}
+          </p>
+          {meta.canonical_count === 0 && (reviewCounts.approved ?? 0) > 0 && (
+            <p className="outputs-summary-hint m-0 text-xs text-muted-foreground">
+              Heroes are optional. Open a product to pick one from its kept shortlist.
+            </p>
           )}
-        </p>
+          <p className="outputs-summary-hint m-0 text-xs text-muted-foreground">
+            Gallery shows product outputs.{" "}
+            <Link to="/templates" className="underline">
+              Manage scene references on Templates
+            </Link>
+            .
+          </p>
+        </div>
       )}
 
       <div className="card filter-panel form-row mb-5 flex flex-wrap items-end gap-4">
@@ -378,33 +422,31 @@ function GalleryTab({
             </SelectContent>
           </Select>
         </div>
-        {tab === "gallery" && (
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium uppercase tracking-wide">Review</Label>
-            <Select
-              value={params.review || "all"}
-              onValueChange={(v) =>
-                setParams({ review: v === "all" ? "" : v, page: "1" })
-              }
-            >
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="pending">
-                  {reviewLabel("pending", reviewCounts.pending)}
-                </SelectItem>
-                <SelectItem value="approved">
-                  {reviewLabel("approved", reviewCounts.approved)}
-                </SelectItem>
-                <SelectItem value="rejected">
-                  {reviewLabel("rejected", reviewCounts.rejected)}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        )}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-medium uppercase tracking-wide">Status</Label>
+          <Select
+            value={params.review || "all"}
+            onValueChange={(v) =>
+              setParams({ review: v === "all" ? "" : v, page: "1" })
+            }
+          >
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="All" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="pending">
+                {reviewLabel("pending", reviewCounts.pending)}
+              </SelectItem>
+              <SelectItem value="approved">
+                {reviewLabel("approved", reviewCounts.approved)}
+              </SelectItem>
+              <SelectItem value="rejected">
+                {reviewLabel("rejected", reviewCounts.rejected)}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <div className="space-y-1.5">
           <Label className="text-xs font-medium uppercase tracking-wide">Sort</Label>
           <Select
@@ -421,19 +463,22 @@ function GalleryTab({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pb-2">
           <Checkbox
-            id="scene-plates-only"
-            checked={params.scene_plates === "true"}
+            id="include-template-assets"
+            checked={includeTemplateAssets}
             onCheckedChange={(checked) =>
-              setParams({ scene_plates: checked === true ? "true" : "", page: "1" })
+              setParams({
+                include_assets: checked === true ? "true" : "",
+                page: "1",
+              })
             }
           />
-          <Label htmlFor="scene-plates-only" className="cursor-pointer font-normal">
-            Scene plates only
+          <Label htmlFor="include-template-assets" className="cursor-pointer font-normal">
+            Include template assets
           </Label>
         </div>
-        <div className="ml-auto flex flex-wrap items-center gap-2">
+        <div className="ml-auto flex flex-wrap items-center gap-2 pb-0.5">
           <Button variant="secondary" size="sm" onClick={() => setExportDialogOpen(true)}>
             Export
           </Button>
@@ -471,18 +516,17 @@ function GalleryTab({
         <Loading variant="skeleton-grid" message="Loading outputs..." />
       ) : filteredItems.length === 0 ? (
         <EmptyState
-          title={tab === "pending" ? "No pending reviews" : "No catalog images"}
-          description={
-            tab === "pending"
-              ? "All caught up. Browse the gallery or start a new Studio batch."
-              : "No images match the current filters."
-          }
+          title="No product outputs"
+          description="Generate in Studio, then Keep or Reject here. Scene references live under Templates."
           action={
-            tab === "pending" ? (
-              <Button asChild variant="secondary">
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button asChild>
                 <Link to="/studio?tab=batch">Go to Studio</Link>
               </Button>
-            ) : undefined
+              <Button asChild variant="secondary">
+                <Link to="/templates">Manage scene library</Link>
+              </Button>
+            </div>
           }
         />
       ) : (
@@ -516,17 +560,20 @@ function GalleryTab({
                 }
                 footer={
                   <div className="mt-2 flex flex-wrap gap-1">
-                    {item.is_scene_plate && <Badge variant="secondary">scene plate</Badge>}
-                    {item.is_canonical && <Badge variant="default">canonical</Badge>}
+                    {item.is_canonical && <Badge variant="default">Hero</Badge>}
+                    {item.is_scene_plate ? (
+                      <Badge variant="outline">Scene reference</Badge>
+                    ) : (
+                      <Badge variant={reviewBadgeVariant(item.review_status)}>
+                        {reviewStatusLabel(item.review_status)}
+                      </Badge>
+                    )}
                     {item.product_type && (
                       <Badge variant="secondary">{item.product_type}</Badge>
                     )}
                     {item.collection && (
                       <Badge variant="secondary">{item.collection}</Badge>
                     )}
-                    <Badge variant={reviewBadgeVariant(item.review_status)}>
-                      {item.review_status ?? "pending"}
-                    </Badge>
                   </div>
                 }
                 checked={selectedPaths.has(item.output_path)}

@@ -16,6 +16,7 @@ export type ImageRole = "anchor" | "detail" | "analysis_only" | "archived";
 export type ProductStatus = "draft" | "ready" | "generated";
 export type ProductType =
   | "ring"
+  | "twin_rings"
   | "bracelet"
   | "earrings"
   | "necklace"
@@ -51,6 +52,9 @@ export interface TemplateSummary {
   aspect_ratio: string;
   style_ref_count: number;
   scene_ref_count: number;
+  preview_url?: string | null;
+  types_covered?: number;
+  types_missing?: number;
 }
 
 export interface TemplateStyleReferenceResult {
@@ -72,6 +76,7 @@ export type SceneRefProductType =
   | "default"
   | "bracelet"
   | "ring"
+  | "twin_rings"
   | "earrings"
   | "necklace"
   | "half_set"
@@ -87,6 +92,24 @@ export type JobStatus =
   | "failed";
 
 export type ReferenceMode = "none" | "job" | "product";
+export type GenerationModel = "nano-banana-2" | "gpt-image-2-image-to-image";
+
+export const GENERATION_MODELS: {
+  value: GenerationModel;
+  label: string;
+  hint: string;
+}[] = [
+  {
+    value: "nano-banana-2",
+    label: "Nano Banana 2",
+    hint: "Default catalog model — strong with product + scene refs",
+  },
+  {
+    value: "gpt-image-2-image-to-image",
+    label: "GPT Image 2",
+    hint: "Image-to-image; 4:5 templates may run at 1K",
+  },
+];
 
 export interface JobProductResult {
   product_id: string;
@@ -112,6 +135,7 @@ export interface Job {
   template: string;
   workflow: string | null;
   analyze: boolean;
+  model: GenerationModel;
   category: string;
   output_prefix: string;
   product_ids: string[];
@@ -486,6 +510,7 @@ export const api = {
     product_ids: string[];
     template?: string;
     analyze?: boolean;
+    model?: GenerationModel;
     output_prefix?: string;
     reference_mode?: ReferenceMode;
     selected_ref_url?: string | null;
@@ -533,6 +558,8 @@ export const api = {
     review_status?: string;
     sort?: string;
     scene_plates_only?: boolean;
+    exclude_scene_plates?: boolean;
+    product_id?: string;
   }) => {
     const q = new URLSearchParams();
     if (params?.page) q.set("page", String(params.page));
@@ -542,6 +569,8 @@ export const api = {
     if (params?.review_status) q.set("review_status", params.review_status);
     if (params?.sort) q.set("sort", params.sort);
     if (params?.scene_plates_only) q.set("scene_plates_only", "true");
+    if (params?.exclude_scene_plates) q.set("exclude_scene_plates", "true");
+    if (params?.product_id) q.set("product_id", params.product_id);
     const qs = q.toString();
     return request<CatalogListResponse>(`/catalog${qs ? `?${qs}` : ""}`);
   },
@@ -578,7 +607,10 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     }),
-  setCanonicalOutput: (body: { product_id: string; output_path: string }) =>
+  setCanonicalOutput: (body: {
+    product_id: string;
+    output_path: string | null;
+  }) =>
     request<CatalogReviewResult>("/catalog/review/set-canonical", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

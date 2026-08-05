@@ -7,7 +7,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# Container/orchestrator env must win over any .env baked into the image.
+load_dotenv(override=False)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_ROOT = Path(os.getenv("DATA_ROOT", str(PROJECT_ROOT)))

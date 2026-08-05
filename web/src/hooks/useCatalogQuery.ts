@@ -10,6 +10,7 @@ interface UseCatalogQueryOptions {
   reviewStatus?: string;
   sort?: string;
   scenePlatesOnly?: boolean;
+  excludeScenePlates?: boolean;
   productId?: string;
   enabled?: boolean;
 }
@@ -23,6 +24,8 @@ export function useCatalogQuery(options: UseCatalogQueryOptions) {
     reviewStatus,
     sort = "newest",
     scenePlatesOnly = false,
+    excludeScenePlates = false,
+    productId,
     enabled = true,
   } = options;
 
@@ -41,6 +44,8 @@ export function useCatalogQuery(options: UseCatalogQueryOptions) {
         review_status: reviewStatus || undefined,
         sort,
         scene_plates_only: scenePlatesOnly,
+        exclude_scene_plates: excludeScenePlates && !scenePlatesOnly,
+        product_id: productId || undefined,
       });
       setData(catalog);
     } catch (e) {
@@ -48,7 +53,18 @@ export function useCatalogQuery(options: UseCatalogQueryOptions) {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, collection, productType, reviewStatus, sort, scenePlatesOnly, enabled]);
+  }, [
+    page,
+    pageSize,
+    collection,
+    productType,
+    reviewStatus,
+    sort,
+    scenePlatesOnly,
+    excludeScenePlates,
+    productId,
+    enabled,
+  ]);
 
   useEffect(() => {
     reload().catch(() => undefined);

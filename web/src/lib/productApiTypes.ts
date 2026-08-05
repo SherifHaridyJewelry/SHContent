@@ -6,6 +6,8 @@ export interface ProductMeta {
   counts_by_type_ready: Record<string, number>;
   counts_by_type_generatable: Record<string, number>;
   total: number;
+  /** All product IDs — used for import ID suggestions (not just the current page). */
+  ids?: string[];
 }
 
 export interface ImportFolderInfo {

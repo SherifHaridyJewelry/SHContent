@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, Product, ProductType } from "../api";
 import CollectionPicker, { resolveCollectionValue } from "./CollectionPicker";
 import {
@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { typeLabel } from "../lib/productTypes"
+import { typeLabel, PRODUCT_TYPES } from "../lib/productTypes"
 
 const IMAGE_RE = /\.(jpe?g|png|webp|gif)$/i;
 
@@ -111,6 +111,19 @@ export default function BatchImport({
 
   const allFiles = useMemo(() => rows.flatMap((r) => r.files), [rows]);
 
+  const duplicateIds = useMemo(() => {
+    const taken = new Set(existingIds.map((id) => id.toLowerCase()));
+    const seen = new Set<string>();
+    const dups = new Set<string>();
+    for (const row of rows) {
+      const id = row.id.trim().toLowerCase();
+      if (!id) continue;
+      if (taken.has(id) || seen.has(id)) dups.add(row.id.trim());
+      seen.add(id);
+    }
+    return dups;
+  }, [rows, existingIds]);
+
   const handleFiles = useCallback(
     (fileList: FileList | null) => {
       if (!fileList?.length) return;
@@ -126,12 +139,19 @@ export default function BatchImport({
     );
   };
 
-  const rebuildPreview = () => {
+  const rebuildPreview = useCallback(() => {
     if (!allFiles.length) return;
     const dt = new DataTransfer();
     allFiles.forEach((f) => dt.items.add(f));
     setRows(buildPreviewRows([...dt.files], mode, productType, existingIds));
-  };
+  }, [allFiles, mode, productType, existingIds]);
+
+  useEffect(() => {
+    if (!rows.length) return;
+    rebuildPreview();
+    // Re-suggest IDs when type/mode/known IDs change; keep files.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when those inputs change
+  }, [mode, productType, existingIds]);
 
   async function submit() {
     const collection = resolveCollectionValue(collectionSelect, newCollection);
@@ -141,6 +161,12 @@ export default function BatchImport({
     }
     if (!rows.length) {
       onError("Add images first");
+      return;
+    }
+    if (duplicateIds.size) {
+      onError(
+        `Duplicate id: ${Array.from(duplicateIds).join("; Duplicate id: ")}. Click Refresh IDs or edit them.`
+      );
       return;
     }
 
@@ -197,11 +223,9 @@ export default function BatchImport({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {(["ring", "bracelet", "earrings", "necklace", "half_set", "full_set", "general"] as const).map(
-                (t) => (
-                  <SelectItem key={t} value={t}>{typeLabel(t)}</SelectItem>
-                )
-              )}
+              {PRODUCT_TYPES.map((t) => (
+                <SelectItem key={t} value={t}>{typeLabel(t)}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -294,7 +318,9 @@ export default function BatchImport({
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
+              {rows.map((row) => {
+                const isDup = duplicateIds.has(row.id.trim());
+                return (
                 <tr key={row.key}>
                   <td style={{ fontSize: "0.8rem" }}>{row.label}</td>
                   <td>{row.imageCount}</td>
@@ -302,8 +328,12 @@ export default function BatchImport({
                     <Input
                       value={row.id}
                       onChange={(e) => updateRow(row.key, "id", e.target.value)}
-                      className="w-full min-w-[100px]"
+                      className={`w-full min-w-[100px]${isDup ? " border-destructive" : ""}`}
+                      aria-invalid={isDup}
                     />
+                    {isDup && (
+                      <p className="m-0 mt-1 text-xs text-destructive">ID already used</p>
+                    )}
                   </td>
                   <td>
                     <Input
@@ -313,13 +343,19 @@ export default function BatchImport({
                     />
                   </td>
                 </tr>
-              ))}
+              );
+              })}
             </tbody>
           </table>
+          {duplicateIds.size > 0 && (
+            <p className="mt-2 text-sm text-destructive">
+              Fix duplicate IDs or click Refresh IDs before creating.
+            </p>
+          )}
           <Button
             type="button"
             className="mt-4"
-            disabled={submitting}
+            disabled={submitting || duplicateIds.size > 0}
             onClick={submit}
           >
             {submitting ? "Creating…" : `Create ${rows.length} product(s)`}

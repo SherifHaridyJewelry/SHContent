@@ -28,6 +28,9 @@ raw/*
 # Cursor IDE
 .cursor/plans/
 
+# Kilo Code plugin (local tooling only)
+.kilo/
+
 # Web frontend
 web/node_modules/
 web/dist/

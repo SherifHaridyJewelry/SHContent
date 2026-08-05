@@ -29,6 +29,8 @@ from naming import build_output_name
 from prompt_builder import build_prompt_json, resolve_template, load_json
 from vision_analyze import analyze_product, get_api_key
 from generate_kie import create_task, poll_task, download_image, log_task
+from generate_kie_gpt_image import build_payload as build_gpt_payload
+from kie_jobs import create_task as create_kie_task
 
 
 def upload_product_images(s3_client, r2_config: dict, image_paths: list[Path]) -> list[str]:
@@ -88,6 +90,7 @@ def process_single_product(
     product_type: str | None = None,
     job_ref_url: str | None = None,
     product_ref_url: str | None = None,
+    model: str = "nano-banana-2",
 ) -> dict:
     """Process one product through the full pipeline. Returns a result dict."""
     result = {
@@ -185,7 +188,12 @@ def process_single_product(
 
     # Step 4: Generate image
     _step("generating")
-    print("\n[4/4] Generating image via Nano Banana 2...")
+    model_label = (
+        "GPT Image 2"
+        if model == "gpt-image-2-image-to-image"
+        else "Nano Banana 2"
+    )
+    print(f"\n[4/4] Generating image via {model_label}...")
     fmt = prompt_json.get("api_parameters", {}).get("output_format", "jpg")
     image_path = PROJECT_ROOT / "images" / category / f"{output_name}.{fmt}"
     image_path.parent.mkdir(parents=True, exist_ok=True)
@@ -197,9 +205,15 @@ def process_single_product(
         resolution = None
         format = None
         google_search = False
+        model = None
 
     try:
-        task_id = create_task(api_key, prompt_for_api, MockArgs(), exit_on_error=False)
+        if model == "gpt-image-2-image-to-image":
+            MockArgs.model = "gpt-image-2-image-to-image"
+            payload = build_gpt_payload(prompt_for_api, MockArgs())
+            task_id = create_kie_task(api_key, payload, exit_on_error=False)
+        else:
+            task_id = create_task(api_key, prompt_for_api, MockArgs(), exit_on_error=False)
         print(f"  Task ID: {task_id}")
         result["task_id"] = task_id
         if on_task_created:
@@ -220,6 +234,7 @@ def process_single_product(
         log_entry = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "task_id": task_id,
+            "model": model,
             "prompt_file": str(prompt_path),
             "output_file": str(image_path),
             "aspect_ratio": prompt_json.get("api_parameters", {}).get("aspect_ratio", "auto"),

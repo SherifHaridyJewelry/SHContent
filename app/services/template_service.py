@@ -20,11 +20,36 @@ if str(SCRIPTS_DIR) not in sys.path:
 from r2_upload import get_r2_config, get_s3_client, upload_file_with_key  # noqa: E402
 
 
+_CORE_SCENE_TYPES = ("default", "ring", "twin_rings", "bracelet", "earrings", "necklace")
+
+
 def _count_scene_refs(data: dict) -> int:
     scene_refs = data.get("scene_references") or {}
     if not isinstance(scene_refs, dict):
         return 0
     return sum(len(v) for v in scene_refs.values() if isinstance(v, list))
+
+
+def _scene_preview_url(data: dict) -> str | None:
+    scene_refs = data.get("scene_references") or {}
+    if not isinstance(scene_refs, dict):
+        return None
+    for key in _CORE_SCENE_TYPES:
+        urls = scene_refs.get(key) or []
+        if isinstance(urls, list) and urls:
+            return str(urls[0])
+    for urls in scene_refs.values():
+        if isinstance(urls, list) and urls:
+            return str(urls[0])
+    return None
+
+
+def _scene_type_coverage(data: dict) -> tuple[int, int]:
+    scene_refs = data.get("scene_references") or {}
+    if not isinstance(scene_refs, dict):
+        return 0, len(_CORE_SCENE_TYPES)
+    covered = sum(1 for key in _CORE_SCENE_TYPES if scene_refs.get(key))
+    return covered, len(_CORE_SCENE_TYPES) - covered
 
 
 def list_templates() -> list[TemplateSummary]:
@@ -35,6 +60,7 @@ def list_templates() -> list[TemplateSummary]:
         data = json.loads(path.read_text(encoding="utf-8"))
         api = data.get("api_parameters", {})
         scene = data.get("scene", {})
+        covered, missing = _scene_type_coverage(data)
         results.append(
             TemplateSummary(
                 name=path.stem,
@@ -45,6 +71,9 @@ def list_templates() -> list[TemplateSummary]:
                 aspect_ratio=api.get("aspect_ratio", "4:5"),
                 style_ref_count=len(data.get("style_references", [])),
                 scene_ref_count=_count_scene_refs(data),
+                preview_url=_scene_preview_url(data),
+                types_covered=covered,
+                types_missing=missing,
             )
         )
     return results

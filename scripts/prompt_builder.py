@@ -26,14 +26,17 @@ TEMPLATES_DIR = PROJECT_ROOT / "templates"
 MAX_IMAGE_INPUT = 14
 
 SCALE_GUARD = (
-    "Place the product as a large hero subject in tight catalog framing. "
-    "Match the scene reference for background, surface, and lighting only — "
-    "do not shrink the product to match a small or distant display in the reference."
+    "Frame the jewelry as a large close-up hero: the product should fill roughly "
+    "60–75% of the frame height, tightly cropped with only a modest margin of "
+    "background. Camera is close to the subject — not a wide tabletop shot. "
+    "Match the scene reference for background color, surface texture, and lighting "
+    "only; do not copy a distant or miniature product scale from any reference image."
 )
 
 GENERIC_SUBJECT = (
-    "The jewelry piece shown in the reference images, placed as the hero subject, "
-    "with all original details, textures, and proportions faithfully preserved."
+    "The jewelry piece shown in the reference images, placed as a large close-up "
+    "hero subject filling most of the frame, with all original details, textures, "
+    "and proportions faithfully preserved."
 )
 
 FIDELITY_SUBJECT = (
@@ -269,8 +272,7 @@ def build_prompt_text(
         "Do not alter, simplify, or reinterpret the product design."
     )
 
-    if has_reference:
-        parts.append(SCALE_GUARD)
+    parts.append(SCALE_GUARD)
 
     return " ".join(parts)
 

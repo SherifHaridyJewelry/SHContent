@@ -11,6 +11,7 @@ import SelectionBar from "./SelectionBar";
 import { useSelectionSet } from "../hooks/useSelectionSet";
 import {
   nameFromFilename,
+  PRODUCT_TYPES,
   suggestName,
   suggestNextId,
   typeLabel,
@@ -219,17 +220,7 @@ export default function ImportDialog({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {(
-                          [
-                            "ring",
-                            "bracelet",
-                            "earrings",
-                            "necklace",
-                            "half_set",
-                            "full_set",
-                            "general",
-                          ] as const
-                        ).map((t) => (
+                        {PRODUCT_TYPES.map((t) => (
                           <SelectItem key={t} value={t}>
                             {typeLabel(t)}
                           </SelectItem>
@@ -315,17 +306,7 @@ export default function ImportDialog({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {(
-                      [
-                        "ring",
-                        "bracelet",
-                        "earrings",
-                        "necklace",
-                        "half_set",
-                        "full_set",
-                        "general",
-                      ] as const
-                    ).map((t) => (
+                    {PRODUCT_TYPES.map((t) => (
                       <SelectItem key={t} value={t}>
                         {typeLabel(t)}
                       </SelectItem>

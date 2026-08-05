@@ -14,12 +14,16 @@ import ImportDialog from "../components/ImportDialog";
 import PageHeader from "../components/PageHeader";
 import Pagination from "../components/Pagination";
 import ProductFilterBar from "../components/ProductFilterBar";
+import ProductHeroPicker from "../components/ProductHeroPicker";
+import SelectionBar from "../components/SelectionBar";
+import { useSelectionSet } from "../hooks/useSelectionSet";
 import { useUrlParams } from "../hooks/useUrlParams";
-import { typeLabel } from "../lib/productTypes";
+import { PRODUCT_TYPES, typeLabel } from "../lib/productTypes";
 import { selectableCardClass } from "../lib/selectionStyles";
 import { useGenerateStore } from "../stores/generateStore";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Loading } from "@/components/ui/Loading";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -41,6 +45,7 @@ const LIST_DEFAULTS = {
   type: "",
   collection: "",
   status: "",
+  product: "",
 };
 
 export default function Products() {
@@ -54,6 +59,12 @@ export default function Products() {
 
   const setSelectedProductIds = useGenerateStore((s) => s.setSelectedProductIds);
   const selectedProductIds = useGenerateStore((s) => s.selectedProductIds);
+  const {
+    selected: batchIds,
+    toggle: toggleBatchId,
+    toggleAll: toggleAllBatch,
+    clear: clearBatch,
+  } = useSelectionSet<string>();
 
   const [productData, setProductData] = useState<Awaited<
     ReturnType<typeof api.listProducts>
@@ -64,6 +75,7 @@ export default function Products() {
   const [orphans, setOrphans] = useState<ImportFolderInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Product | null>(null);
+  const [deepLinkTried, setDeepLinkTried] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [editForm, setEditForm] = useState({
     name: "",
@@ -78,10 +90,11 @@ export default function Products() {
   const collections = meta?.collections ?? [];
 
   const existingIds = useMemo(() => {
+    if (meta?.ids?.length) return meta.ids;
     const ids = products.map((p) => p.id);
     if (selected && !ids.includes(selected.id)) ids.push(selected.id);
     return ids;
-  }, [products, selected]);
+  }, [meta?.ids, products, selected]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -112,6 +125,21 @@ export default function Products() {
   }, [load]);
 
   useEffect(() => {
+    const id = params.product;
+    if (!id || deepLinkTried) return;
+    setDeepLinkTried(true);
+    const onPage = products.find((p) => p.id === id);
+    if (onPage) {
+      setSelected(onPage);
+      return;
+    }
+    api
+      .getProduct(id)
+      .then((p) => setSelected(p))
+      .catch(() => toast.error(`Product ${id} not found`));
+  }, [params.product, products, deepLinkTried]);
+
+  useEffect(() => {
     if (!selected) return;
     setEditForm({
       name: selected.name,
@@ -125,7 +153,15 @@ export default function Products() {
           ? selected.collection
           : "",
     });
+    if (params.product !== selected.id) {
+      setParams({ product: selected.id });
+    }
   }, [selected, collections]);
+
+  function closeDrawer() {
+    setSelected(null);
+    setParams({ product: "" });
+  }
 
   async function handleSaveProduct() {
     if (!selected) return;
@@ -192,12 +228,21 @@ export default function Products() {
   async function handleUpload(files: FileList | null) {
     if (!selected || !files?.length) return;
     try {
-      for (const file of Array.from(files)) {
-        await api.uploadImage(selected.id, file, "analysis_only");
+      const hasAnchor = selected.images.some((i) => i.role === "anchor");
+      const list = Array.from(files);
+      for (let i = 0; i < list.length; i++) {
+        const role: ImageRole =
+          !hasAnchor && i === 0 ? "anchor" : "analysis_only";
+        await api.uploadImage(selected.id, list[i], role);
       }
       const updated = await api.getProduct(selected.id);
       setSelected(updated);
       await load();
+      toast.success(
+        !hasAnchor
+          ? "Uploaded — first image set as anchor"
+          : `Uploaded ${list.length} image(s)`
+      );
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Upload failed");
     }
@@ -214,10 +259,6 @@ export default function Products() {
     }
   }
 
-  function anchorImage(product: Product) {
-    return product.images.find((i) => i.role === "anchor") ?? product.images[0];
-  }
-
   function readinessNote(product: Product): string {
     const anchors = product.images.filter((i) => i.role === "anchor");
     if (anchors.length === 1) {
@@ -229,19 +270,74 @@ export default function Products() {
     return "Draft — multiple anchors found. Keep only one anchor role.";
   }
 
+  const studioBatchIds = useMemo(
+    () => new Set(selectedProductIds),
+    [selectedProductIds]
+  );
+
+  function openStudioBatch() {
+    navigate("/studio?tab=batch");
+  }
+
   function addToStudioBatch(product: Product) {
+    if (studioBatchIds.has(product.id)) {
+      openStudioBatch();
+      return;
+    }
     const next = new Set(selectedProductIds);
     next.add(product.id);
     setSelectedProductIds(Array.from(next));
     toast.success(`Added ${product.name} to Studio batch`);
-    navigate("/studio?tab=batch");
+    openStudioBatch();
+  }
+
+  function addBatchToStudio() {
+    const ids = Array.from(batchIds);
+    if (!ids.length) return;
+    const already = ids.filter((id) => studioBatchIds.has(id));
+    const fresh = ids.filter((id) => !studioBatchIds.has(id));
+    if (fresh.length === 0) {
+      clearBatch();
+      openStudioBatch();
+      return;
+    }
+    const next = new Set(selectedProductIds);
+    for (const id of fresh) next.add(id);
+    setSelectedProductIds(Array.from(next));
+    clearBatch();
+    if (already.length > 0) {
+      toast.success(
+        `Added ${fresh.length} product(s) (${already.length} already in Studio batch)`
+      );
+    } else {
+      toast.success(`Added ${fresh.length} product(s) to Studio batch`);
+    }
+    openStudioBatch();
+  }
+
+  const batchAlreadyInStudio =
+    batchIds.size > 0 && Array.from(batchIds).every((id) => studioBatchIds.has(id));
+  const batchFreshCount = Array.from(batchIds).filter(
+    (id) => !studioBatchIds.has(id)
+  ).length;
+
+  const pageIds = useMemo(() => products.map((p) => p.id), [products]);
+
+  function cardThumb(product: Product): { path: string; alt: string } | null {
+    const anchor = product.images.find((i) => i.role === "anchor");
+    if (anchor) return { path: anchor.path, alt: `${product.name} anchor` };
+    if (product.last_output)
+      return { path: product.last_output, alt: `${product.name} latest` };
+    if (product.images[0])
+      return { path: product.images[0].path, alt: product.name };
+    return null;
   }
 
   return (
     <div className={selected ? "with-detail-drawer" : undefined}>
       <PageHeader
         title="Products"
-        description="Import jewelry SKUs, assign one anchor photo per product. Status becomes ready automatically when an anchor is set."
+        description="Import SKUs, set one anchor photo, then send ready products to Studio. Pick a hero later from kept outputs."
         actions={
           <Button onClick={() => setImportOpen(true)}>
             Import
@@ -276,12 +372,27 @@ export default function Products() {
         typeTotal={meta?.total}
       />
 
+      <SelectionBar
+        count={batchIds.size}
+        onClearAll={clearBatch}
+        onSelectAllOnPage={() => toggleAllBatch(pageIds)}
+        actions={
+          <Button size="sm" disabled={!batchIds.size} onClick={addBatchToStudio}>
+            {batchAlreadyInStudio
+              ? "Open in Studio"
+              : batchFreshCount < batchIds.size
+                ? `Add ${batchFreshCount} more to Studio`
+                : `Add ${batchIds.size || ""} to Studio`}
+          </Button>
+        }
+      />
+
       {loading ? (
         <Loading variant="skeleton-grid" message="Loading products..." />
       ) : products.length === 0 ? (
         <EmptyState
           title="No products match filters"
-          description="Import photos or create a SKU to start the catalog workflow."
+          description="Import photos or create a SKU, set an anchor, then generate in Studio."
           icon={<Image className="h-16 w-16" />}
           action={
             <Button onClick={() => setImportOpen(true)}>Import products</Button>
@@ -302,30 +413,30 @@ export default function Products() {
           )}
           <div className="grid mt-3">
             {products.map((p) => {
-              const thumb = anchorImage(p);
+              const thumb = cardThumb(p);
+              const checked = batchIds.has(p.id);
+              const generatable = p.status === "ready" || p.status === "generated";
               return (
                 <div
                   key={p.id}
                   className={selectableCardClass(
-                    selected?.id === p.id,
-                    "card cursor-pointer"
+                    selected?.id === p.id || checked,
+                    "card cursor-pointer relative"
                   )}
                   onClick={() => setSelected(p)}
                 >
+                  <div
+                    className="absolute left-2 top-2 z-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Checkbox
+                      checked={checked}
+                      onCheckedChange={() => toggleBatchId(p.id)}
+                      aria-label={`Select ${p.name}`}
+                    />
+                  </div>
                   {thumb ? (
-                    <img className="thumb" src={assetUrl(thumb.path)} alt={p.name} />
-                  ) : p.approved_output ? (
-                    <img
-                      className="thumb"
-                      src={assetUrl(p.approved_output)}
-                      alt={`${p.name} canonical`}
-                    />
-                  ) : p.last_output ? (
-                    <img
-                      className="thumb"
-                      src={assetUrl(p.last_output)}
-                      alt={`${p.name} latest`}
-                    />
+                    <img className="thumb" src={assetUrl(thumb.path)} alt={thumb.alt} />
                   ) : (
                     <div className="thumb" />
                   )}
@@ -338,21 +449,18 @@ export default function Products() {
                     <Badge variant={p.status === "ready" ? "default" : "secondary"}>
                       {p.status}
                     </Badge>
-                    {p.approved_output && <Badge variant="default">canonical</Badge>}
-                    {p.review_status && (
-                      <Badge
-                        variant={
-                          p.review_status === "approved"
-                            ? "default"
-                            : p.review_status === "rejected"
-                              ? "destructive"
-                              : "secondary"
-                        }
-                      >
-                        {p.review_status}
-                      </Badge>
+                    {p.approved_output ? (
+                      <Badge variant="default">Hero</Badge>
+                    ) : (
+                      <Badge variant="outline">No hero</Badge>
                     )}
                   </div>
+                  {generatable && (
+                    <p className="mt-2 mb-0 text-xs text-muted-foreground">
+                      Ready for Studio
+                      {!p.approved_output ? " · pick hero when you have kept shots" : ""}
+                    </p>
+                  )}
                 </div>
               );
             })}
@@ -386,7 +494,7 @@ export default function Products() {
               size="sm"
               className="h-8 w-8 p-0"
               aria-label="Close"
-              onClick={() => setSelected(null)}
+              onClick={closeDrawer}
             >
               <X className="h-4 w-4" />
             </Button>
@@ -396,8 +504,19 @@ export default function Products() {
 
           <div className="mb-4 flex flex-wrap gap-2">
             {(selected.status === "ready" || selected.status === "generated") && (
-              <Button size="sm" onClick={() => addToStudioBatch(selected)}>
-                Add to Studio batch
+              <Button
+                size="sm"
+                variant={studioBatchIds.has(selected.id) ? "secondary" : "default"}
+                onClick={() => addToStudioBatch(selected)}
+              >
+                {studioBatchIds.has(selected.id) ? "Open in Studio" : "Add to Studio"}
+              </Button>
+            )}
+            {!selected.approved_output && (
+              <Button asChild size="sm" variant="secondary">
+                <Link to={`/outputs?tab=gallery&product=${selected.id}&review=approved`}>
+                  Pick hero from kept
+                </Link>
               </Button>
             )}
             <Button asChild size="sm" variant="secondary">
@@ -416,6 +535,108 @@ export default function Products() {
               Delete
             </Button>
           </div>
+
+          <div className="card mb-4 p-4">
+            <h4 className="mb-3 text-sm font-medium">Photos</h4>
+            <div
+              className="dropzone mb-3"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                handleUpload(e.dataTransfer.files).catch(() => undefined);
+              }}
+              onClick={() => document.getElementById("product-file-input")?.click()}
+            >
+              <Upload className="mx-auto mb-2 h-5 w-5 text-muted-foreground" />
+              <p className="m-0 text-sm text-muted-foreground">
+                Drop images here — first upload becomes the anchor if none is set
+              </p>
+              <input
+                id="product-file-input"
+                type="file"
+                accept="image/*"
+                multiple
+                hidden
+                onChange={(e) => handleUpload(e.target.files).catch(() => undefined)}
+              />
+            </div>
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>File</th>
+                    <th>Role</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selected.images.map((img) => (
+                    <tr key={img.filename}>
+                      <td>
+                        <img
+                          src={assetUrl(img.path)}
+                          alt=""
+                          style={{
+                            width: 48,
+                            height: 48,
+                            objectFit: "cover",
+                            borderRadius: 4,
+                          }}
+                        />
+                      </td>
+                      <td className="text-xs">{img.filename}</td>
+                      <td>
+                        <Select
+                          value={img.role}
+                          onValueChange={(v) =>
+                            handleRoleChange(img.filename, v as ImageRole)
+                          }
+                        >
+                          <SelectTrigger className="w-[130px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {ROLES.map((r) => (
+                              <SelectItem key={r} value={r}>
+                                {r}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </td>
+                      <td>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          aria-label={`Delete ${img.filename}`}
+                          onClick={() => handleDeleteImage(img.filename)}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <ProductHeroPicker
+            product={selected}
+            onProductUpdated={(p) => {
+              setSelected(p);
+              setProductData((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      items: prev.items.map((item) => (item.id === p.id ? p : item)),
+                    }
+                  : prev
+              );
+            }}
+          />
 
           <div className="card mb-4 bg-secondary/30 p-4">
             <h4 className="mb-3 text-sm font-medium">Edit product</h4>
@@ -439,17 +660,7 @@ export default function Products() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {(
-                      [
-                        "ring",
-                        "bracelet",
-                        "earrings",
-                        "necklace",
-                        "half_set",
-                        "full_set",
-                        "general",
-                      ] as const
-                    ).map((t) => (
+                    {PRODUCT_TYPES.map((t) => (
                       <SelectItem key={t} value={t}>
                         {typeLabel(t)}
                       </SelectItem>
@@ -470,89 +681,6 @@ export default function Products() {
                 {saving ? "Saving…" : "Save changes"}
               </Button>
             </div>
-          </div>
-
-          <div
-            className="dropzone"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              handleUpload(e.dataTransfer.files);
-            }}
-            onClick={() => document.getElementById("product-file-input")?.click()}
-          >
-            <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground/40" />
-            <span>Drop images here or click to upload</span>
-            <input
-              id="product-file-input"
-              type="file"
-              accept="image/*"
-              multiple
-              hidden
-              onChange={(e) => handleUpload(e.target.files)}
-            />
-          </div>
-
-          <div className="table-scroll mt-4">
-            <table>
-              <thead>
-                <tr>
-                  <th>Preview</th>
-                  <th>File</th>
-                  <th>Role</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {selected.images.map((img) => (
-                  <tr key={img.filename}>
-                    <td>
-                      <img
-                        src={assetUrl(img.path)}
-                        alt=""
-                        style={{
-                          width: 48,
-                          height: 48,
-                          objectFit: "cover",
-                          borderRadius: 4,
-                        }}
-                      />
-                    </td>
-                    <td className="text-xs">{img.filename}</td>
-                    <td>
-                      <Select
-                        value={img.role}
-                        onValueChange={(v) =>
-                          handleRoleChange(img.filename, v as ImageRole)
-                        }
-                      >
-                        <SelectTrigger className="w-[130px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ROLES.map((r) => (
-                            <SelectItem key={r} value={r}>
-                              {r}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </td>
-                    <td>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        aria-label={`Delete ${img.filename}`}
-                        onClick={() => handleDeleteImage(img.filename)}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </aside>
       )}

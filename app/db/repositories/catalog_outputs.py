@@ -92,6 +92,7 @@ class CatalogOutputRepository:
         product_type: str | None = None,
         review_status: str | None = None,
         scene_plates_only: bool = False,
+        product_id: str | None = None,
     ):
         query = (
             select(
@@ -109,6 +110,8 @@ class CatalogOutputRepository:
             query = query.where(CatalogOutputRow.collection == collection)
         if product_type:
             query = query.where(CatalogOutputRow.product_type == product_type)
+        if product_id:
+            query = query.where(CatalogOutputRow.product_id == product_id)
         if review_status == "pending":
             query = query.where(
                 or_(CatalogReviewRow.status.is_(None), CatalogReviewRow.status == "")
@@ -128,6 +131,8 @@ class CatalogOutputRepository:
         product_type: str | None = None,
         review_status: str | None = None,
         scene_plates_only: bool = False,
+        exclude_scene_plates: bool = False,
+        product_id: str | None = None,
         sort: str = "newest",
     ) -> tuple[list[tuple[CatalogOutputRow, str | None, str | None]], int]:
         query = self._base_query(
@@ -135,7 +140,10 @@ class CatalogOutputRepository:
             product_type=product_type,
             review_status=review_status,
             scene_plates_only=scene_plates_only,
+            product_id=product_id,
         )
+        if exclude_scene_plates and not scene_plates_only:
+            query = query.where(CatalogOutputRow.is_scene_plate.is_(False))
         count_query = select(func.count()).select_from(query.subquery())
         total = self.session.scalar(count_query) or 0
 
@@ -166,12 +174,14 @@ class CatalogOutputRepository:
         product_type: str | None = None,
         review_status: str | None = None,
         scene_plates_only: bool = False,
+        product_id: str | None = None,
     ) -> dict:
         query = self._base_query(
             collection=collection,
             product_type=product_type,
             review_status=review_status,
             scene_plates_only=scene_plates_only,
+            product_id=product_id,
         )
         subq = query.subquery()
         total = self.session.scalar(select(func.count()).select_from(subq)) or 0
@@ -202,7 +212,14 @@ class CatalogOutputRepository:
             .where(ProductRow.approved_output == CatalogOutputRow.output_path)
         ) or 0
 
+        # Review counts follow plate scope so Gallery Status matches the list.
+        # Default (product review): exclude scene plates.
+        # Scene-plates-only: count among scene plates.
         review_counts = {"pending": 0, "approved": 0, "rejected": 0}
+        if scene_plates_only:
+            plate_scope = CatalogOutputRow.is_scene_plate.is_(True)
+        else:
+            plate_scope = CatalogOutputRow.is_scene_plate.is_(False)
         all_rows = self.session.execute(
             select(CatalogReviewRow.status, func.count())
             .select_from(CatalogOutputRow)
@@ -210,6 +227,7 @@ class CatalogOutputRepository:
                 CatalogReviewRow,
                 CatalogReviewRow.output_path == CatalogOutputRow.output_path,
             )
+            .where(plate_scope)
             .group_by(CatalogReviewRow.status)
         ).all()
         pending = self.session.scalar(
@@ -219,7 +237,10 @@ class CatalogOutputRepository:
                 CatalogReviewRow,
                 CatalogReviewRow.output_path == CatalogOutputRow.output_path,
             )
-            .where(or_(CatalogReviewRow.status.is_(None), CatalogReviewRow.status == ""))
+            .where(
+                plate_scope,
+                or_(CatalogReviewRow.status.is_(None), CatalogReviewRow.status == ""),
+            )
         ) or 0
         review_counts["pending"] = pending
         for status, count in all_rows:

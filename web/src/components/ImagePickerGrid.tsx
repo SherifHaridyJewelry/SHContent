@@ -66,7 +66,7 @@ export default function ImagePickerGrid({
             imageAlt={item.output_label ?? item.product_name ?? item.output_path}
             label={
               <span className="text-xs">
-                {item.is_scene_plate ? "scene plate" : item.product_id ?? item.product_name}
+                {item.is_scene_plate ? "scene ref" : item.product_id ?? item.product_name}
               </span>
             }
             checked={selected.has(item.output_path)}
