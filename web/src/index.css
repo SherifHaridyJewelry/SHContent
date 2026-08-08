@@ -1895,17 +1895,31 @@ code.output-link-value {
     min-height: 2.5rem;
   }
 
-  /* Dialogs host their own tabs — avoid negative page margins inside modals */
+  /* Keep modals inside the viewport even when content has large min-widths */
+  [role="dialog"] {
+    width: calc(100vw - 1.5rem) !important;
+    max-width: calc(100vw - 1.5rem) !important;
+  }
+
   [role="dialog"] .studio-tabs,
   [role="dialog"] .type-tabs {
     margin-inline: 0;
     padding-inline: 0;
+    max-width: 100%;
+    min-width: 0;
     mask-image: linear-gradient(
       to right,
       #000 0,
       #000 calc(100% - 1.25rem),
       transparent 100%
     );
+  }
+
+  [role="dialog"] .collection-picker,
+  [role="dialog"] .batch-mode-toggle,
+  [role="dialog"] .form-row {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .studio-run-row {

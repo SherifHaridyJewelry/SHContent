@@ -152,7 +152,7 @@ export default function ImportDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+      <DialogContent className="max-h-[min(90vh,calc(100dvh-1.5rem))] w-[calc(100vw-1.5rem)] max-w-3xl min-w-0 overflow-x-hidden overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Import products</DialogTitle>
           <DialogDescription>
