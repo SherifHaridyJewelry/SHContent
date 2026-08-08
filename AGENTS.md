@@ -8,8 +8,16 @@ See `README.md` and `PIPELINE.md` in this repo.
 
 ## Production
 
+<<<<<<< HEAD
 - **URL:** https://workflow.sherifharidyjewelry.com (DNS ready; Traefik routing TBD)
 - **VPS:** `/opt/shcontent` · **Runtime:** `systemctl shcontent-api`
+=======
+- **URL:** https://workflow.sherifharidyjewelry.com
+- **Health:** `GET /api/health`
+- **VPS:** `/opt/shcontent` · secrets in `/etc/shcontent/.env`
+- **Compose project:** `shcontent` (containers `shcontent-api-1`, etc.)
+- **Database:** Postgres via Docker Compose (same pattern as SHFlow); `POSTGRES_PASSWORD` in `/etc/shcontent/.env`
+>>>>>>> cursor/mobile-friendly-ui-eec2
 
 ## Cursor rules
 

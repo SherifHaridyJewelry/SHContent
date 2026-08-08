@@ -1,0 +1,21 @@
+{
+  "prompt": "Square Facebook ad creative for investment-grade silver ingots. Three rectangular silver bars from the reference images placed in a confident triangular composition on brushed dark graphite metal surface — Egypt in all languages 100g bar at front center, Mother in all languages 100g bar behind left, BTC 999 100g bar behind right. Every engraving, finish contrast between polished face and matte border, and exact product silhouette must match references with no redesign. Shot 50mm lens f/9 ISO 100, even professional studio lighting suggesting trust and stability. Subtle reflection on graphite surface. Generous clean margin along top edge for ad copy overlay. No text, no percentage claims, no watermarks in the generated image. High-end bullion dealer aesthetic suitable for Bullion Trading Center Meta campaigns in Egypt market.",
+  "negative_prompt": "text, typography, SALE, percent off, watermarks, stock photo feel, wrong products, invented engravings, plastic metal, cartoon, illustration, gold bars only, copper, cheap props, hands, people, crypto coins, bitcoin logo not on bar, oversharpened halos, lens flare abuse",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407351_es999ixegalx100.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407354_es999ixmoalx100.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407353_es999ixrbtcx100.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "1:1",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "trust investment product ad, square feed",
+    "lighting": "balanced studio, low drama",
+    "camera_angle": "top-down 35 degrees",
+    "depth_of_field": "deep focus, all products sharp",
+    "quality": "ultra_high"
+  }
+}

@@ -30,9 +30,65 @@ cp .env.example .env
 
 Edit `.env` and replace `your_api_key_here` with your actual key.
 
+## Jewelry Workflow App (local)
+
+Local web UI for managing jewelry product photos, running the catalog pipeline, and reviewing outputs.
+
+### Start the API
+
+```bash
+source ~/.venvs/shcontent/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+### Start the UI
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). The Vite dev server proxies `/api` to port 8000.
+
+### Product folder layout
+
+Raw photos live under `raw/jewelry/<product_id>/`. The app stores metadata in `data/jewelry_products.json`.
+
+Per product, assign image roles:
+
+| Role | Used for |
+|------|----------|
+| `anchor` | Primary reference in generation (exactly one required) |
+| `detail` | Optional second reference for stones/clasp detail |
+| `analysis_only` | Gemini vision analysis only, not sent to image generator |
+| `archived` | Ignored |
+
+A product is **ready** when it has exactly one anchor image.
+
+### Workflow config
+
+Default workflow: [`workflows/jewelry_catalog.json`](workflows/jewelry_catalog.json)  
+Default template: [`templates/jewelry_catalog_4x5.json`](templates/jewelry_catalog_4x5.json)  
+Output: `images/jewelry/catalog_<product_id>.jpg` at 4:5, 2K.
+
+CLI batch (still supported):
+
+```bash
+python scripts/product_pipeline.py \
+  --batch-dir raw/jewelry/ \
+  -t jewelry_catalog_4x5 \
+  --output-prefix catalog \
+  --category jewelry \
+  --analyze
+```
+
 ## Project Structure
 
 ```
+app/                FastAPI jewelry workflow app
+web/                React + Vite frontend
 scripts/            Python scripts for image generation and management
   generate_kie.py     Create task, poll for result, download image
   get_kie_image.py    Fetch image for an existing task ID

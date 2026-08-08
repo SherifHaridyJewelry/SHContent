@@ -1,0 +1,20 @@
+{
+  "model": "gpt-image-2-image-to-image",
+  "prompt": "Full silver bars catalog on navy: every cast bar from references in one frame, weight-accurate relative sizing (5kg mega largest, then 1kg, 500g, 250g), organized left-to-right descending weight, shared baseline. Background: deep midnight navy blue matte seamless studio backdrop \u2014 strong color contrast against cool reflective silver so products pop in a Facebook feed thumbnail. Lighting: even balanced studio lighting with large softboxes camera-left and camera-right, catalog clarity, accurate metal speculars, soft contact shadows, no harsh vignette. Square 1:1 Facebook ad product photo. Preserve every engraving, logo, and product silhouette exactly from reference images \u2014 no redesign. Generous clean margin along top edge for Meta ad copy. CRITICAL: no text overlays, slogans, watermarks, or typography except engravings on the metal.",
+  "negative_prompt": "text overlays, SALE, watermarks, wrong products, invented engravings, plastic metal, cartoon render, flat grey background matching silver, low contrast, muddy lighting, hands, people, cluttered props, gold-only scene, oversharpened halos",
+  "input_urls": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411309_es999bxxbar5000.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411302_es999bxsrar1000.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411305_es999bxsrarx500.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411307_es999bxsrarx250.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "1:1",
+    "resolution": "2K"
+  },
+  "settings": {
+    "workflow": "btc_catalog_creatives",
+    "variation_id": "collection_bars_all",
+    "label": "Bars category \u2014 full range"
+  }
+}

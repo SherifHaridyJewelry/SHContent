@@ -1,0 +1,61 @@
+{
+  "prompt": "Catalog grid on navy: 14 round silver coins from references in neat rows, scale diameter by weight (8g/10g smallest, 50g largest), preserve each relief design exactly. Background: deep midnight navy blue matte seamless studio backdrop \u2014 strong color contrast against cool reflective silver so products pop in a Facebook feed thumbnail. Lighting: even balanced studio lighting with large softboxes camera-left and camera-right, catalog clarity, accurate metal speculars, soft contact shadows, no harsh vignette. Square 1:1 Facebook ad product photo. Preserve every engraving, logo, and product silhouette exactly from reference images \u2014 no redesign. Generous clean margin along top edge for Meta ad copy. CRITICAL: no text overlays, slogans, watermarks, or typography except engravings on the metal.",
+  "negative_prompt": "text overlays, SALE, watermarks, wrong products, invented engravings, plastic metal, cartoon render, flat grey background matching silver, low contrast, muddy lighting, hands, people, cluttered props, gold-only scene, oversharpened halos",
+  "input_urls": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413529_es999pxwolvxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413532_es999pxxhdlxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413535_es999pxddplxxx8.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413536_es999pxdondxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413538_es999pxdasdxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413541_es999pxirmnxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413543_es999pxkulkxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413546_es999pxmicmxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413550_es999pxminmxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413553_es999pxmrscxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413556_es999pxspmnxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413559_es999pxthorxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413562_es999pxwolvxxx8.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413565_es999pxxhdlxx50.png"
+  ],
+  "image_urls": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413529_es999pxwolvxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413532_es999pxxhdlxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413535_es999pxddplxxx8.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413536_es999pxdondxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413538_es999pxdasdxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413541_es999pxirmnxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413543_es999pxkulkxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413546_es999pxmicmxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413550_es999pxminmxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413553_es999pxmrscxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413556_es999pxspmnxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413559_es999pxthorxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413562_es999pxwolvxxx8.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413565_es999pxxhdlxx50.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "1:1",
+    "resolution": "2K"
+  },
+  "settings": {
+    "workflow": "btc_coins_nano",
+    "variation_id": "collection_coins_2",
+    "label": "Coins catalog part 2/2 (Nano Banana)"
+  },
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413529_es999pxwolvxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413532_es999pxxhdlxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413535_es999pxddplxxx8.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413536_es999pxdondxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413538_es999pxdasdxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413541_es999pxirmnxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413543_es999pxkulkxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413546_es999pxmicmxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413550_es999pxminmxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413553_es999pxmrscxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413556_es999pxspmnxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413559_es999pxthorxx50.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413562_es999pxwolvxxx8.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779413565_es999pxxhdlxx50.png"
+  ]
+}

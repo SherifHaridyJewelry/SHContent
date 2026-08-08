@@ -1,0 +1,45 @@
+{
+  "template_name": "Jewelry Eggplant 4x5",
+  "category": "jewelry",
+  "product_type": "general_jewelry",
+  "scene": {
+    "surface": "Warm cream linen-textured jewelry display cushion, matching the beige display stands used in the shop",
+    "background": "Deep eggplant matte background with a subtle luxury gradient, rich aubergine tone inspired by the shop stands, no green cast",
+    "props": "none",
+    "arrangement": "Large close-up hero, centered, filling most of the frame with only a modest margin of background; for sets, group pieces tightly as one cohesive hero cluster — avoid wide empty tabletop framing"
+  },
+  "camera": {
+    "focal_length": "100mm macro lens, close working distance",
+    "aperture": "f/2.8 to f/4.0",
+    "iso": "100",
+    "lens_behavior": "Tight catalog crop; product occupies roughly 60–75% of frame height; shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture and gemstones",
+    "shooting_angle": "Eye-level close-up, straight-on or slight three-quarter perspective suited to the product type; camera pulled in so the jewelry dominates the frame"
+  },
+  "lighting": {
+    "setup": "Large diffused softbox positioned at 45-degrees from camera-right; controlled white bounce card at camera-left for gentle fill; overhead silk for soft diffusion; background kept darker than the product for premium contrast",
+    "quality": "Soft, controlled, high-end jewelry lighting with crisp gemstone sparkle, polished metal highlights, and gentle shadow separation from the eggplant background"
+  },
+  "style": "Minimalist luxury jewelry hero photography, beige and eggplant brand palette, high-end editorial studio product photography",
+  "quality_directives": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional neutral color grading, realistic micro-reflections on metal surfaces, tight close-up catalog composition with the product large in frame, rich eggplant brand background, premium contrast suitable for social media hero images",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, cluttered background, lens flare, dust on lens, hands, model, packaging, price tag, paper tag, product tag, hang tag, label, sticker, barcode, green background, sage background, wide shot, distant product, tiny subject, product too small in frame, excessive negative space, far away tabletop view, miniature jewelry in large empty scene",
+  "style_references": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/outputs/jewelry/catalog_bracelet03_eggplant_4x5_9817cb06.jpg"
+  ],
+  "scene_references": {
+    "default": [],
+    "bracelet": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg"
+    ],
+    "ring": [],
+    "necklace": [],
+    "earrings": [],
+    "full_set": [
+      "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_full_set03_eggplant_4x5_b52c119a.jpg"
+    ]
+  },
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  }
+}

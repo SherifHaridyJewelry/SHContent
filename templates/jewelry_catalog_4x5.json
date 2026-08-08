@@ -1,0 +1,35 @@
+{
+  "template_name": "Jewelry Catalog 4x5",
+  "category": "jewelry",
+  "product_type": "general_jewelry",
+  "scene": {
+    "surface": "Cream-colored linen-textured jewelry display surface or neutral bust appropriate to the product type",
+    "background": "Flat, muted sage green matte background with soft gradient",
+    "props": "none",
+    "arrangement": "Large close-up hero, centered, filling most of the frame with only a modest margin of background; for sets, group pieces tightly as one cohesive hero cluster — avoid wide empty tabletop framing"
+  },
+  "camera": {
+    "focal_length": "100mm macro lens, close working distance",
+    "aperture": "f/2.8 to f/4.0",
+    "iso": "100",
+    "lens_behavior": "Tight catalog crop; product occupies roughly 60–75% of frame height; shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture and gemstones",
+    "shooting_angle": "Eye-level close-up, straight-on or slight three-quarter perspective suited to the product type; camera pulled in so the jewelry dominates the frame"
+  },
+  "lighting": {
+    "setup": "Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion",
+    "quality": "Soft, wrap-around light with gentle shadow transitions; clean, bright highlights to define metallic edges and surface sheen"
+  },
+  "style": "Minimalist editorial catalog, high-end lifestyle studio photography",
+  "quality_directives": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional color grading, realistic micro-reflections on metal surfaces, tight close-up catalog composition with the product large in frame, consistent brand palette across all product types",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, cluttered background, lens flare, dust on lens, hands, model, packaging, price tag, paper tag, product tag, hang tag, label, sticker, barcode, wide shot, distant product, tiny subject, product too small in frame, excessive negative space, far away tabletop view, miniature jewelry in large empty scene",
+  "style_references": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp01.jpg",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp02.jpg"
+  ],
+  "scene_references": {},
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  }
+}

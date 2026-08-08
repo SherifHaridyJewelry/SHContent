@@ -1,0 +1,19 @@
+{
+  "prompt": "Product photography in the style of Minimalist luxury jewelry catalog, warm beige brand palette, high-end studio product photography. Hero subject: The jewelry piece shown in the reference images, placed as the hero subject, with all original details, textures, and proportions faithfully preserved. The product is placed on Warm cream linen-textured jewelry display cushion, matching the beige display stands used in the shop, with Single hero product centered with balanced negative space; for sets, arranged as a cohesive group with clear hierarchy. Background: Soft warm beige matte background, tonal sand and champagne-beige gradient, no green cast, elegant and clean. Shot with a 85mm or 100mm macro lens lens, f/2.8 to f/4.0, ISO 100. Shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture and gemstones. Camera angle: Eye-level, straight-on or slight three-quarter perspective suited to the product type. Lighting: Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion. Soft, warm, wrap-around light with gentle shadow transitions; clean bright highlights to define metallic edges without harsh glare. Extreme detail on fabric weave and metal grain, no visible digital noise, professional warm-neutral color grading, realistic micro-reflections on metal surfaces, clean minimalist composition, consistent beige brand palette across all product types Reproduce the product from the reference images with exact fidelity -- preserve every detail of shape, texture, material finish, and construction. Do not alter, simplify, or reinterpret the product design.",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, cluttered background, lens flare, dust on lens, hands, model, packaging, green background, sage background",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1782486461_catalog_ring01.jpg"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "Minimalist luxury jewelry catalog, warm beige brand palette, high-end studio product photography",
+    "lighting": "Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion",
+    "camera_angle": "Eye-level, straight-on or slight three-quarter perspective suited to the product type",
+    "depth_of_field": "Shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture and gemstones",
+    "quality": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional warm-neutral color grading, realistic micro-reflections on metal surfaces, clean minimalist composition, consistent beige brand palette across all product types"
+  }
+}

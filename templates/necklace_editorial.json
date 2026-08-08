@@ -1,0 +1,34 @@
+{
+  "template_name": "Necklace Editorial",
+  "category": "jewelry",
+  "product_type": "necklace",
+  "scene": {
+    "surface": "Cream-colored linen-textured jewelry bust",
+    "background": "Flat, muted sage green matte background with soft gradient",
+    "props": "none",
+    "arrangement": "Centrally positioned on the bust, following the natural curve of the neck, layered with appropriate spacing"
+  },
+  "camera": {
+    "focal_length": "85mm or 100mm macro lens",
+    "aperture": "f/2.8 to f/4.0",
+    "iso": "100",
+    "lens_behavior": "Shallow depth of field with soft fall-off; creamy background bokeh; sharp focus on the center-front metallic texture",
+    "shooting_angle": "Eye-level, varying between straight-on and a slight three-quarter perspective"
+  },
+  "lighting": {
+    "setup": "Large diffused softbox positioned at 45-degrees from camera-right; white bounce card at camera-left for soft fill; overhead silk for general diffusion",
+    "quality": "Soft, wrap-around light with gentle shadow transitions; clean, bright highlights to define metallic edges and surface sheen"
+  },
+  "style": "Minimalist editorial catalog, high-end lifestyle studio photography",
+  "quality_directives": "Extreme detail on fabric weave and metal grain, no visible digital noise, professional color grading, realistic micro-reflections on metal surfaces, clean minimalist composition",
+  "negative_prompt": "cartoon, illustration, 3D render, CGI, plastic look, oversaturated, blurry product, watermark, text overlay, harsh shadows, specular highlights, cluttered background, lens flare, dust on lens, price tag, paper tag, product tag, hang tag, label, sticker, barcode",
+  "style_references": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp01.jpg",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/1773699099_necklace_insp02.jpg"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  }
+}

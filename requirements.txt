@@ -1,2 +1,13 @@
 requests
 python-dotenv
+boto3
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+sqlalchemy>=2.0
+alembic
+psycopg2-binary
+ruff
+pytest
+httpx

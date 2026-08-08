@@ -1,0 +1,19 @@
+{
+  "prompt": "Facebook feed ad hero shot of a single 100g fine silver ingot bar exactly matching the reference image — Egypt in all languages design with embossed multilingual Egypt text, polished reflective center, matte frosted perimeter border, identical proportions and engraving layout. The bar stands upright at a slight 8-degree angle on a black velvet-lined pedestal against a deep navy-to-black gradient backdrop. Shot with 100mm macro lens, f/5.6, ISO 100. Rim light from behind-right creates a thin luminous edge on the silver; soft key from camera-left reveals engraving depth. Right side and lower portion of frame hold soft negative space for CTA and copy added later in Meta Ads — absolutely no text, badges, or watermarks baked into the image. Museum-quality bullion product photography for Bullion Trading Center silver ingots. Do not change the engraved languages or add decorative elements.",
+  "negative_prompt": "text overlays, sale badges, watermarks, fake logos, wrong engravings, different product, plastic silver, 3D render, cartoon, hands, person, cluttered desk, coins, gold, price sticker, QR code, mirror selfie, over-retouched metal, anatomy normalization, beautification filters",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407351_es999ixegalx100.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "hero product, luxury bullion ad",
+    "lighting": "rim plus soft key, dark studio",
+    "camera_angle": "eye-level, slight angle on product",
+    "depth_of_field": "product sharp, background smooth falloff",
+    "quality": "ultra_high"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "name": "scene_plate_jewelry",
+  "description": "Generate product-free jewelry scene plates for template scene_references",
+  "model": "nano-banana-2",
+  "category": "jewelry",
+  "aspect_ratio": "4:5",
+  "resolution": "2K",
+  "output_format": "jpg",
+  "plates": [
+    {
+      "id": "eggplant_pillow",
+      "label": "Eggplant pillow (default)",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_pillow.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_pillow.jpg",
+      "scene_key": "default",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_cylinder",
+      "label": "Solid bracelet cylinder",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_cylinder.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_cylinder.jpg",
+      "scene_key": "bracelet",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_bracelet_chain",
+      "label": "Chain bracelet T-stand",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_bracelet_chain.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_bracelet_chain.jpg",
+      "scene_key": "bracelet",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_half_set",
+      "label": "Half set (bracelet + ring)",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_half_set.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_half_set.jpg",
+      "scene_key": "half_set",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_ring",
+      "label": "Ring holder (legacy)",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_ring.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_ring.jpg",
+      "scene_key": "ring",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_ring_cone",
+      "label": "Ring cone holder",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_ring_cone.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_ring_cone.jpg",
+      "scene_key": "ring",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_ring_pillow",
+      "label": "Ring pillow",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_ring_pillow.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_ring_pillow.jpg",
+      "scene_key": "ring",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_bust",
+      "label": "Eggplant bust (necklace)",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_bust.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_bust.jpg",
+      "scene_key": "necklace",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_earrings",
+      "label": "Earrings pad",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_earrings.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_earrings.jpg",
+      "scene_key": "earrings",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "eggplant_earrings_tbar",
+      "label": "Earrings T-bar",
+      "prompt_file": "prompts/jewelry/scene_plate_eggplant_earrings_tbar.json",
+      "output_file": "images/jewelry/scene_plate_eggplant_earrings_tbar.jpg",
+      "scene_key": "earrings",
+      "template": "jewelry_eggplant_4x5"
+    },
+    {
+      "id": "beige_pillow",
+      "label": "Beige pillow (default)",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_pillow.json",
+      "output_file": "images/jewelry/scene_plate_beige_pillow.jpg",
+      "scene_key": "default",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_cylinder",
+      "label": "Solid bracelet cylinder",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_cylinder.json",
+      "output_file": "images/jewelry/scene_plate_beige_cylinder.jpg",
+      "scene_key": "bracelet",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_bracelet_chain",
+      "label": "Chain bracelet T-stand",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_bracelet_chain.json",
+      "output_file": "images/jewelry/scene_plate_beige_bracelet_chain.jpg",
+      "scene_key": "bracelet",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_half_set",
+      "label": "Half set (bracelet + ring)",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_half_set.json",
+      "output_file": "images/jewelry/scene_plate_beige_half_set.jpg",
+      "scene_key": "half_set",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_ring",
+      "label": "Ring holder (legacy)",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_ring.json",
+      "output_file": "images/jewelry/scene_plate_beige_ring.jpg",
+      "scene_key": "ring",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_ring_cone",
+      "label": "Ring cone holder",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_ring_cone.json",
+      "output_file": "images/jewelry/scene_plate_beige_ring_cone.jpg",
+      "scene_key": "ring",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_ring_pillow",
+      "label": "Ring pillow",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_ring_pillow.json",
+      "output_file": "images/jewelry/scene_plate_beige_ring_pillow.jpg",
+      "scene_key": "ring",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_bust",
+      "label": "Beige bust (necklace)",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_bust.json",
+      "output_file": "images/jewelry/scene_plate_beige_bust.jpg",
+      "scene_key": "necklace",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_earrings",
+      "label": "Earrings pad",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_earrings.json",
+      "output_file": "images/jewelry/scene_plate_beige_earrings.jpg",
+      "scene_key": "earrings",
+      "template": "jewelry_beige_4x5"
+    },
+    {
+      "id": "beige_earrings_tbar",
+      "label": "Earrings T-bar",
+      "prompt_file": "prompts/jewelry/scene_plate_beige_earrings_tbar.json",
+      "output_file": "images/jewelry/scene_plate_beige_earrings_tbar.jpg",
+      "scene_key": "earrings",
+      "template": "jewelry_beige_4x5"
+    }
+  ]
+}

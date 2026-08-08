@@ -1,0 +1,61 @@
+{
+  "name": "bracelet_fidelity_ab_test",
+  "description": "A/B test bracelet06/07 chain fidelity across Nano Banana 2 and GPT Image 2 i2i",
+  "category": "jewelry",
+  "template": "jewelry_eggplant_4x5",
+  "samples_per_run": 2,
+  "products": {
+    "bracelet06": {
+      "anchor": "raw/jewelry/bracelet06/IMG_20260629_190436.jpg"
+    },
+    "bracelet07": {
+      "anchor": "raw/jewelry/bracelet07/IMG_20260629_190105.jpg"
+    }
+  },
+  "scene_ref_bracelet": "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/references/distilled/jewelry_eggplant_4x5/distilled_catalog_bracelet05_eggplant_4x5_ced902d0.jpg",
+  "r2_prefix": "products",
+  "variants": {
+    "A": {
+      "label": "Nano Banana baseline",
+      "model": "nano-banana-2",
+      "generator": "generate_kie.py",
+      "aspect_ratio": "4:5",
+      "resolution": "2K",
+      "scene_ref": false
+    },
+    "B": {
+      "label": "GPT i2i 4:5 1K",
+      "model": "gpt-image-2-image-to-image",
+      "generator": "generate_kie_gpt_image.py",
+      "aspect_ratio": "4:5",
+      "resolution": "1K",
+      "scene_ref": false
+    },
+    "C": {
+      "label": "GPT i2i 3:4 2K",
+      "model": "gpt-image-2-image-to-image",
+      "generator": "generate_kie_gpt_image.py",
+      "aspect_ratio": "3:4",
+      "resolution": "2K",
+      "scene_ref": false
+    },
+    "D": {
+      "label": "GPT i2i 3:4 2K + scene ref",
+      "model": "gpt-image-2-image-to-image",
+      "generator": "generate_kie_gpt_image.py",
+      "aspect_ratio": "3:4",
+      "resolution": "2K",
+      "scene_ref": true
+    }
+  },
+  "round1": {
+    "prompt_mode": "baseline",
+    "analyze_mode": "standard"
+  },
+  "round2_default_variants": ["B", "C"],
+  "round2_prompt_modes": {
+    "N2a": {"prompt_mode": "fidelity", "analyze_mode": "material_only"},
+    "N2b": {"prompt_mode": "fidelity", "analyze_mode": "none"},
+    "N2c": {"prompt_mode": "fidelity", "analyze_mode": "chain_structured"}
+  }
+}

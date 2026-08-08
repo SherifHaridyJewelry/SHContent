@@ -4,10 +4,14 @@
 # Python
 __pycache__/
 *.pyc
+.venv/
 
 # Generated images (large binaries)
 images/*
 !images/.gitkeep
+
+# Generated export ZIPs
+exports/
 
 # Logs
 logs/*
@@ -17,5 +21,22 @@ logs/*
 # prompts/*
 # !prompts/.gitkeep
 
+# Raw product photos and inspiration images
+raw/*
+!raw/.gitkeep
+
 # Cursor IDE
 .cursor/plans/
+
+# Kilo Code plugin (local tooling only)
+.kilo/
+
+# Web frontend
+web/node_modules/
+web/dist/
+web/tsconfig.tsbuildinfo
+
+cloudflare api.txt
+# Local SQLite DB
+data/*.db
+data/*.db-*

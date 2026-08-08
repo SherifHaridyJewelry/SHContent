@@ -1,18 +1,33 @@
 ---
-description: SHContent VPS deploy via systemd and GitHub Actions
-globs: deploy/**,.github/**
+description: SHContent VPS deploy via Docker Compose and GitHub Actions
+globs: deploy/**,.github/**,Dockerfile*
 alwaysApply: false
 ---
 
 # SHContent DevOps
 
-**Production:** https://workflow.sherifharidyjewelry.com · **VPS:** `/opt/shcontent`  
-**Runtime:** Python API via `systemctl shcontent-api` (not Docker Traefik stack yet).
+**Production:** https://workflow.sherifharidyjewelry.com · **Health:** `GET /api/health`  
+**VPS:** `/opt/shcontent` · **Secrets:** `/etc/shcontent/.env` (never commit)
+
+## Compose project name
+
+The stack **must** use `name: shcontent` in `deploy/docker-compose.prod.yml`.  
+Never deploy from a bare `deploy/` folder without an explicit project name — it defaults to `deploy` and collides with SHFlow.
+
+Containers: `shcontent-api-1`, `shcontent-web-1`, `shcontent-postgres-1`. Database: Postgres (same pattern as SHFlow).
 
 ## Deploy
 
-Push to `main` runs `.github/workflows/deploy.yml`: rsync → `pip install` → `alembic upgrade head` → `systemctl restart shcontent-api`.
+Always pass `--env-file /etc/shcontent/.env` so `POSTGRES_PASSWORD` matches between the Postgres container and API `DATABASE_URL`.
 
-Secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.
+```bash
+cd web && npm ci && npm run build
+rsync -avz --exclude .git --exclude web/node_modules --exclude .env ./ root@72.62.51.230:/opt/shcontent/
+rsync -avz --delete web/dist/ root@72.62.51.230:/opt/shcontent/web/dist/
+ssh root@72.62.51.230 "chmod -R a+rX /opt/shcontent/web/dist && cd /opt/shcontent/deploy && docker compose --env-file /etc/shcontent/.env -f docker-compose.prod.yml -f docker-compose.domains.yml up -d --build"
+```
 
-When adding Traefik routing, follow `sh-ops/docs/DEVOPS.md` and `sh-ops/docs/DEPLOYMENT_SETUP.md`.
+If Postgres auth fails after a password change, reset the volume (pre-prod):  
+`docker volume rm deploy_shcontent_pgdata` then redeploy.
+
+Canonical guide: `sh-ops` repo → `docs/DEVOPS.md`, `docs/DEPLOYMENT_SETUP.md`.

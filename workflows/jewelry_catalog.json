@@ -1,0 +1,12 @@
+{
+  "name": "jewelry_catalog_4x5",
+  "description": "Jewelry catalog and social feed creatives via Nano Banana 2 product pipeline",
+  "model": "nano-banana-2",
+  "category": "jewelry",
+  "template": "jewelry_catalog_4x5",
+  "aspect_ratio": "4:5",
+  "resolution": "2K",
+  "analyze": true,
+  "max_generation_refs": 2,
+  "output_prefix": "catalog"
+}

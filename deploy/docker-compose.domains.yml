@@ -1,0 +1,21 @@
+# Apply after Cloudflare A records point workflow.sherifharidyjewelry.com → VPS.
+# Usage: docker compose -f docker-compose.prod.yml -f docker-compose.domains.yml up -d
+
+services:
+  api:
+    labels:
+      - traefik.http.routers.shcontent-api-custom.rule=Host(`workflow.sherifharidyjewelry.com`) && PathPrefix(`/api`)
+      - traefik.http.routers.shcontent-api-custom.tls=true
+      - traefik.http.routers.shcontent-api-custom.entrypoints=web,websecure
+      - traefik.http.routers.shcontent-api-custom.tls.certresolver=mytlschallenge
+      - traefik.http.routers.shcontent-api-custom.priority=10
+      - traefik.http.routers.shcontent-api-custom.service=shcontent-api
+
+  web:
+    labels:
+      - traefik.http.routers.shcontent-web-custom.rule=Host(`workflow.sherifharidyjewelry.com`)
+      - traefik.http.routers.shcontent-web-custom.tls=true
+      - traefik.http.routers.shcontent-web-custom.entrypoints=web,websecure
+      - traefik.http.routers.shcontent-web-custom.tls.certresolver=mytlschallenge
+      - traefik.http.routers.shcontent-web-custom.priority=1
+      - traefik.http.routers.shcontent-web-custom.service=shcontent-web

@@ -1,0 +1,22 @@
+[Unit]
+Description=SHContent Jewelry Workflow API
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/opt/shcontent
+EnvironmentFile=/etc/shcontent/.env
+ExecStart=/home/deploy/.venvs/shcontent/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Pipeline uses in-process threads — single worker only
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,22 @@
+{
+  "prompt": "Facebook feed ad creative, professional luxury bullion product photography. Four rectangular fine silver ingot bars exactly as shown in the reference images — preserve every engraved design on the metal only, multilingual text on bars only, matte border texture, and polished center face with zero alteration. The Egypt-in-all-languages bar, Mother-in-all-languages bar, Al-Fatiha bar, and BTC 999 branded bar are arranged in a refined staggered flat-lay on dark charcoal slate with subtle natural stone veining. Shot with 85mm lens at f/8, ISO 100, tripod-stable. Large softbox key light camera-left at 45 degrees creates crisp specular highlights along each bar edge; gentle fill from a white bounce card camera-right. Upper third of frame is intentionally empty negative space — smooth charcoal gradient only, completely blank, no typography anywhere in the scene. Shallow contact shadows under each bar. Premium precious-metals e-commerce aesthetic. Do not invent new engravings, do not smooth metal into plastic, do not add people or hands. CRITICAL: Do not render any words, slogans, brand names, or captions outside the ingot engravings.",
+  "negative_prompt": "any text, typography, letters, words, slogans, BULLION, TRADING, CENTER, SECURE YOUR LEGACY, headlines, captions, watermarks, logos not on product, wrong engravings, altered product designs, plastic metal, CGI render, cartoon, illustration, cluttered props, coins, gold bars, hands, models, skin smoothing, HDR halos, oversaturated, cheap jewelry display, purple backgrounds, price tags, QR codes, blurry engravings, merged products, duplicate bars",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407351_es999ixegalx100.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407354_es999ixmoalx100.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407356_es999ixfthax100.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779407353_es999ixrbtcx100.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "luxury bullion flat-lay, Facebook feed ad",
+    "lighting": "softbox key with bounce fill, studio product",
+    "camera_angle": "slightly elevated 25 degrees, centered",
+    "depth_of_field": "f/8, all bars tack-sharp",
+    "quality": "ultra_high"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "model": "gpt-image-2-image-to-image",
+  "prompt": "Catalog grid on navy: 16 rectangular silver ingots from references in neat rows, each engraving legible, scale each ingot by gram weight relative to others in frame (smallest 5g, largest 100g), no overlapping products. Background: deep midnight navy blue matte seamless studio backdrop \u2014 strong color contrast against cool reflective silver so products pop in a Facebook feed thumbnail. Lighting: even balanced studio lighting with large softboxes camera-left and camera-right, catalog clarity, accurate metal speculars, soft contact shadows, no harsh vignette. Square 1:1 Facebook ad product photo. Preserve every engraving, logo, and product silhouette exactly from reference images \u2014 no redesign. Generous clean margin along top edge for Meta ad copy. CRITICAL: no text overlays, slogans, watermarks, or typography except engravings on the metal.",
+  "negative_prompt": "text overlays, SALE, watermarks, wrong products, invented engravings, plastic metal, cartoon render, flat grey background matching silver, low contrast, muddy lighting, hands, people, cluttered props, gold-only scene, oversharpened halos",
+  "input_urls": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410944_es999ixegalxxx5.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410946_es999ixmoalxxx5.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410948_es999ixtjnfxxx5.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410953_es999ixrbtcxxx5.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410955_es999ixfthaxxx5.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410959_es999ixplumxxx5.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410989_es999ixegalxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410993_es999ixmoalxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779410999_es999ixtjnfxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411001_es999ixfthaxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411017_es999ixanglxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411034_es999ixliloxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411037_es999ixstchxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411039_es999ixplumxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411041_es999ixrbtcxx10.png",
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/btc-silver/1779411043_es999ixmoalxx20.png"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "1:1",
+    "resolution": "2K"
+  },
+  "settings": {
+    "workflow": "btc_catalog_creatives",
+    "variation_id": "collection_ingots_1",
+    "label": "Ingots catalog grid part 1/3"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Luxury editorial product shot of a substantial gold Cuban link chain necklace arranged on a slab of warm cream marble with subtle gray veining. The necklace features thick interlocking oval links in polished gold and a rectangular box clasp at the front — the clasp is encrusted with small brilliant stones that catch warm ambient light. The chain is artfully draped in an S-curve on the marble surface, with soft directional window light from camera-left creating gentle gradients and a long soft shadow beneath. A single dried eucalyptus branch or olive sprig lies beside the necklace for editorial atmosphere. Shot with an 85mm lens, f/2.8, ISO 200. Shallow depth of field — the marble foreground is sharp, the background softly blurs into warm neutral tones. Warm, aspirational luxury magazine aesthetic. No product tags, no display busts, no retail clutter. The gold gleams with natural-looking highlights, not harsh studio flash. Editorial jewelry flat-lay composition.",
+  "negative_prompt": "product tags, safety pins, display busts, calculators, cables, purple backgrounds, retail store setting, cluttered countertops, harsh studio flash, ring flash, cold fluorescent lighting, skin smoothing, plastic skin, airbrushed texture, beautification filters, anatomy normalization, stylized realism, HDR tonemapping, digital art, illustration, cartoon, anime, 3D render, over-saturated colors, text overlays, watermarks",
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  },
+  "settings": {
+    "style": "editorial luxury, aspirational magazine",
+    "lighting": "warm directional window light, soft gradients",
+    "camera_angle": "slight overhead, flat-lay with depth",
+    "depth_of_field": "shallow, f/2.8, marble sharp, background soft",
+    "quality": "ultra_high"
+  }
+}

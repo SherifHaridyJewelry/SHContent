@@ -1,0 +1,12 @@
+{
+  "prompt": "Remove the label, tag, or ticket from the jewelry. Keep everything else identical — same scene, model, lighting, necklace, and composition. No other changes.",
+  "negative_prompt": "product tags, labels, tickets, watermarks, text overlays",
+  "image_input": [
+    "https://pub-ad37d9ca8e184966b45ef67b1b169f44.r2.dev/products/1773700397_gold_cuban_necklace_lifestyle.jpg"
+  ],
+  "api_parameters": {
+    "aspect_ratio": "4:5",
+    "resolution": "2K",
+    "output_format": "jpg"
+  }
+}
