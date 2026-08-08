@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from app.db.models import HistoryEntryRow
 from app.models.schemas import HistoryEntry
 
-
 _KNOWN_FIELDS = {
     "task_id",
     "timestamp",

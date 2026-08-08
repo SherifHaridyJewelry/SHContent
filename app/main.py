@@ -6,7 +6,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from app.api import abtest, catalog, history, jobs, products, reviews, scene_plates, templates
+from app.api import (
+    abtest,
+    catalog,
+    history,
+    jobs,
+    products,
+    reviews,
+    scene_plates,
+    templates,
+)
 from app.config import ALLOWED_ORIGINS, APP_ENV, PROJECT_ROOT
 from app.middleware.auth import AuthMiddleware
 from app.services.path_utils import resolve_storage_path, storage_roots

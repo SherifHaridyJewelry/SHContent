@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 import threading
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.config import SCRIPTS_DIR
 from app.db.engine import get_session
@@ -15,7 +15,7 @@ from app.models.schemas import Job, JobCreate, JobProductResult, JobStatus
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from naming import build_output_name  # noqa: E402
+from naming import build_output_name
 
 _lock = threading.Lock()
 _jobs: dict[str, Job] = {}
@@ -24,7 +24,7 @@ _batch_depth: dict[str, int] = {}
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _ensure_loaded() -> None:
@@ -144,10 +144,8 @@ def list_jobs_paginated(page: int = 1, page_size: int = 25) -> dict:
         page_size = max(1, min(page_size, 100))
         total = len(jobs)
         total_pages = max(1, (total + page_size - 1) // page_size) if total else 1
-        if page > total_pages:
-            page = total_pages
-        if page < 1:
-            page = 1
+        page = min(page, total_pages)
+        page = max(page, 1)
         start = (page - 1) * page_size
         end = start + page_size
         return {

@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.models.schemas import CatalogReviewResult, CatalogReviewUpdate, SetCanonicalRequest
+from app.models.schemas import (
+    CatalogReviewResult,
+    CatalogReviewUpdate,
+    SetCanonicalRequest,
+)
 from app.services import review_service
 
 router = APIRouter(prefix="/catalog/review", tags=["catalog-review"])

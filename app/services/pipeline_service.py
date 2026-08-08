@@ -8,7 +8,13 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from app.config import DEFAULT_WORKFLOW, MAX_PARALLEL_PRODUCTS, PROJECT_ROOT, SCRIPTS_DIR, WORKFLOWS_DIR
+from app.config import (
+    DEFAULT_WORKFLOW,
+    MAX_PARALLEL_PRODUCTS,
+    PROJECT_ROOT,
+    SCRIPTS_DIR,
+    WORKFLOWS_DIR,
+)
 from app.db.engine import get_session
 from app.db.repositories.history import HistoryRepository
 from app.db.repositories.products import ProductRepository
@@ -20,12 +26,12 @@ from app.services.template_service import resolve_template_path
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from naming import build_output_name  # noqa: E402
-from product_pipeline import process_single_product  # noqa: E402
-from prompt_builder import load_json, collect_selectable_url_set  # noqa: E402
-from r2_upload import get_r2_config, get_s3_client  # noqa: E402
-from vision_analyze import get_api_key  # noqa: E402
-from generate_kie import fetch_task, download_image  # noqa: E402
+from generate_kie import download_image, fetch_task
+from naming import build_output_name
+from product_pipeline import process_single_product
+from prompt_builder import collect_selectable_url_set, load_json
+from r2_upload import get_r2_config, get_s3_client
+from vision_analyze import get_api_key
 
 _running_jobs: set[str] = set()
 _running_threads: dict[str, threading.Thread] = {}
@@ -399,7 +405,7 @@ def recover_job(job_id: str) -> tuple[dict, int]:
         image_url = download_image(data, image_path, exit_on_error=False)
         output_r2_url = None
         try:
-            from r2_upload import upload_file_with_key  # noqa: E402
+            from r2_upload import upload_file_with_key
 
             object_key = f"outputs/{category}/{image_path.name}"
             output_r2_url = upload_file_with_key(s3_client, r2_config, image_path, object_key)

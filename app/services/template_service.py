@@ -5,10 +5,9 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 from fastapi import HTTPException
-
-from urllib.parse import unquote, urlparse
 
 from app.config import PROJECT_ROOT, SCRIPTS_DIR, TEMPLATES_DIR
 from app.models.schemas import ProductType, TemplateSummary
@@ -17,8 +16,7 @@ from app.services.path_utils import normalize_project_path
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from r2_upload import get_r2_config, get_s3_client, upload_file_with_key  # noqa: E402
-
+from r2_upload import get_r2_config, get_s3_client, upload_file_with_key
 
 _CORE_SCENE_TYPES = ("default", "ring", "twin_rings", "bracelet", "earrings", "necklace")
 

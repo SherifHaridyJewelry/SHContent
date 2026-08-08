@@ -12,8 +12,7 @@ from app.models.schemas import (
     CatalogMeta,
     PaginatedResponse,
 )
-from app.services import catalog_service
-from app.services import catalog_export_service
+from app.services import catalog_export_service, catalog_service
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 

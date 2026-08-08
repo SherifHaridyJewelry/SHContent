@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 import threading
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from app.config import PROJECT_ROOT, SCRIPTS_DIR
@@ -17,15 +17,20 @@ from app.services import catalog_service, template_service
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from generate_kie import create_task, download_image, get_api_key, poll_task  # noqa: E402
-from r2_upload import get_r2_config, get_s3_client, upload_file_with_key  # noqa: E402
+from generate_kie import (
+    create_task,
+    download_image,
+    get_api_key,
+    poll_task,
+)
+from r2_upload import get_r2_config, get_s3_client, upload_file_with_key
 
 _lock = threading.Lock()
 _jobs: dict[str, ScenePlateJob] = {}
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _ensure_loaded() -> None:
@@ -76,7 +81,11 @@ def _resolve_r2_url(output_path: str, template_name: str) -> tuple[str, str]:
     if not str(local_path).startswith(str(root)):
         raise ValueError(f"Unsupported output path: {output_path}")
 
-    from r2_upload import get_r2_config, get_s3_client, upload_file_with_key  # noqa: E402
+    from r2_upload import (
+        get_r2_config,
+        get_s3_client,
+        upload_file_with_key,
+    )
 
     config = get_r2_config()
     s3_client = get_s3_client(config)

@@ -14,7 +14,7 @@ from app.services.path_utils import normalize_project_path
 if str(Path(__file__).resolve().parent.parent.parent / "scripts") not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "scripts"))
 
-from naming import format_generation_label  # noqa: E402
+from naming import format_generation_label
 
 
 def normalize_output_path(path: str | None) -> str | None:
@@ -140,8 +140,7 @@ def list_catalog_paginated(
             for row, review_status, approved in rows
         ]
     total_pages = max(1, (total + page_size - 1) // page_size) if total else 1
-    if page > total_pages:
-        page = total_pages
+    page = min(page, total_pages)
 
     response = CatalogListResponse(
         items=items,

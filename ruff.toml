@@ -1,0 +1,13 @@
+target-version = "py312"
+line-length = 100
+
+[lint]
+# Keep CI focused on correctness; style nits can land gradually.
+select = ["E", "F", "I", "B"]
+ignore = [
+  "E501",   # line length handled separately
+  "B008",   # FastAPI Form/File defaults
+]
+
+[lint.per-file-ignores]
+"app/services/*.py" = ["E402"]

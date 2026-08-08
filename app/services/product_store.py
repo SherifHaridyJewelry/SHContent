@@ -102,10 +102,8 @@ def list_products_paginated(
     page_size = max(1, min(page_size, 100))
     total = len(products)
     total_pages = max(1, (total + page_size - 1) // page_size) if total else 1
-    if page > total_pages:
-        page = total_pages
-    if page < 1:
-        page = 1
+    page = min(page, total_pages)
+    page = max(page, 1)
     start = (page - 1) * page_size
     end = start + page_size
     return {

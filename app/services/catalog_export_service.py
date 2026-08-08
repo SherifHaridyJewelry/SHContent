@@ -7,7 +7,7 @@ import re
 import threading
 import uuid
 import zipfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import quote
 
@@ -37,7 +37,7 @@ SAFE_NAME_RE = re.compile(r"[^\w\s\-().]+", re.UNICODE)
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _ensure_dirs() -> None:

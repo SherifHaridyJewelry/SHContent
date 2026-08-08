@@ -2,17 +2,23 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.db.models import ProductImageRow, ProductRow
-from app.models.schemas import ImageRole, Product, ProductImage, ProductStatus, ProductType
+from app.models.schemas import (
+    ImageRole,
+    Product,
+    ProductImage,
+    ProductStatus,
+    ProductType,
+)
 
 
 def _utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _row_to_product(row: ProductRow) -> Product:

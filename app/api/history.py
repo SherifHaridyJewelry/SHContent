@@ -64,8 +64,7 @@ def list_history(
     page = max(1, page)
     page_size = max(1, min(page_size, 100))
     total_pages = max(1, (total + page_size - 1) // page_size) if total else 1
-    if page > total_pages:
-        page = total_pages
+    page = min(page, total_pages)
     start = (page - 1) * page_size
     end = start + page_size
     items = [_entry_to_model(row) for row in rows[start:end]]
