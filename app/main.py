@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse
 from app.api import abtest, catalog, history, jobs, products, reviews, scene_plates, templates
 from app.config import ALLOWED_ORIGINS, APP_ENV, PROJECT_ROOT
 from app.middleware.auth import AuthMiddleware
+from app.services.path_utils import resolve_storage_path, storage_roots
 
 app = FastAPI(title="Jewelry Workflow", version="0.2.0")
 
@@ -51,18 +52,25 @@ def health() -> dict:
 
 @app.get("/api/assets/{path:path}")
 def serve_asset(path: str) -> FileResponse:
-    """Serve files under raw/, images/, or prompts/ by project-relative path."""
+    """Serve files under raw/, images/, or prompts/ from DATA_ROOT (with PROJECT_ROOT fallback)."""
     allowed_prefixes = ("raw/", "images/", "prompts/")
     if not any(path.startswith(p) for p in allowed_prefixes):
         raise HTTPException(status_code=404, detail="Path not allowed")
 
-    if APP_ENV != "development":
-        if path.startswith("raw/") or path.startswith("prompts/"):
-            raise HTTPException(status_code=403, detail="Asset path requires authentication")
+    try:
+        file_path = resolve_storage_path(path)
+    except ValueError as exc:
+        raise HTTPException(status_code=403, detail="Invalid path") from exc
 
-    file_path = (PROJECT_ROOT / path).resolve()
-    root = PROJECT_ROOT.resolve()
-    if not str(file_path).startswith(str(root)):
+    allowed = False
+    for root in storage_roots():
+        try:
+            file_path.relative_to(root)
+            allowed = True
+            break
+        except ValueError:
+            continue
+    if not allowed:
         raise HTTPException(status_code=403, detail="Invalid path")
     if not file_path.is_file():
         raise HTTPException(status_code=404, detail="File not found")

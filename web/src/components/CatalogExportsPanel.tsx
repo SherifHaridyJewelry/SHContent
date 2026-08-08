@@ -106,60 +106,62 @@ export default function CatalogExportsPanel({ refreshToken = 0 }: CatalogExports
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-left text-muted-foreground">
-            <th className="pb-2 font-medium">Started</th>
-            <th className="pb-2 font-medium">Scope</th>
-            <th className="pb-2 font-medium">Status</th>
-            <th className="pb-2 font-medium">Images</th>
-            <th className="pb-2 font-medium"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {exports.map((job) => (
-            <tr key={job.id} className="border-t border-border">
-              <td className="py-2 text-xs">{job.created_at.slice(0, 19).replace("T", " ")}</td>
-              <td className="py-2">{scopeLabel(job.scope)}</td>
-              <td className="py-2">
-                <Badge variant={statusVariant(job.status)} className="gap-1">
-                  {(job.status === "pending" || job.status === "running") && (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  )}
-                  {job.status}
-                </Badge>
-                {job.error && (
-                  <div className="text-xs text-destructive mt-1 max-w-[220px]">{job.error}</div>
-                )}
-              </td>
-              <td className="py-2 text-xs">
-                {job.counts.exported}/{job.counts.total}
-                {job.counts.skipped > 0 && ` · ${job.counts.skipped} skipped`}
-              </td>
-              <td className="py-2 text-right">
-                {job.status === "success" && (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    disabled={downloadingId === job.id}
-                    onClick={() => handleDownload(job)}
-                  >
-                    {downloadingId === job.id ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Download className="mr-1 h-3.5 w-3.5" />
-                        ZIP
-                      </>
-                    )}
-                  </Button>
-                )}
-              </td>
+      <div className="table-scroll">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-muted-foreground">
+              <th className="pb-2 font-medium">Started</th>
+              <th className="pb-2 font-medium">Scope</th>
+              <th className="pb-2 font-medium">Status</th>
+              <th className="pb-2 font-medium">Images</th>
+              <th className="pb-2 font-medium"></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {exports.map((job) => (
+              <tr key={job.id} className="border-t border-border">
+                <td className="py-2 text-xs">{job.created_at.slice(0, 19).replace("T", " ")}</td>
+                <td className="py-2">{scopeLabel(job.scope)}</td>
+                <td className="py-2">
+                  <Badge variant={statusVariant(job.status)} className="gap-1">
+                    {(job.status === "pending" || job.status === "running") && (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    )}
+                    {job.status}
+                  </Badge>
+                  {job.error && (
+                    <div className="text-xs text-destructive mt-1 max-w-[220px]">{job.error}</div>
+                  )}
+                </td>
+                <td className="py-2 text-xs">
+                  {job.counts.exported}/{job.counts.total}
+                  {job.counts.skipped > 0 && ` · ${job.counts.skipped} skipped`}
+                </td>
+                <td className="py-2 text-right">
+                  {job.status === "success" && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      disabled={downloadingId === job.id}
+                      onClick={() => handleDownload(job)}
+                    >
+                      {downloadingId === job.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Download className="mr-1 h-3.5 w-3.5" />
+                          ZIP
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

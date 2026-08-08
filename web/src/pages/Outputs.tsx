@@ -463,7 +463,7 @@ function GalleryTab({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center gap-2 pb-2">
+        <div className="filter-inline-action flex items-center gap-2 pb-2">
           <Checkbox
             id="include-template-assets"
             checked={includeTemplateAssets}
@@ -478,7 +478,7 @@ function GalleryTab({
             Include template assets
           </Label>
         </div>
-        <div className="ml-auto flex flex-wrap items-center gap-2 pb-0.5">
+        <div className="filter-actions ml-auto flex flex-wrap items-center gap-2 pb-0.5">
           <Button variant="secondary" size="sm" onClick={() => setExportDialogOpen(true)}>
             Export
           </Button>

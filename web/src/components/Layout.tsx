@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Menu, X } from "lucide-react";
@@ -49,6 +49,20 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
+
   return (
     <div className="layout">
       <JobPolling />
@@ -57,8 +71,10 @@ export default function Layout() {
           type="button"
           variant="ghost"
           size="sm"
-          className="h-9 w-9 p-0"
+          className="h-11 w-11 p-0"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="app-sidebar"
           onClick={() => setMobileOpen((o) => !o)}
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -73,7 +89,10 @@ export default function Layout() {
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <aside className={`sidebar${mobileOpen ? " sidebar-open" : ""}`}>
+      <aside
+        id="app-sidebar"
+        className={`sidebar${mobileOpen ? " sidebar-open" : ""}`}
+      >
         <h1>Jewelry Workflow</h1>
         <p className="sidebar-tagline">
           Products → Templates → Studio → Outputs
@@ -82,7 +101,13 @@ export default function Layout() {
       </aside>
       <main className="main">
         <Outlet />
-        <Toaster position="top-right" richColors />
+        <Toaster
+          position="top-right"
+          richColors
+          className="toaster-responsive"
+          offset={16}
+          mobileOffset={{ top: 64, bottom: 16 }}
+        />
       </main>
     </div>
   );

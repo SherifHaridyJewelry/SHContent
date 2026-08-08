@@ -8,7 +8,7 @@ from pathlib import Path
 
 from fastapi import HTTPException, UploadFile
 
-from app.config import PROJECT_ROOT, RAW_JEWELRY_DIR
+from app.config import RAW_JEWELRY_DIR
 from app.db.engine import get_session
 from app.db.repositories.products import ProductRepository
 from app.models.schemas import (
@@ -26,7 +26,11 @@ from app.models.schemas import (
     ProductUpdate,
 )
 from app.services import product_naming
-from app.services.path_utils import normalize_project_path
+from app.services.path_utils import (
+    normalize_project_path,
+    resolve_storage_path,
+    to_relative_storage_path,
+)
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 
@@ -174,7 +178,7 @@ def _save_upload_to_product(
     with open(dest, "wb") as f:
         shutil.copyfileobj(upload.file, f)
 
-    rel_path = str(dest.relative_to(PROJECT_ROOT))
+    rel_path = to_relative_storage_path(dest)
     image = ProductImage(filename=filename, path=rel_path, role=role)
     product.images.append(image)
     return image
@@ -258,7 +262,7 @@ def delete_image(product_id: str, filename: str) -> Product:
         raise HTTPException(status_code=404, detail=f"Image not found: {filename}")
 
     img = product.images.pop(found_idx)
-    file_path = PROJECT_ROOT / img.path
+    file_path = resolve_storage_path(img.path)
     if file_path.exists() and file_path.is_file():
         file_path.unlink()
 
@@ -353,19 +357,19 @@ def resolve_pipeline_paths(product: Product, max_generation_refs: int = 2) -> di
     if not active:
         raise HTTPException(status_code=400, detail=f"No images for product {product.id}")
 
-    all_paths = [PROJECT_ROOT / img.path for img in active]
+    all_paths = [resolve_storage_path(img.path) for img in active]
 
     gen_images = [img for img in active if img.role in (ImageRole.anchor, ImageRole.detail)]
     gen_images.sort(key=lambda i: 0 if i.role == ImageRole.anchor else 1)
     gen_images = gen_images[:max_generation_refs]
-    generation_paths = [PROJECT_ROOT / img.path for img in gen_images]
+    generation_paths = [resolve_storage_path(img.path) for img in gen_images]
 
     analysis_images = [
         img
         for img in active
         if img.role in (ImageRole.anchor, ImageRole.detail, ImageRole.analysis_only)
     ]
-    analysis_paths = [PROJECT_ROOT / img.path for img in analysis_images]
+    analysis_paths = [resolve_storage_path(img.path) for img in analysis_images]
 
     anchors = [img for img in active if img.role == ImageRole.anchor]
     if len(anchors) != 1:
@@ -542,7 +546,7 @@ def import_orphan_folders(
 
         for idx, img_path in enumerate(images):
             role = ImageRole.anchor if idx == 0 else ImageRole.analysis_only
-            rel_path = str(img_path.relative_to(PROJECT_ROOT))
+            rel_path = to_relative_storage_path(img_path)
             product.images.append(
                 ProductImage(filename=img_path.name, path=rel_path, role=role)
             )

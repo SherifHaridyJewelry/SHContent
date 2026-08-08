@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 
 const NEW_COLLECTION = "__new__";
 
@@ -19,6 +20,7 @@ interface CollectionPickerProps {
   label?: string;
   required?: boolean;
   allowEmpty?: boolean;
+  fullWidth?: boolean;
 }
 
 export function resolveCollectionValue(
@@ -41,13 +43,14 @@ export default function CollectionPicker({
   label = "Collection",
   required = false,
   allowEmpty = false,
+  fullWidth = false,
 }: CollectionPickerProps) {
   const isNew = value === NEW_COLLECTION;
   const selectValue = value || (allowEmpty ? "__empty__" : "__placeholder__");
 
   return (
-    <div className="collection-picker">
-      <div>
+    <div className={cn("collection-picker", fullWidth && "collection-picker--full")}>
+      <div className={fullWidth ? "w-full" : undefined}>
         <Label className="mb-1 block">
           {label}
           {required && " *"}
@@ -60,7 +63,7 @@ export default function CollectionPicker({
             else onChange(v);
           }}
         >
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className={fullWidth ? "w-full" : "w-[200px]"}>
             <SelectValue placeholder="Select collection…" />
           </SelectTrigger>
           <SelectContent>
@@ -80,13 +83,14 @@ export default function CollectionPicker({
         </Select>
       </div>
       {isNew && (
-        <div className="mt-2">
+        <div className={cn("mt-2", fullWidth && "w-full")}>
           <Label className="mb-1 block">New collection name</Label>
           <Input
             required={required}
             value={newValue}
             onChange={(e) => onNewValueChange(e.target.value)}
             placeholder="e.g. Zahya"
+            className={fullWidth ? "w-full" : undefined}
           />
         </div>
       )}
