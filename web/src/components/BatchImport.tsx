@@ -1,23 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, Product, ProductType } from "../api";
-import CollectionPicker, { resolveCollectionValue } from "./CollectionPicker";
+import CollectionPicker, {
+  NEW_COLLECTION,
+  resolveCollectionValue,
+} from "./CollectionPicker";
 import {
   nameFromFilename,
   suggestName,
   suggestNextId,
 } from "../lib/productTypes";
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { typeLabel, PRODUCT_TYPES } from "../lib/productTypes"
+} from "@/components/ui/select";
+import { typeLabel, PRODUCT_TYPES } from "../lib/productTypes";
+import { ImagePlus } from "lucide-react";
 
 const IMAGE_RE = /\.(jpe?g|png|webp|gif)$/i;
 
@@ -102,12 +106,13 @@ export default function BatchImport({
 }: BatchImportProps) {
   const [productType, setProductType] = useState<ProductType>(defaultType);
   const [collectionSelect, setCollectionSelect] = useState(
-    defaultCollection || (collections[0] ?? "")
+    defaultCollection || collections[0] || NEW_COLLECTION
   );
   const [newCollection, setNewCollection] = useState("");
   const [mode, setMode] = useState<BatchMode>("one_per_file");
   const [rows, setRows] = useState<BatchPreviewRow[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
 
   const allFiles = useMemo(() => rows.flatMap((r) => r.files), [rows]);
 
@@ -156,7 +161,7 @@ export default function BatchImport({
   async function submit() {
     const collection = resolveCollectionValue(collectionSelect, newCollection);
     if (!collection) {
-      onError("Collection is required");
+      onError("Choose a collection or enter a new collection name.");
       return;
     }
     if (!rows.length) {
@@ -205,26 +210,27 @@ export default function BatchImport({
   }
 
   return (
-    <div className="batch-import card">
-      <h3>Batch import</h3>
-      <p className="text-muted-foreground text-sm mb-4">
-        Set type and collection once, then drop multiple images or a folder of product subfolders.
-        IDs and names are suggested automatically.
+    <div className="batch-import space-y-4">
+      <p className="m-0 text-sm text-muted-foreground">
+        Set type and collection, then drop images or a folder of product subfolders.
+        IDs and names are suggested automatically; the first image becomes the anchor.
       </p>
 
-      <div className="form-row">
-        <div>
-          <Label className="mb-1 block">Type</Label>
+      <div className="grid gap-3">
+        <div className="space-y-1.5">
+          <Label>Type</Label>
           <Select
             value={productType}
             onValueChange={(v) => setProductType(v as ProductType)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {PRODUCT_TYPES.map((t) => (
-                <SelectItem key={t} value={t}>{typeLabel(t)}</SelectItem>
+                <SelectItem key={t} value={t}>
+                  {typeLabel(t)}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -236,45 +242,52 @@ export default function BatchImport({
           newValue={newCollection}
           onNewValueChange={setNewCollection}
           required
+          fullWidth
         />
       </div>
 
-      <div className="batch-mode-toggle mb-4 space-y-2">
+      <div className="space-y-2">
         <RadioGroup
           value={mode}
           onValueChange={(v) => setMode(v as BatchMode)}
-          className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4"
+          className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-4"
         >
           <div className="flex items-center gap-2">
             <RadioGroupItem value="one_per_file" id="batch-one-per-file" />
-            <Label htmlFor="batch-one-per-file" className="font-normal cursor-pointer">
+            <Label htmlFor="batch-one-per-file" className="cursor-pointer font-normal">
               One image = one product
             </Label>
           </div>
           <div className="flex items-center gap-2">
             <RadioGroupItem value="one_per_folder" id="batch-one-per-folder" />
-            <Label htmlFor="batch-one-per-folder" className="font-normal cursor-pointer">
+            <Label htmlFor="batch-one-per-folder" className="cursor-pointer font-normal">
               One folder = one product
             </Label>
           </div>
         </RadioGroup>
         {rows.length > 0 && (
-          <Button variant="secondary" size="sm" onClick={rebuildPreview}>
+          <Button type="button" variant="secondary" size="sm" onClick={rebuildPreview}>
             Refresh IDs
           </Button>
         )}
       </div>
 
       <div
-        className="dropzone"
-        onDragOver={(e) => e.preventDefault()}
+        className={`dropzone${dragOver ? " dropzone-active" : ""}`}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
         onDrop={(e) => {
           e.preventDefault();
+          setDragOver(false);
           handleFiles(e.dataTransfer.files);
         }}
       >
-        <p style={{ marginBottom: "0.75rem" }}>Drag &amp; drop images here, or</p>
-        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", flexWrap: "wrap" }}>
+        <ImagePlus className="mx-auto mb-3 h-8 w-8 opacity-50" aria-hidden />
+        <p className="mb-3 text-sm">Drag &amp; drop images here, or</p>
+        <div className="flex flex-wrap justify-center gap-2">
           <Button asChild variant="secondary" className="cursor-pointer">
             <label>
               Select images
@@ -307,62 +320,62 @@ export default function BatchImport({
       </div>
 
       {rows.length > 0 && (
-        <>
-          <div className="table-scroll mt-4">
-            <table>
-              <thead>
-                <tr>
-                  <th>Source</th>
-                  <th>Images</th>
-                  <th>ID</th>
-                  <th>Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => {
-                  const isDup = duplicateIds.has(row.id.trim());
-                  return (
-                  <tr key={row.key}>
-                    <td style={{ fontSize: "0.8rem" }}>{row.label}</td>
-                    <td>{row.imageCount}</td>
-                    <td>
+        <div className="space-y-3">
+          <div className="batch-preview-list space-y-2">
+            {rows.map((row) => {
+              const isDup = duplicateIds.has(row.id.trim());
+              return (
+                <div
+                  key={row.key}
+                  className="rounded-lg border border-border bg-card/60 p-3"
+                >
+                  <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+                    <p className="m-0 min-w-0 flex-1 truncate text-sm font-medium">
+                      {row.label}
+                    </p>
+                    <span className="shrink-0 text-xs text-muted-foreground">
+                      {row.imageCount} image{row.imageCount === 1 ? "" : "s"}
+                    </span>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <div className="space-y-1">
+                      <Label className="text-xs">ID</Label>
                       <Input
                         value={row.id}
                         onChange={(e) => updateRow(row.key, "id", e.target.value)}
-                        className={`w-full min-w-[100px]${isDup ? " border-destructive" : ""}`}
+                        className={isDup ? "border-destructive" : undefined}
                         aria-invalid={isDup}
                       />
                       {isDup && (
-                        <p className="m-0 mt-1 text-xs text-destructive">ID already used</p>
+                        <p className="m-0 text-xs text-destructive">ID already used</p>
                       )}
-                    </td>
-                    <td>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Name</Label>
                       <Input
                         value={row.name}
                         onChange={(e) => updateRow(row.key, "name", e.target.value)}
-                        className="w-full min-w-[120px]"
                       />
-                    </td>
-                  </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           {duplicateIds.size > 0 && (
-            <p className="mt-2 text-sm text-destructive">
+            <p className="m-0 text-sm text-destructive">
               Fix duplicate IDs or click Refresh IDs before creating.
             </p>
           )}
           <Button
             type="button"
-            className="mt-4"
+            className="w-full sm:w-auto"
             disabled={submitting || duplicateIds.size > 0}
             onClick={submit}
           >
             {submitting ? "Creating…" : `Create ${rows.length} product(s)`}
           </Button>
-        </>
+        </div>
       )}
     </div>
   );

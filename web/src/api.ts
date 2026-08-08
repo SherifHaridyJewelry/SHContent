@@ -308,11 +308,34 @@ export function normalizeAssetPath(path: string): string {
 
 const API = "/api";
 
+function formatApiError(text: string, statusText: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return statusText || "Request failed";
+  try {
+    const body = JSON.parse(trimmed) as { detail?: unknown };
+    if (typeof body.detail === "string") return body.detail;
+    if (Array.isArray(body.detail)) {
+      return body.detail
+        .map((item) => {
+          if (typeof item === "string") return item;
+          if (item && typeof item === "object" && "msg" in item) {
+            return String((item as { msg: unknown }).msg);
+          }
+          return JSON.stringify(item);
+        })
+        .join("; ");
+    }
+  } catch {
+    // plain text body
+  }
+  return trimmed;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API}${path}`, init);
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(text || res.statusText);
+    throw new Error(formatApiError(text, res.statusText));
   }
   if (res.status === 204) return undefined as T;
   return res.json();
