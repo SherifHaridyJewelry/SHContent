@@ -308,45 +308,47 @@ export default function BatchImport({
 
       {rows.length > 0 && (
         <>
-          <table style={{ marginTop: "1rem" }}>
-            <thead>
-              <tr>
-                <th>Source</th>
-                <th>Images</th>
-                <th>ID</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
-                const isDup = duplicateIds.has(row.id.trim());
-                return (
-                <tr key={row.key}>
-                  <td style={{ fontSize: "0.8rem" }}>{row.label}</td>
-                  <td>{row.imageCount}</td>
-                  <td>
-                    <Input
-                      value={row.id}
-                      onChange={(e) => updateRow(row.key, "id", e.target.value)}
-                      className={`w-full min-w-[100px]${isDup ? " border-destructive" : ""}`}
-                      aria-invalid={isDup}
-                    />
-                    {isDup && (
-                      <p className="m-0 mt-1 text-xs text-destructive">ID already used</p>
-                    )}
-                  </td>
-                  <td>
-                    <Input
-                      value={row.name}
-                      onChange={(e) => updateRow(row.key, "name", e.target.value)}
-                      className="w-full min-w-[120px]"
-                    />
-                  </td>
+          <div className="table-scroll mt-4">
+            <table>
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Images</th>
+                  <th>ID</th>
+                  <th>Name</th>
                 </tr>
-              );
-              })}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((row) => {
+                  const isDup = duplicateIds.has(row.id.trim());
+                  return (
+                  <tr key={row.key}>
+                    <td style={{ fontSize: "0.8rem" }}>{row.label}</td>
+                    <td>{row.imageCount}</td>
+                    <td>
+                      <Input
+                        value={row.id}
+                        onChange={(e) => updateRow(row.key, "id", e.target.value)}
+                        className={`w-full min-w-[100px]${isDup ? " border-destructive" : ""}`}
+                        aria-invalid={isDup}
+                      />
+                      {isDup && (
+                        <p className="m-0 mt-1 text-xs text-destructive">ID already used</p>
+                      )}
+                    </td>
+                    <td>
+                      <Input
+                        value={row.name}
+                        onChange={(e) => updateRow(row.key, "name", e.target.value)}
+                        className="w-full min-w-[120px]"
+                      />
+                    </td>
+                  </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
           {duplicateIds.size > 0 && (
             <p className="mt-2 text-sm text-destructive">
               Fix duplicate IDs or click Refresh IDs before creating.
