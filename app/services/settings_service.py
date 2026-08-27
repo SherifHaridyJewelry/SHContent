@@ -481,7 +481,7 @@ def test_r2_connection() -> dict[str, Any]:
         }
     try:
         import boto3
-        from botocore.exceptions import ClientError, BotoCoreError
+        from botocore.exceptions import BotoCoreError, ClientError
 
         client = boto3.client(
             "s3",
