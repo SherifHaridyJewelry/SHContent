@@ -4,6 +4,7 @@ import type {
   ProductImportResult,
   ProductMeta,
 } from "./lib/productApiTypes";
+import { getBrowserApiKey } from "./lib/browserApiKey";
 
 export type {
   ProductMeta,
@@ -278,6 +279,49 @@ export interface ScenePlateJob {
   error: string | null;
 }
 
+export type SettingsFieldType = "string" | "secret" | "int" | "bool" | "select";
+
+export interface SettingsField {
+  key: string;
+  label: string;
+  description: string;
+  type: SettingsFieldType;
+  secret: boolean;
+  configured: boolean;
+  source: string;
+  value: string | number | boolean | null;
+  hint: string | null;
+  options: string[] | null;
+  min: number | null;
+  max: number | null;
+}
+
+export interface SettingsGroup {
+  id: string;
+  title: string;
+  description: string;
+  fields: SettingsField[];
+}
+
+export interface SettingsResponse {
+  groups: SettingsGroup[];
+  status: {
+    kie_configured: boolean;
+    r2_configured: boolean;
+    app_auth_enabled: boolean;
+  };
+  defaults: {
+    max_parallel_products: number;
+    default_generation_model: GenerationModel;
+    default_analyze: boolean;
+  };
+}
+
+export interface ConnectionTestResult {
+  ok: boolean;
+  detail: string;
+}
+
 const TERMINAL_JOB_STATUSES: JobStatus[] = ["success", "failed"];
 const ACTIVE_JOB_STATUSES: JobStatus[] = [
   "pending",
@@ -332,7 +376,12 @@ function formatApiError(text: string, statusText: string): string {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API}${path}`, init);
+  const headers = new Headers(init?.headers);
+  const browserKey = getBrowserApiKey();
+  if (browserKey && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${browserKey}`);
+  }
+  const res = await fetch(`${API}${path}`, { ...init, headers });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(formatApiError(text, res.statusText));
@@ -355,7 +404,12 @@ export function catalogExportDownloadUrl(exportId: string): string {
 }
 
 export async function downloadCatalogExport(exportId: string): Promise<void> {
-  const res = await fetch(catalogExportDownloadUrl(exportId));
+  const headers = new Headers();
+  const browserKey = getBrowserApiKey();
+  if (browserKey) {
+    headers.set("Authorization", `Bearer ${browserKey}`);
+  }
+  const res = await fetch(catalogExportDownloadUrl(exportId), { headers });
   if (!res.ok) {
     let detail = res.statusText;
     try {
@@ -639,6 +693,17 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     }),
+  getSettings: () => request<SettingsResponse>("/settings"),
+  updateSettings: (values: Record<string, string | number | boolean>) =>
+    request<SettingsResponse>("/settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ values }),
+    }),
+  testKieConnection: () =>
+    request<ConnectionTestResult>("/settings/test/kie", { method: "POST" }),
+  testR2Connection: () =>
+    request<ConnectionTestResult>("/settings/test/r2", { method: "POST" }),
 };
 
 export { TERMINAL_JOB_STATUSES, ACTIVE_JOB_STATUSES };

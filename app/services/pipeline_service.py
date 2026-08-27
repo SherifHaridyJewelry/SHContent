@@ -258,7 +258,11 @@ def _run_job(job_id: str) -> None:
         pending = [p for p in job.products if p.status != JobStatus.success]
         any_failed = False
 
-        with ThreadPoolExecutor(max_workers=MAX_PARALLEL_PRODUCTS) as executor:
+        from app.services.settings_service import get_int as settings_get_int
+
+        max_workers = settings_get_int("max_parallel_products", MAX_PARALLEL_PRODUCTS)
+        max_workers = max(1, min(8, max_workers))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [
                 executor.submit(
                     _process_job_product,

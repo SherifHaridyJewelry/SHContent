@@ -8,6 +8,7 @@ const Templates = lazy(() => import("./pages/Templates"));
 const TemplateDetail = lazy(() => import("./pages/TemplateDetail"));
 const Studio = lazy(() => import("./pages/Studio"));
 const Outputs = lazy(() => import("./pages/Outputs"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 function NotFound() {
   return (
@@ -89,6 +90,14 @@ export default function App() {
           element={
             <Suspense fallback={<Loading variant="skeleton-grid" message="Loading outputs..." />}>
               <Outputs />
+            </Suspense>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <Suspense fallback={<Loading variant="skeleton" message="Loading settings..." />}>
+              <Settings />
             </Suspense>
           }
         />

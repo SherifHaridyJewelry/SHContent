@@ -42,6 +42,11 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           <span className="nav-badge">{pendingReview}</span>
         )}
       </NavLink>
+
+      <p className="nav-section">System</p>
+      <NavLink to="/settings" className={navClass} onClick={onNavigate}>
+        Settings
+      </NavLink>
     </nav>
   );
 }

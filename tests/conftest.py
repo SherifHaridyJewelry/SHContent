@@ -53,6 +53,7 @@ def db_session(engine) -> Generator[Session, None, None]:
 def _patch_database(monkeypatch, engine):
     monkeypatch.setenv("DATABASE_URL", TEST_DATABASE_URL)
     from app.db import engine as db_engine_module
+    from app.services import settings_service
 
     monkeypatch.setattr(db_engine_module, "engine", engine)
     monkeypatch.setattr(
@@ -62,7 +63,9 @@ def _patch_database(monkeypatch, engine):
     )
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    settings_service.reset_runtime_state_for_tests()
     yield
+    settings_service.reset_runtime_state_for_tests()
 
 
 @pytest.fixture

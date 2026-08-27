@@ -209,13 +209,23 @@ function BatchTab() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const autoRefForTemplate = useRef<string | null>(null);
 
+  const defaultsApplied = useRef(false);
+
   useEffect(() => {
     let cancelled = false;
     setBootstrapLoading(true);
-    Promise.all([api.getProductMeta(), api.listTemplates()])
-      .then(([m, tmpls]) => {
+    Promise.all([api.getProductMeta(), api.listTemplates(), api.getSettings()])
+      .then(([m, tmpls, settings]) => {
         if (cancelled) return;
         setMeta(m);
+        if (!defaultsApplied.current) {
+          defaultsApplied.current = true;
+          setAnalyze(Boolean(settings.defaults.default_analyze));
+          const modelDefault = settings.defaults.default_generation_model;
+          if (GENERATION_MODELS.some((x) => x.value === modelDefault)) {
+            setModel(modelDefault);
+          }
+        }
         const jewelry = tmpls.filter((t) => t.category === "jewelry");
         const list = jewelry.length > 0 ? jewelry : tmpls;
         setTemplates(list);
@@ -243,7 +253,7 @@ function BatchTab() {
     return () => {
       cancelled = true;
     };
-  }, [setTemplate, setSelectedTemplates]);
+  }, [setTemplate, setSelectedTemplates, setAnalyze, setModel]);
 
   const loadProducts = useCallback(async () => {
     setProductsLoading(true);

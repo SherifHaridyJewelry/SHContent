@@ -6,6 +6,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
+from contextlib import asynccontextmanager
+
 from app.api import (
     abtest,
     catalog,
@@ -14,13 +16,22 @@ from app.api import (
     products,
     reviews,
     scene_plates,
+    settings,
     templates,
 )
 from app.config import ALLOWED_ORIGINS, APP_ENV, PROJECT_ROOT
 from app.middleware.auth import AuthMiddleware
 from app.services.path_utils import resolve_storage_path, storage_roots
+from app.services.settings_service import apply_stored_settings_on_startup
 
-app = FastAPI(title="Jewelry Workflow", version="0.2.0")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    apply_stored_settings_on_startup()
+    yield
+
+
+app = FastAPI(title="Jewelry Workflow", version="0.2.0", lifespan=lifespan)
 
 app.add_middleware(AuthMiddleware)
 app.add_middleware(
@@ -44,6 +55,7 @@ app.include_router(catalog.router, prefix="/api")
 app.include_router(reviews.router, prefix="/api")
 app.include_router(scene_plates.router, prefix="/api")
 app.include_router(abtest.router, prefix="/api")
+app.include_router(settings.router, prefix="/api")
 
 
 @app.get("/abtest-picker.html")
