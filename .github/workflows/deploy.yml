@@ -29,12 +29,46 @@ jobs:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
       - name: Add known host key
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          set -euo pipefail
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+
+          # Strip whitespace / accidental user@ prefix (common secret mistakes)
+          HOST="$(printf '%s' "${VPS_HOST:-}" | tr -d '[:space:]')"
+          HOST="${HOST#*@}"
+
+          if [ -z "$HOST" ]; then
+            echo "::error::VPS_HOST secret is empty. Set it to 72.62.51.230 (IP only, no user@)."
+            exit 1
+          fi
+
+          echo "Scanning SSH host keys for: $HOST"
+          if ! ssh-keyscan -T 30 -H "$HOST" >> ~/.ssh/known_hosts 2>keyscan.err; then
+            echo "::error::ssh-keyscan failed for '$HOST'"
+            cat keyscan.err || true
+            exit 1
+          fi
+          if ! grep -q . ~/.ssh/known_hosts; then
+            echo "::error::ssh-keyscan returned no keys for '$HOST'"
+            cat keyscan.err || true
+            exit 1
+          fi
+          echo "Host keys added."
 
       - name: Sync application
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
         run: |
+          set -euo pipefail
+          HOST="$(printf '%s' "${VPS_HOST:-}" | tr -d '[:space:]')"
+          HOST="${HOST#*@}"
+          USER="$(printf '%s' "${VPS_USER:-root}" | tr -d '[:space:]')"
+          if [ -z "$USER" ]; then USER=root; fi
+
           rsync -avz --delete \
             --exclude .git \
             --exclude web/node_modules \
@@ -47,14 +81,23 @@ jobs:
             --exclude .venv \
             --exclude .env \
             -e "ssh -o StrictHostKeyChecking=yes" \
-            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/shcontent/
+            ./ "${USER}@${HOST}:/opt/shcontent/"
           rsync -avz --delete \
             -e "ssh -o StrictHostKeyChecking=yes" \
-            web/dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/shcontent/web/dist/
+            web/dist/ "${USER}@${HOST}:/opt/shcontent/web/dist/"
 
       - name: Restart stack
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
         run: |
-          ssh -o StrictHostKeyChecking=yes ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+          set -euo pipefail
+          HOST="$(printf '%s' "${VPS_HOST:-}" | tr -d '[:space:]')"
+          HOST="${HOST#*@}"
+          USER="$(printf '%s' "${VPS_USER:-root}" | tr -d '[:space:]')"
+          if [ -z "$USER" ]; then USER=root; fi
+
+          ssh -o StrictHostKeyChecking=yes "${USER}@${HOST}" \
             "chmod -R a+rX /opt/shcontent/web/dist && cd /opt/shcontent/deploy && docker compose --env-file /etc/shcontent/.env -f docker-compose.prod.yml -f docker-compose.domains.yml up -d --build"
 
       - name: Verify health
