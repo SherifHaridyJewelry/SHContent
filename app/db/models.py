@@ -168,6 +168,14 @@ class CatalogExportRow(Base):
     updated_at: Mapped[str] = mapped_column(String(64), nullable=False)
 
 
+class AppSettingRow(Base):
+    __tablename__ = "app_settings"
+
+    key: Mapped[str] = mapped_column(String(128), primary_key=True)
+    value: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    updated_at: Mapped[str] = mapped_column(String(64), nullable=False)
+
+
 class CatalogOutputRow(Base):
     __tablename__ = "catalog_outputs"
     __table_args__ = (
