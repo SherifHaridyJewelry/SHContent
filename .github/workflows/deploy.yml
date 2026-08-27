@@ -101,4 +101,17 @@ jobs:
             "chmod -R a+rX /opt/shcontent/web/dist && cd /opt/shcontent/deploy && docker compose --env-file /etc/shcontent/.env -f docker-compose.prod.yml -f docker-compose.domains.yml up -d --build"
 
       - name: Verify health
-        run: curl -sf https://workflow.sherifharidyjewelry.com/api/health
+        run: |
+          set -euo pipefail
+          # Compose rebuild can take a bit after restart — retry until healthy.
+          for i in $(seq 1 30); do
+            if curl -sf https://workflow.sherifharidyjewelry.com/api/health; then
+              echo
+              echo "Health check passed (attempt $i)"
+              exit 0
+            fi
+            echo "Health not ready yet (attempt $i/30), waiting..."
+            sleep 5
+          done
+          echo "::error::Health check failed after retries"
+          exit 1
